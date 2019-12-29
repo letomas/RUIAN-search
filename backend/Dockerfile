@@ -5,9 +5,12 @@ COPY mvnw .
 COPY .mvn .mvn
 COPY pom.xml .
 COPY src src
-RUN ./mvnw package
+RUN ./mvnw install
+RUN mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar)
 
 FROM openjdk:8-jdk-alpine
 VOLUME /tmp
-COPY --from=build /workspace/app/target/*.jar app.jar
-ENTRYPOINT ["sh", "-c", "java ${JAVA_OPTS} -jar /app.jar ${0} ${@}"]
+COPY --from=build /workspace/app/target/dependency/BOOT-INF/lib /app/lib
+COPY --from=build /workspace/app/target/dependency/META-INF /app/META-INF
+COPY --from=build /workspace/app/target/dependency/BOOT-INF/classes /app
+ENTRYPOINT ["java","-cp","app:app/lib/*", "cz.cvut.fit.ruiansearch.RuianSearchApplication"]

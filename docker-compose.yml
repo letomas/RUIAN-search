@@ -11,5 +11,20 @@ services:
     command: 
       - solr-precreate # Create core and name it ruian
       - ruian
+    networks:
+      - solr
+  spring-boot:
+    container_name: backend
+    build: ./backend/
+    image: backend/spring-boot
+    ports:
+      - "8080:8080"
+    networks:
+      - solr
+    depends_on:
+      - solr
 volumes:
   data:
+networks:
+  solr:
+    driver: bridge

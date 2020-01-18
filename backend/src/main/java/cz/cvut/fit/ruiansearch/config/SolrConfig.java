@@ -1,10 +1,8 @@
-package cz.cvut.fit.config;
+package cz.cvut.fit.ruiansearch.config;
 
-import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.solr.core.SolrOperations;
 import org.springframework.data.solr.core.SolrTemplate;
 import org.springframework.data.solr.repository.config.EnableSolrRepositories;
 
@@ -12,12 +10,12 @@ import org.springframework.data.solr.repository.config.EnableSolrRepositories;
 @EnableSolrRepositories
 public class SolrConfig {
     @Bean
-    public SolrClient solrClient() {
+    public HttpSolrClient solrClient() {
         return new HttpSolrClient.Builder("http://localhost:8983/solr").build();
     }
 
     @Bean
-    public SolrOperations solrTemplate() {
+    public SolrTemplate solrTemplate() {
         return new SolrTemplate(solrClient());
     }
 }

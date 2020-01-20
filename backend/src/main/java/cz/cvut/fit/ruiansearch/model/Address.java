@@ -15,46 +15,46 @@ public class Address {
     /*
      * ADM stands for Adresní místo
      */
-    @Indexed(name="Kód_ADM")
+    @Indexed(name="K_d_ADM")
     private long admCode;
 
-    @Indexed(name="Kód_obce")
+    @Indexed(name="K_d_obce")
     private long cityCode;
 
-    @Indexed(name="Název_obce")
+    @Indexed(name="N_zev_obce")
     private String cityName;
 
     /*
      * MOMC is czech abbreviation for city borough
      */
-    @Indexed(name="Kód_MOMC")
+    @Indexed(name="K_d_MOMC")
     private long boroughCode;
 
-    @Indexed(name="Název_MOMC")
+    @Indexed(name="N_zev_MOMC")
     private String boroughName;
 
     /*
      *  MOP is czech abbreviation for Prague's (Czech capital city) city borough
      */
-    @Indexed(name="Kód_MOP")
+    @Indexed(name="K_d_MOP")
     private long pragueBoroughCode;
 
-    @Indexed(name="Název_MOP")
+    @Indexed(name="N_zev_MOP")
     private long pragueBoroughName;
 
     /*
      * Unlike boroughs city disctricts aren't self-governed
      */
-    @Indexed(name="Kód_části_obce")
+    @Indexed(name="K_d___sti_obce")
     private long disctrictCode;
 
-    @Indexed(name="Název_části_obce")
+    @Indexed(name="N_zev___sti_obce")
     private String districtName;
 
-    @Indexed(name="Kód_ulice")
+    @Indexed(name="K_d_ulice")
     private long streetCode;
 
-    @Indexed(name="Název_ulice")
+    @Indexed(name="N_zev_ulice")
     private String streetName;
 
     /*
@@ -64,25 +64,25 @@ public class Address {
     @Indexed(name="Typ_SO")
     private String buildingType;
 
-    @Indexed(name="Číslo_domovní")
+    @Indexed(name="__slo_domovn_")
     private long houseNumber;
 
-    @Indexed(name="Číslo_orientační")
+    @Indexed(name="__slo_orienta_n_")
     private long orientationalNumber;
 
-    @Indexed(name="Znak_čísla_orientačního")
+    @Indexed(name="Znak___sla_orienta_n_ho")
     private String orientationalNumberLetter;
 
-    @Indexed(name="PSČ")
+    @Indexed(name="PS_")
     private long postalCode;
 
-    @Indexed(name="Souřadnice_X")
+    @Indexed(name="Sou_adnice_X")
     private double coordinationX;
 
-    @Indexed(name="Souřadnice_Y")
+    @Indexed(name="Sou_adnice_Y")
     private double coordinationY;
 
-    @Indexed(name="Platí_od")
+    @Indexed(name="Plat__Od")
     private LocalDate validFrom;
 
     public String getId() {

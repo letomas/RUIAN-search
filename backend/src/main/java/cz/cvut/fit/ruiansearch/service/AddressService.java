@@ -22,4 +22,13 @@ public class AddressService implements IAddressService {
         }
         return addressRepository.findAll();
     }
+
+    @Override
+    public List<Address> search(String term) {
+        if(term == null) {
+            return findAll();
+        }
+
+        return addressRepository.search(term);
+    }
 }

@@ -11,4 +11,7 @@ import java.util.List;
 public interface IAddressRepository extends SolrCrudRepository<Address, String> {
     @Query(":")
     List<Address> findAll();
+
+    @Query("N_zev_obce:*?0* OR N_zev___sti_obce:*?0* OR N_zev_ulice:*?0*")
+    List<Address> search(String term);
 }

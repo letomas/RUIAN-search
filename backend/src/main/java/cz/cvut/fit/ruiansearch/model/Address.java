@@ -77,13 +77,16 @@ public class Address {
     private long postalCode;
 
     @Indexed(name="Sou_adnice_X")
-    private double coordinationX;
+    private double coordinateX;
 
     @Indexed(name="Sou_adnice_Y")
-    private double coordinationY;
+    private double coordinateY;
 
     @Indexed(name="Plat__Od")
     private LocalDate validFrom;
+
+    @Indexed(name="Search_field")
+    private String searchField;
 
     public String getId() {
         return id;
@@ -153,15 +156,19 @@ public class Address {
         return postalCode;
     }
 
-    public double getCoordinationX() {
-        return coordinationX;
+    public double getCoordinateX() {
+        return coordinateX;
     }
 
-    public double getCoordinationY() {
-        return coordinationY;
+    public double getCoordinateY() {
+        return coordinateY;
     }
 
     public LocalDate getValidFrom() {
         return validFrom;
+    }
+
+    public String getSearchField() {
+        return searchField;
     }
 }

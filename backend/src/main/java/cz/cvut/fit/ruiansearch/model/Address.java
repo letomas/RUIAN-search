@@ -40,7 +40,7 @@ public class Address {
     private long pragueBoroughCode;
 
     @Indexed(name="N_zev_MOP")
-    private long pragueBoroughName;
+    private String pragueBoroughName;
 
     /*
      * Unlike boroughs city disctricts aren't self-governed
@@ -116,7 +116,7 @@ public class Address {
         return pragueBoroughCode;
     }
 
-    public long getPragueBoroughName() {
+    public String getPragueBoroughName() {
         return pragueBoroughName;
     }
 

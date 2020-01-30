@@ -1,11 +1,9 @@
-version: '3'
-
 services:
   solr:
     container_name: solr
     image: solr:8.3
     ports:
-     - "8983:8983"
+     - ${RUIAN_SOLR_PORT}:8983
     volumes:
       - data:/var/solr
     command: 
@@ -15,8 +13,13 @@ services:
       - solr
   spring-boot:
     container_name: backend
-    build: ./backend/
+    build:
+      context: ./backend/
+      args:
+        RUIAN_SOLR_URL: http://solr:${RUIAN_SOLR_PORT}/solr
     image: backend/spring-boot
+    environment:
+      RUIAN_SOLR_URL: http://solr:${RUIAN_SOLR_PORT}/solr      
     ports:
       - "8080:8080"
     networks:

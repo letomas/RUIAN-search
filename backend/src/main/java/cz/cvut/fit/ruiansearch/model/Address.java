@@ -5,6 +5,7 @@ import org.springframework.data.solr.core.mapping.Indexed;
 import org.springframework.data.solr.core.mapping.SolrDocument;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @SolrDocument(collection = "ruian")
 public class Address {
@@ -16,10 +17,10 @@ public class Address {
      * ADM stands for Adresní místo
      */
     @Indexed(name="K_d_ADM")
-    private long admCode;
+    private Long admCode;
 
     @Indexed(name="K_d_obce")
-    private long cityCode;
+    private Long cityCode;
 
     @Indexed(name="N_zev_obce")
     private String cityName;
@@ -28,7 +29,7 @@ public class Address {
      * MOMC is czech abbreviation for city borough
      */
     @Indexed(name="K_d_MOMC")
-    private long boroughCode;
+    private Long boroughCode;
 
     @Indexed(name="N_zev_MOMC")
     private String boroughName;
@@ -37,7 +38,7 @@ public class Address {
      *  MOP is czech abbreviation for Prague's (Czech capital city) city borough
      */
     @Indexed(name="K_d_MOP")
-    private long pragueBoroughCode;
+    private Long pragueBoroughCode;
 
     @Indexed(name="N_zev_MOP")
     private String pragueBoroughName;
@@ -46,13 +47,13 @@ public class Address {
      * Unlike boroughs city disctricts aren't self-governed
      */
     @Indexed(name="K_d___sti_obce")
-    private long disctrictCode;
+    private Long disctrictCode;
 
     @Indexed(name="N_zev___sti_obce")
     private String districtName;
 
     @Indexed(name="K_d_ulice")
-    private long streetCode;
+    private Long streetCode;
 
     @Indexed(name="N_zev_ulice")
     private String streetName;
@@ -65,38 +66,38 @@ public class Address {
     private String buildingType;
 
     @Indexed(name="__slo_domovn_")
-    private long houseNumber;
+    private Long houseNumber;
 
     @Indexed(name="__slo_orienta_n_")
-    private long orientationalNumber;
+    private Long orientationalNumber;
 
     @Indexed(name="Znak___sla_orienta_n_ho")
     private String orientationalNumberLetter;
 
     @Indexed(name="PS_")
-    private long postalCode;
+    private Long postalCode;
 
     @Indexed(name="Sou_adnice_X")
-    private double coordinateX;
+    private Double coordinateX;
 
     @Indexed(name="Sou_adnice_Y")
-    private double coordinateY;
+    private Double coordinateY;
 
     @Indexed(name="Plat__Od")
     private LocalDate validFrom;
 
     @Indexed(name="Search_field")
-    private String searchField;
+    private List<String> searchField;
 
     public String getId() {
         return id;
     }
 
-    public long getAdmCode() {
+    public Long getAdmCode() {
         return admCode;
     }
 
-    public long getCityCode() {
+    public Long getCityCode() {
         return cityCode;
     }
 
@@ -104,7 +105,7 @@ public class Address {
         return cityName;
     }
 
-    public long getBoroughCode() {
+    public Long getBoroughCode() {
         return boroughCode;
     }
 
@@ -112,7 +113,7 @@ public class Address {
         return boroughName;
     }
 
-    public long getPragueBoroughCode() {
+    public Long getPragueBoroughCode() {
         return pragueBoroughCode;
     }
 
@@ -120,7 +121,7 @@ public class Address {
         return pragueBoroughName;
     }
 
-    public long getDisctrictCode() {
+    public Long getDisctrictCode() {
         return disctrictCode;
     }
 
@@ -128,7 +129,7 @@ public class Address {
         return districtName;
     }
 
-    public long getStreetCode() {
+    public Long getStreetCode() {
         return streetCode;
     }
 
@@ -140,11 +141,11 @@ public class Address {
         return buildingType;
     }
 
-    public long getHouseNumber() {
+    public Long getHouseNumber() {
         return houseNumber;
     }
 
-    public long getOrientationalNumber() {
+    public Long getOrientationalNumber() {
         return orientationalNumber;
     }
 
@@ -152,15 +153,15 @@ public class Address {
         return orientationalNumberLetter;
     }
 
-    public long getPostalCode() {
+    public Long getPostalCode() {
         return postalCode;
     }
 
-    public double getCoordinateX() {
+    public Double getCoordinateX() {
         return coordinateX;
     }
 
-    public double getCoordinateY() {
+    public Double getCoordinateY() {
         return coordinateY;
     }
 
@@ -168,7 +169,7 @@ public class Address {
         return validFrom;
     }
 
-    public String getSearchField() {
+    public List<String> getSearchField() {
         return searchField;
     }
 }

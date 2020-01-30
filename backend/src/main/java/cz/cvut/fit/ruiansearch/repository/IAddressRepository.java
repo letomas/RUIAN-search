@@ -9,9 +9,6 @@ import java.util.List;
 
 @Repository
 public interface IAddressRepository extends SolrCrudRepository<Address, String> {
-    @Query(":")
-    List<Address> findAll();
-
     @Query("Search_field:*?0*")
     List<Address> search(String term);
 }

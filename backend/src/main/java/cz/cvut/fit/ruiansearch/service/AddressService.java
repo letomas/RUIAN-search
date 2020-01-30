@@ -16,17 +16,9 @@ public class AddressService implements IAddressService {
     }
 
     @Override
-    public List<Address> findAll() {
-        if(addressRepository.count() == 0) {
-            return Collections.emptyList();
-        }
-        return addressRepository.findAll();
-    }
-
-    @Override
     public List<Address> search(String term) {
         if(term == null) {
-            return findAll();
+            return Collections.emptyList();
         }
 
         return addressRepository.search(term);

@@ -11,4 +11,5 @@ import java.util.List;
 public interface IAddressRepository extends SolrCrudRepository<Address, String> {
     @Query("Search_field:*?0*")
     List<Address> search(String term);
+    List<Address> findByAdmCodeStartsWith(String AdmCode);
 }

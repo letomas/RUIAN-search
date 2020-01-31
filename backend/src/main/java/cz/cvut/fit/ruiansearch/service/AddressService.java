@@ -1,7 +1,7 @@
 package cz.cvut.fit.ruiansearch.service;
 
-import cz.cvut.fit.ruiansearch.repository.IAddressRepository;
 import cz.cvut.fit.ruiansearch.model.Address;
+import cz.cvut.fit.ruiansearch.repository.IAddressRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -22,5 +22,10 @@ public class AddressService implements IAddressService {
         }
 
         return addressRepository.search(term);
+    }
+
+    @Override
+    public List<Address> findByAdmCode(String admCode) {
+        return addressRepository.findByAdmCodeStartsWith(admCode);
     }
 }

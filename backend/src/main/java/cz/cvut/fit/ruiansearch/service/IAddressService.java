@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface IAddressService {
     List<Address> search(String term);
+    List<Address> findByAdmCode(String admCode);
 }

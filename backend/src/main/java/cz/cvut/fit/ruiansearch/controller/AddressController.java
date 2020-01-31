@@ -1,7 +1,7 @@
 package cz.cvut.fit.ruiansearch.controller;
 
-import cz.cvut.fit.ruiansearch.service.AddressService;
 import cz.cvut.fit.ruiansearch.model.Address;
+import cz.cvut.fit.ruiansearch.service.AddressService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,7 +19,12 @@ public class AddressController {
     }
 
     @GetMapping("/address")
-    public List<Address> getAddresses(@RequestParam(name = "search", required = false) String term) {
-        return addressService.search(term);
+    public List<Address> getAddresses(@RequestParam(name = "search", required = false) String term,
+                                      @RequestParam(name = "admCode", required = false) String admCode) {
+        if(term != null) {
+            return addressService.search(term);
+        }
+
+        return addressService.findByAdmCode(admCode);
     }
 }

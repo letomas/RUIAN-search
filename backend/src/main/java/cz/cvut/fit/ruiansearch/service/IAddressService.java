@@ -1,10 +1,10 @@
 package cz.cvut.fit.ruiansearch.service;
 
 import cz.cvut.fit.ruiansearch.model.Address;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface IAddressService {
-    List<Address> search(String term);
-    List<Address> findByAdmCode(String admCode);
+    Page<Address> search(String term, Pageable pageable);
+    Page<Address> findByAdmCode(String admCode, Pageable pageable);
 }

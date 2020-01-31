@@ -5,8 +5,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.solr.core.SolrTemplate;
+import org.springframework.data.solr.repository.config.EnableSolrRepositories;
 
 @Configuration
+@EnableSolrRepositories("cz.cvut.fit.ruiansearch.repository")
 public class SolrConfig {
     /*
      * Try to use Solr url defined in environment variable RUIAN_SOLR_URL

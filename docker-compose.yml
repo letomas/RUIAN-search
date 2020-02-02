@@ -8,8 +8,9 @@ services:
      - ${RUIAN_SOLR_PORT}:8983
     volumes:
       - data:/var/solr
+      - ./startup.sh:/startup.sh:ro
     command: 
-      - solr-precreate # Create core and name it ruian
+      - /startup.sh
       - ruian
     networks:
       - solr

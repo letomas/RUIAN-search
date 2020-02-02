@@ -1,4 +1,5 @@
 FROM openjdk:8-jdk-alpine AS build
+ARG RUIAN_SOLR_URL
 WORKDIR /workspace/app
 
 COPY mvnw .

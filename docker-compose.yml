@@ -5,7 +5,7 @@ services:
     container_name: solr
     image: solr:8.3
     ports:
-     - ${RUIAN_SOLR_PORT}:8983
+     - "${RUIAN_SOLR_PORT}:8983"
     volumes:
       - data:/var/solr
       - ./startup.sh:/startup.sh:ro
@@ -24,13 +24,27 @@ services:
     environment:
       RUIAN_SOLR_URL: http://solr:${RUIAN_SOLR_PORT}/solr      
     ports:
-      - "8080:8080"
+      - "${RUIAN_SPRING_PORT}:8080"
     networks:
       - solr
+      - spring
     depends_on:
       - solr
+  vue-app:
+    container_name: frontend
+    build: ./frontend/
+    image: frontend/vue
+    ports: 
+      - "${RUIAN_VUE_PORT}:8080"
+    networks:
+      - spring
+    depends_on: 
+      - spring-boot
 volumes:
   data:
 networks:
   solr:
     driver: bridge
+  spring:
+    driver: bridge
+    

@@ -4,7 +4,7 @@
       <Navigation />
     </header>
     <main>
-      <h1>Hello world!</h1>
+      <router-view />
     </main>
   </div>
 </template>
@@ -20,7 +20,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

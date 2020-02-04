@@ -4,9 +4,11 @@
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav tabs>
-          <b-nav-item href="#" style="color: red;">Úvod</b-nav-item>
-          <b-nav-item href="#">Vyhledávání</b-nav-item>
-          <b-nav-item href="#">Adresní místa v okolí</b-nav-item>
+          <b-nav-item :to="{ name: 'home' }">Úvod</b-nav-item>
+          <b-nav-item :to="{ name: 'search' }">Vyhledávání</b-nav-item>
+          <b-nav-item :to="{ name: 'nearbyAddresses' }"
+            >Adresní místa v okolí</b-nav-item
+          >
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>

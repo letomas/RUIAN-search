@@ -26,8 +26,6 @@ start-local-solr
 # Get the core name.
 core_name=$1
 
-port=${RUIAN_SOLR_PORT:-8983}
-
 # Check whether core already exists
 if [ -d "/var/solr/data/$core_name" ]; then
 	echo "Core already exists, skipping creation"
@@ -132,7 +130,7 @@ else
 				"multiValued":true,
 			}
 		]
-	}' http://localhost:$port/solr/$core_name/schema
+	}' http://localhost:8983/solr/$core_name/schema
 
 	curl -X POST -H 'Content-type:application/json' --data-binary '{
 		"add-copy-field":[
@@ -157,7 +155,7 @@ else
 				"dest":"Search_field"
 			},  
 		]            
-	}' http://localhost:$port/solr/$core_name/schema
+	}' http://localhost:8983/solr/$core_name/schema
 fi
 
 echo "Finished configuring with the Schema API"

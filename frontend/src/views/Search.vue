@@ -2,10 +2,7 @@
   <div class="search">
     <h1>Vyhledávání adresních míst</h1>
     <Searchbar />
-    <h2>
-      <BIconAlertTriangleFill variant="danger"></BIconAlertTriangleFill>
-      Work in progress
-    </h2>
+    <b-table :items="items" :fields="fields"></b-table>
   </div>
 </template>
 
@@ -16,6 +13,30 @@ export default {
   name: "Search",
   components: {
     Searchbar
+  },
+  data() {
+    return {
+      fields: [
+        { key: "admCode", label: "Kód ADM" },
+        { key: "streetName", label: "Název ulice" },
+        { key: "boroughName", label: "Název části obce" },
+        { key: "cityName", label: "Název obce" }
+      ],
+      items: [
+        {
+          admCode: 21690278,
+          cityName: "Praha",
+          boroughName: "Hradčany",
+          streetName: "Hrad I. nádvoří"
+        },
+        {
+          admCode: 21690294,
+          cityName: "Praha",
+          boroughName: "Hradčany",
+          streetName: "Jiřská"
+        }
+      ]
+    };
   }
 };
 </script>

@@ -19,10 +19,10 @@ services:
     build:
       context: ./backend/
       args:
-        RUIAN_SOLR_URL: http://solr:${RUIAN_SOLR_PORT}/solr
+        RUIAN_SOLR_URL: http://solr:8983/solr
     image: backend/spring-boot
     environment:
-      RUIAN_SOLR_URL: http://solr:${RUIAN_SOLR_PORT}/solr      
+      RUIAN_SOLR_URL: http://solr:8983/solr      
     ports:
       - "${RUIAN_SPRING_PORT}:8080"
     networks:

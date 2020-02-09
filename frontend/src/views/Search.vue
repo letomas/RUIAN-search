@@ -2,7 +2,11 @@
   <div class="search">
     <h1>Vyhledávání adresních míst</h1>
     <Searchbar />
-    <b-table :items="items" :fields="fields"></b-table>
+    <b-table :items="items" :fields="fields">
+      <template v-slot:cell(detail)>
+        <b-button variant="primary">Detail</b-button>
+      </template>
+    </b-table>
   </div>
 </template>
 
@@ -20,7 +24,8 @@ export default {
         { key: "admCode", label: "Kód ADM" },
         { key: "streetName", label: "Název ulice" },
         { key: "boroughName", label: "Název části obce" },
-        { key: "cityName", label: "Název obce" }
+        { key: "cityName", label: "Název obce" },
+        { key: "detail", label: "" }
       ],
       items: [
         {

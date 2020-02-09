@@ -19,6 +19,10 @@ const routes = [
     path: "/adresni-mista-v-okoli",
     name: "nearbyAddresses",
     component: () => import("../views/NearbyAddresses.vue")
+  },
+  {
+    path: "*",
+    component: () => import("../componenets/NotFound.vue")
   }
 ];
 

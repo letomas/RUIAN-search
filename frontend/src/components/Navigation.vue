@@ -9,6 +9,9 @@
           <b-nav-item :to="{ name: 'nearbyAddresses' }">
             Adresní místa v okolí
           </b-nav-item>
+          <b-nav-item :to="{ name: 'addressDetail', params: { id: 21692742 } }">
+            Detail
+          </b-nav-item>
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>

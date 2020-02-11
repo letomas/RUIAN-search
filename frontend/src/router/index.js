@@ -6,9 +6,13 @@ Vue.use(VueRouter);
 
 const routes = [
   {
-    path: "/",
+    path: "",
     name: "home",
     component: Home
+  },
+  {
+    path: "/",
+    redirect: { name: "home" }
   },
   {
     path: "/vyhledavani",
@@ -21,8 +25,13 @@ const routes = [
     component: () => import("../views/NearbyAddresses.vue")
   },
   {
+    path: "/adresni-mista/:id(\\d+)",
+    name: "addressDetail",
+    component: () => import("../views/AddressDetail.vue")
+  },
+  {
     path: "*",
-    component: () => import("../componenets/NotFound.vue")
+    component: () => import("../components/NotFound.vue")
   }
 ];
 

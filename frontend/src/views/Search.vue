@@ -12,6 +12,7 @@
 
 <script>
 import Searchbar from "../components/Searchbar.vue";
+import api from "../api.js";
 
 export default {
   name: "Search",
@@ -27,21 +28,19 @@ export default {
         { key: "cityName", label: "Název obce" },
         { key: "detail", label: "" }
       ],
-      items: [
-        {
-          admCode: 21690278,
-          cityName: "Praha",
-          boroughName: "Hradčany",
-          streetName: "Hrad I. nádvoří"
-        },
-        {
-          admCode: 21690294,
-          cityName: "Praha",
-          boroughName: "Hradčany",
-          streetName: "Jiřská"
-        }
-      ]
+      items: []
     };
+  },
+  mounted() {
+    api
+      .getQueryResult("praha")
+      .then(result => {
+        this.$log.debug("Query result is:" + result.data);
+        this.items = result.data.content;
+      })
+      .catch(error => {
+        this.$log.debug(error);
+      });
   }
 };
 </script>

@@ -1,7 +1,9 @@
 <template>
   <div class="search">
     <h1>Vyhledávání adresních míst</h1>
-    <Searchbar />
+    <b-container fluid>
+      <Searchbar />
+    </b-container>
     <b-table :items="items" :fields="fields">
       <template v-slot:cell(detail)>
         <b-button variant="primary">Detail</b-button>

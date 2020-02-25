@@ -6,6 +6,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class AddressServiceImpl implements AddressService {
     private final AddressRepository addressRepository;
@@ -22,5 +24,10 @@ public class AddressServiceImpl implements AddressService {
     @Override
     public Page<Address> findByAdmCodeStartsWith(String admCode, Pageable pageable) {
         return addressRepository.findByAdmCodeStartsWith(admCode, pageable);
+    }
+
+    @Override
+    public Optional<Address> findByAdmCode(String admCode) {
+        return addressRepository.findByAdmCodeEquals(admCode);
     }
 }

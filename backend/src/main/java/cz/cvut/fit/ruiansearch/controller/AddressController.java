@@ -7,7 +7,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @CrossOrigin
@@ -32,6 +35,11 @@ public class AddressController {
             return addressService.search(term, pageable);
         }
 
-        return addressService.findByAdmCode(admCode, pageable);
+        return addressService.findByAdmCodeStartsWith(admCode, pageable);
+    }
+
+    @GetMapping({"/{admCode}", "/{admCode}/"})
+    public Optional<Address> getAddressDetail(@PathVariable String admCode) {
+        return addressService.findByAdmCode(admCode);
     }
 }

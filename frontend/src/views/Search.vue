@@ -2,11 +2,21 @@
   <div class="search">
     <h1>Vyhledávání adresních míst</h1>
     <b-container fluid>
-      <Searchbar />
+      <Searchbar
+        v-bind:query="query"
+        v-bind:admCode="admCode"
+        v-on:search="search($event)"
+        v-on:searchByAdmCode="searchByAdmCode($event)"
+      />
     </b-container>
     <b-table :items="items" :fields="fields">
-      <template v-slot:cell(detail)>
-        <b-button variant="primary">Detail</b-button>
+      <template v-slot:cell(detail)="{ item }">
+        <b-button
+          variant="primary"
+          :to="{ name: 'addressDetail', params: { id: item.admCode } }"
+        >
+          Detail
+        </b-button>
       </template>
     </b-table>
   </div>
@@ -30,19 +40,37 @@ export default {
         { key: "cityName", label: "Název obce" },
         { key: "detail", label: "" }
       ],
-      items: []
+      items: [],
+      error: null,
+      query: null,
+      admCode: null
     };
   },
-  mounted() {
-    api
-      .getQueryResult("praha")
-      .then(result => {
-        this.$log.debug("Query result is:" + result.data);
-        this.items = result.data.content;
-      })
-      .catch(error => {
-        this.$log.debug(error);
-      });
+  methods: {
+    search(query) {
+      api
+        .getQueryResult(query)
+        .then(result => {
+          this.$log.debug("Query result is:" + result.data);
+          this.items = result.data.content;
+        })
+        .catch(error => {
+          this.error = error.toString();
+          this.$log.debug(error);
+        });
+    },
+    searchByAdmCode(admCode) {
+      api
+        .findByAdmCode(admCode)
+        .then(result => {
+          this.$log.debug("Query result is:" + result.data);
+          this.items = result.data.content;
+        })
+        .catch(error => {
+          this.error = error.toString();
+          this.$log.debug(error);
+        });
+    }
   }
 };
 </script>

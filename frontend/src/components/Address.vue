@@ -51,6 +51,8 @@
 </template>
 
 <script>
+import addressBuilder from "../addressBuilder.js";
+
 export default {
   name: "Address",
   props: {
@@ -59,14 +61,14 @@ export default {
     }
   },
   computed: {
-    firstRow: () => {
-      return "first";
+    firstRow: function() {
+      return addressBuilder.build(this.address).firstRow;
     },
-    secondRow: () => {
-      return "second";
+    secondRow: function() {
+      return addressBuilder.build(this.address).secondRow;
     },
-    thirdRow: () => {
-      return "third";
+    thirdRow: function() {
+      return addressBuilder.build(this.address).thirdRow;
     }
   },
   data() {

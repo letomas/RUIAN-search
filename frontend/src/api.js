@@ -10,5 +10,14 @@ const ruian_api = axios.create({
 export default {
   getQueryResult: query => {
     return ruian_api.get("/addresses?search=" + query);
+  },
+  getDetail: admCode => {
+    return ruian_api.get("/addresses/" + admCode);
+  },
+  findByAdmCode: admCode => {
+    return ruian_api.get("/addresses?admCode=" + admCode);
+  },
+  getHealthStatus: () => {
+    return ruian_api.get("/health");
   }
 };

@@ -9,10 +9,11 @@
           <b-form-input
             type="search"
             placeholder="Zadejte název adresního místa"
+            v-model="query"
           ></b-form-input>
 
           <b-input-group-append>
-            <b-button variant="primary">
+            <b-button variant="primary" v-on:click="search(query)">
               <BIconSearch></BIconSearch>
             </b-button>
           </b-input-group-append>
@@ -30,10 +31,11 @@
             type="search"
             label="Vyhledávání adresních míst podle jejich kódu:"
             placeholder="Zadejte kód ADM"
+            v-model="admCode"
           ></b-form-input>
 
           <b-input-group-append>
-            <b-button variant="primary">
+            <b-button variant="primary" v-on:click="searchByAdmCode(admCode)">
               <BIconSearch></BIconSearch>
             </b-button>
           </b-input-group-append>
@@ -45,7 +47,23 @@
 
 <script>
 export default {
-  name: "Searchbar"
+  name: "Searchbar",
+  props: {
+    query: {
+      type: String
+    },
+    admCode: {
+      type: Number
+    }
+  },
+  methods: {
+    search(query) {
+      this.$emit("search", query);
+    },
+    searchByAdmCode(admCode) {
+      this.$emit("searchByAdmCode", admCode);
+    }
+  }
 };
 </script>
 

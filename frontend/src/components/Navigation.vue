@@ -19,3 +19,9 @@ export default {
   name: "Navigation"
 };
 </script>
+
+<style scoped>
+.nav-item {
+  margin-right: 1.2em;
+}
+</style>

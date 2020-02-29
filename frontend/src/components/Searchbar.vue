@@ -5,7 +5,7 @@
         <label for="name-search">Vyhledávání adresních míst podle názvu:</label>
       </b-row>
 
-      <b-row class="input-group">
+      <b-row class="typehead">
         <Typeahead
           :data="suggestions"
           :serializer="address => buildAddress(address)"
@@ -27,7 +27,7 @@
         </label>
       </b-row>
 
-      <b-row>
+      <b-row class="typehead">
         <Typeahead
           :data="codeSuggestions"
           :serializer="address => address.admCode.toString()"
@@ -117,7 +117,7 @@ export default {
 </script>
 
 <style scoped>
-.input-group {
+.typehead {
   margin-bottom: 1rem;
 }
 #name-search {

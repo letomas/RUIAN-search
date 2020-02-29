@@ -2,31 +2,31 @@
   <div id="address">
     <b-container class="address-info" fluid>
       <b-row>
-        <b-col cols="3">Kód:</b-col>
+        <b-col class="header" cols="3">Kód:</b-col>
         <b-col>{{ address.admCode }}</b-col>
       </b-row>
       <b-row>
-        <b-col cols="3">Obec:</b-col>
+        <b-col class="header" cols="3">Obec:</b-col>
         <b-col>{{ address.cityName }}</b-col>
       </b-row>
       <b-row>
-        <b-col cols="3">Část obce:</b-col>
+        <b-col class="header" cols="3">Část obce:</b-col>
         <b-col>{{ address.districtName }}</b-col>
       </b-row>
       <b-row>
-        <b-col cols="3">Městská část/obvod:</b-col>
+        <b-col class="header" cols="3">Městská část/obvod:</b-col>
         <b-col>{{ address.boroughName }}</b-col>
       </b-row>
       <b-row>
-        <b-col cols="3">Ulice:</b-col>
+        <b-col class="header" cols="3">Ulice:</b-col>
         <b-col>{{ address.streetName }}</b-col>
       </b-row>
       <b-row>
-        <b-col cols="3">PSČ:</b-col>
+        <b-col class="header" cols="3">PSČ:</b-col>
         <b-col>{{ address.postalCode }}</b-col>
       </b-row>
       <b-row>
-        <b-col cols="3">IRI:</b-col>
+        <b-col class="header" cols="3">IRI:</b-col>
         <b-col>
           <a :href="IRIBaseUrl + address.admCode">
             {{ IRIBaseUrl }}{{ address.admCode }}
@@ -45,6 +45,10 @@
       </b-row>
       <b-row>
         <b-col>{{ thirdRow }}</b-col>
+      </b-row>
+      <b-row class="inline-address">
+        <b-col class="header" cols="2">Adresa v řádku: </b-col>
+        <b-col>{{ inline }}</b-col>
       </b-row>
     </b-container>
   </div>
@@ -69,6 +73,9 @@ export default {
     },
     thirdRow: function() {
       return addressBuilder.build(this.address).thirdRow;
+    },
+    inline: function() {
+      return addressBuilder.buildInline(this.address);
     }
   },
   data() {
@@ -83,5 +90,12 @@ export default {
 .address-info {
   text-align: left;
   margin-bottom: 2em;
+}
+.inline-address {
+  margin-top: 1.3em;
+}
+
+.header {
+  font-weight: bold;
 }
 </style>

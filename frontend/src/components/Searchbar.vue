@@ -4,20 +4,21 @@
       <b-row>
         <label for="name-search">Vyhledávání adresních míst podle názvu:</label>
       </b-row>
-      <b-row>
-        <b-input-group id="name-search">
-          <b-form-input
-            type="search"
-            placeholder="Zadejte název adresního místa"
-            v-model="query"
-          ></b-form-input>
 
-          <b-input-group-append>
+      <b-row class="input-group">
+        <Typeahead
+          :data="suggestions"
+          :serializer="address => buildAddress(address)"
+          placeholder="Zadejte adresní místo"
+          v-model="query"
+          id="name-search"
+        >
+          <template slot="append">
             <b-button variant="primary" v-on:click="search(query)">
               <BIconSearch></BIconSearch>
             </b-button>
-          </b-input-group-append>
-        </b-input-group>
+          </template>
+        </Typeahead>
       </b-row>
 
       <b-row>
@@ -25,29 +26,38 @@
           Vyhledávání adresních míst podle jejich kódu:
         </label>
       </b-row>
-      <b-row>
-        <b-input-group id="code-search">
-          <b-form-input
-            type="search"
-            label="Vyhledávání adresních míst podle jejich kódu:"
-            placeholder="Zadejte kód ADM"
-            v-model="admCode"
-          ></b-form-input>
 
-          <b-input-group-append>
+      <b-row>
+        <Typeahead
+          :data="codeSuggestions"
+          :serializer="address => address.admCode.toString()"
+          placeholder="Zadejte kód ADM"
+          v-model="admCode"
+          id="code-search"
+        >
+          <template slot="append">
             <b-button variant="primary" v-on:click="searchByAdmCode(admCode)">
               <BIconSearch></BIconSearch>
             </b-button>
-          </b-input-group-append>
-        </b-input-group>
+          </template>
+        </Typeahead>
       </b-row>
     </b-container>
   </div>
 </template>
 
 <script>
+import Typeahead from "vue-bootstrap-typeahead";
+import _ from "underscore";
+
+import api from "../api.js";
+import addressBuilder from "../addressBuilder.js";
+
 export default {
   name: "Searchbar",
+  components: {
+    Typeahead
+  },
   props: {
     query: {
       type: String
@@ -56,13 +66,52 @@ export default {
       type: Number
     }
   },
+  data() {
+    return {
+      suggestions: [],
+      codeSuggestions: []
+    };
+  },
   methods: {
     search(query) {
       this.$emit("search", query);
     },
     searchByAdmCode(admCode) {
       this.$emit("searchByAdmCode", admCode);
+    },
+    getSuggestions(query) {
+      api
+        .getQueryResult(query)
+        .then(result => {
+          this.suggestions = result.data.content;
+        })
+        .catch(error => {
+          this.error = error.toString();
+          this.$log.debug(error);
+        });
+    },
+    getCodeSuggestions(admCode) {
+      api
+        .findByAdmCode(admCode)
+        .then(result => {
+          this.codeSuggestions = result.data.content;
+        })
+        .catch(error => {
+          this.error = error.toString();
+          this.$log.debug(error);
+        });
+    },
+    buildAddress(address) {
+      return addressBuilder.buildInline(address);
     }
+  },
+  watch: {
+    query: _.debounce(function(input) {
+      this.getSuggestions(input);
+    }, 400),
+    admCode: _.debounce(function(input) {
+      this.getCodeSuggestions(input);
+    }, 400)
   }
 };
 </script>

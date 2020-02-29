@@ -1,4 +1,15 @@
 module.exports = {
+  buildInline: address => {
+    let result = {};
+    const addressInRows = module.exports.build(address);
+
+    result = addressInRows.firstRow + ", " + addressInRows.secondRow;
+    if (addressInRows.thirdRow) {
+      result += ", " + addressInRows.thirdRow;
+    }
+
+    return result;
+  },
   build: address => {
     let result = {};
     if (

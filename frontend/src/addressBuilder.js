@@ -18,23 +18,34 @@ module.exports = {
     ) {
       result.secondRow = address.districtName;
     }
+
     if (address.streetName === "") {
-      module.exports.buildLastRow(result, address);
       if (address.cityName === address.districtName) {
         result.firstRow = address.buildingType + " " + address.houseNumber;
       } else {
-        result.firstRow = address.districtName + " " + address.houseNumber;
+        result.firstRow = address.districtName;
+        module.exports.addBuildingTypeAndHouseNumber(result, address);
       }
+
       module.exports.addOrientationalNumberAndLetter(result, address);
+      module.exports.buildLastRow(result, address);
 
       return result;
     }
 
-    result.firstRow = address.streetName + " " + address.houseNumber;
+    result.firstRow = address.streetName;
+    module.exports.addBuildingTypeAndHouseNumber(result, address);
     module.exports.addOrientationalNumberAndLetter(result, address);
     module.exports.buildLastRow(result, address);
 
     return result;
+  },
+  addBuildingTypeAndHouseNumber(result, address) {
+    if (address.buildingType === "č.ev.") {
+      result.firstRow += " " + address.buildingType + " " + address.houseNumber;
+    } else {
+      result.firstRow += " " + address.houseNumber;
+    }
   },
   addOrientationalNumberAndLetter: (result, address) => {
     if (address.orientationalNumber !== null) {

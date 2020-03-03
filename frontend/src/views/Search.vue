@@ -60,6 +60,7 @@ export default {
     search(query) {
       this.showResult = false;
       this.noResult = false;
+      this.query = query;
 
       api
         .getQueryResult(query)
@@ -80,6 +81,7 @@ export default {
     searchByAdmCode(admCode) {
       this.showResult = false;
       this.noResult = false;
+      this.admCode = admCode;
 
       api
         .findByAdmCode(admCode)

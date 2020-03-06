@@ -16,20 +16,22 @@ Aplikace využívá třívrstvou kontejnerizovanou architekturu. Na datové vrst
 - bash
 
 ## Spuštění
-Po stažení/naklonování projektu je možné aplikaci sputit pomocí příkazu:
+Po stažení/naklonování projektu je možné aplikaci sputit pomocí skriptu:
 ```
-docker-compose up -d
+./init.sh
 ```
-Při provedení změn je nutné znovu sestavit image, je tedy nutné použít příkaz:
+Při provedení změn je nutné přidat argument build:
 ```
-docker-compose up --build -d
+./init.sh build
 ```
+Tento skript volá docker-compose up -d (případně ještě s argumentem --build) a kontroluje stav kontejnerů. Jakmile jsou všechny kontejnery připravené, vypíše se do příkazové řádky: `Application is ready`.
+
 
 K nahrání a aktualizaci dat je nutné spusit skript:
 ```
 ./index.sh
 ```
-Skript stáhne zip soubor, který osahuje přes 6000 csv souborů, jeden soubor pro každou obec v ČR. Zip soubor je nutné rozbalit. Csv soubory se musí upravit (zkonvertovat kódování z Windows-1250 na UTF-8) a následně nahrát do Solru pomocí Post toolu (nástroj pro nahrávání souborů do Solru přes příkazovou řádku). Celý proces může zabrat přibližně 10 minut.
+Skript stáhne zip soubor, který osahuje přes 6000 csv souborů, jeden soubor pro každou obec v ČR. Zip soubor je nutné rozbalit. Csv soubory se musí upravit (zkonvertovat kódování z Windows-1250 na UTF-8) a následně nahrát do Solru pomocí Post toolu (nástroj pro nahrávání souborů do Solru přes příkazovou řádku). Celý proces může zabrat přibližně 15 minut.
 
 ## Konfigurace
 Součástí projektu je soubor `.env`, ve kterém je možné nastavit porty jednotlivých aplikacích. Ve výchozím stavu jsou porty nastaveny takto:

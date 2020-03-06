@@ -14,6 +14,10 @@ services:
       - ruian
     networks:
       - solr
+    healthcheck:
+      test: wget --spider -q http://localhost:8983 || exit 1
+      interval: 10s
+      timeout: 10s
   spring-boot:
     container_name: backend
     build:
@@ -30,6 +34,10 @@ services:
       - spring
     depends_on:
       - solr
+    healthcheck:
+      test: wget --spider -q http://localhost:8080 || exit 1
+      interval: 10s
+      timeout: 10s
   vue-app:
     container_name: frontend
     build: ./frontend/
@@ -40,6 +48,10 @@ services:
       - spring
     depends_on: 
       - spring-boot
+    healthcheck:
+      test: wget --spider -q http://localhost:80 || exit 1
+      interval: 10s
+      timeout: 10s
 volumes:
   data:
 networks:

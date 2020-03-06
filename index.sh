@@ -20,7 +20,7 @@ curl -X POST -H 'Content-Type: application/json' 'http://localhost:8983/solr/rui
 
 # Index data using post tool
 echo "Indexing data"
-docker run --rm -v "$PWD/data:/data" --network=host solr:8 post -c ruian -params "separator=%3B" /data/
+docker run --rm -v "$PWD/data:/data" --network=host solr:8.3 post -c ruian -params "separator=%3B" /data/
 
 # Delete files
 rm -rf *.zip CSV data

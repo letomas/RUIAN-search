@@ -2,11 +2,10 @@ FROM openjdk:8-jdk-alpine AS build
 ARG RUIAN_SOLR_URL
 WORKDIR /workspace/app
 
-COPY mvnw .
-COPY .mvn .mvn
+RUN apk add --no-cache maven
 COPY pom.xml .
 COPY src src
-RUN ./mvnw install
+RUN mvn install
 RUN mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar)
 
 FROM openjdk:8-jdk-alpine

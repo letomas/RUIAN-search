@@ -48,7 +48,7 @@ module.exports = {
     }
   },
   addOrientationalNumberAndLetter: (result, address) => {
-    if (address.orientationalNumber !== null) {
+    if (address.orientationalNumber) {
       result.firstRow +=
         "/" + address.orientationalNumber + address.orientationalNumberLetter;
     }

@@ -13,6 +13,13 @@ import java.util.Optional;
 public interface AddressRepository extends SolrCrudRepository<Address, String> {
     @Query("Search_field:*?0*")
     Page<Address> search(String term, Pageable pageable);
+    @Query(name="Address.findByFormQuery")
+    Page<Address> formSearch(
+            String streetName,
+            String houseNumber,
+            String boroughName,
+            String cityName,
+            Pageable pageable);
     Page<Address> findByAdmCodeStartsWith(String AdmCode, Pageable pageable);
     Optional<Address> findByAdmCodeEquals(String AdmCode);
 }

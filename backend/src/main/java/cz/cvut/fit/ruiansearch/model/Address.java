@@ -17,10 +17,10 @@ public class Address {
      * ADM stands for Adresní místo
      */
     @Indexed(name="K_d_ADM")
-    private Long admCode;
+    private String admCode;
 
     @Indexed(name="K_d_obce")
-    private Long cityCode;
+    private String cityCode;
 
     @Indexed(name="N_zev_obce")
     private String cityName;
@@ -29,7 +29,7 @@ public class Address {
      * MOMC is czech abbreviation for city borough
      */
     @Indexed(name="K_d_MOMC")
-    private Long boroughCode;
+    private String boroughCode;
 
     @Indexed(name="N_zev_MOMC")
     private String boroughName;
@@ -38,7 +38,7 @@ public class Address {
      *  MOP is czech abbreviation for Prague's (Czech capital city) city borough
      */
     @Indexed(name="K_d_MOP")
-    private Long pragueBoroughCode;
+    private String pragueBoroughCode;
 
     @Indexed(name="N_zev_MOP")
     private String pragueBoroughName;
@@ -47,13 +47,13 @@ public class Address {
      * Unlike boroughs city disctricts aren't self-governed
      */
     @Indexed(name="K_d___sti_obce")
-    private Long disctrictCode;
+    private String disctrictCode;
 
     @Indexed(name="N_zev___sti_obce")
     private String districtName;
 
     @Indexed(name="K_d_ulice")
-    private Long streetCode;
+    private String streetCode;
 
     @Indexed(name="N_zev_ulice")
     private String streetName;
@@ -66,16 +66,16 @@ public class Address {
     private String buildingType;
 
     @Indexed(name="__slo_domovn_")
-    private Long houseNumber;
+    private String houseNumber;
 
     @Indexed(name="__slo_orienta_n_")
-    private Long orientationalNumber;
+    private String orientationalNumber;
 
     @Indexed(name="Znak___sla_orienta_n_ho")
     private String orientationalNumberLetter;
 
     @Indexed(name="PS_")
-    private Long postalCode;
+    private String postalCode;
 
     @Indexed(name="Sou_adnice_X")
     private Double coordinateX;
@@ -93,11 +93,11 @@ public class Address {
         return id;
     }
 
-    public Long getAdmCode() {
+    public String getAdmCode() {
         return admCode;
     }
 
-    public Long getCityCode() {
+    public String getCityCode() {
         return cityCode;
     }
 
@@ -105,7 +105,7 @@ public class Address {
         return cityName;
     }
 
-    public Long getBoroughCode() {
+    public String getBoroughCode() {
         return boroughCode;
     }
 
@@ -113,7 +113,7 @@ public class Address {
         return boroughName;
     }
 
-    public Long getPragueBoroughCode() {
+    public String getPragueBoroughCode() {
         return pragueBoroughCode;
     }
 
@@ -121,7 +121,7 @@ public class Address {
         return pragueBoroughName;
     }
 
-    public Long getDisctrictCode() {
+    public String getDisctrictCode() {
         return disctrictCode;
     }
 
@@ -129,7 +129,7 @@ public class Address {
         return districtName;
     }
 
-    public Long getStreetCode() {
+    public String getStreetCode() {
         return streetCode;
     }
 
@@ -141,11 +141,11 @@ public class Address {
         return buildingType;
     }
 
-    public Long getHouseNumber() {
+    public String getHouseNumber() {
         return houseNumber;
     }
 
-    public Long getOrientationalNumber() {
+    public String getOrientationalNumber() {
         return orientationalNumber;
     }
 
@@ -153,7 +153,7 @@ public class Address {
         return orientationalNumberLetter;
     }
 
-    public Long getPostalCode() {
+    public String getPostalCode() {
         return postalCode;
     }
 

@@ -12,6 +12,7 @@
           placeholder="Zadejte adresní místo"
           v-model="query"
           id="name-search"
+          @hit="redirectToDetail($event)"
         >
           <template slot="append">
             <b-button variant="primary" v-on:click="search(query)">
@@ -34,6 +35,7 @@
           placeholder="Zadejte kód ADM"
           v-model="admCode"
           id="code-search"
+          @hit="redirectToDetail($event)"
         >
           <template slot="append">
             <b-button variant="primary" v-on:click="searchByAdmCode(admCode)">
@@ -100,6 +102,12 @@ export default {
           this.error = error.toString();
           this.$log.debug(error);
         });
+    },
+    redirectToDetail(address) {
+      this.$router.push({
+        name: "addressDetail",
+        params: { id: address.admCode }
+      });
     },
     buildAddress(address) {
       return addressBuilder.buildInline(address);

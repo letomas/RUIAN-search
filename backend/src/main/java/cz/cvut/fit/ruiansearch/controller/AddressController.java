@@ -4,9 +4,7 @@ import cz.cvut.fit.ruiansearch.model.Address;
 import cz.cvut.fit.ruiansearch.service.AddressService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.data.web.SortDefault;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,16 +24,16 @@ public class AddressController {
     public Page<Address> getAddresses(
             @RequestParam(name = "search", required = false) String term,
             @RequestParam(name = "admCode", required = false) String admCode,
-            @PageableDefault()
-            @SortDefault.SortDefaults({
-                    @SortDefault(sort = "admCode", direction = Sort.Direction.ASC)
-            }) Pageable pageable) {
+            @PageableDefault() Pageable pageable) {
 
-        if(term != null) {
+        if(term != null && term != "") {
             return addressService.search(term, pageable);
         }
+        if(admCode != null && admCode != "") {
+            return addressService.findByAdmCodeStartsWith(admCode, pageable);
+        }
 
-        return addressService.findByAdmCodeStartsWith(admCode, pageable);
+        return Page.empty();
     }
 
     @GetMapping({"/{admCode}", "/{admCode}/"})

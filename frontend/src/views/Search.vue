@@ -9,16 +9,22 @@
         v-on:searchByAdmCode="searchByAdmCode($event)"
       />
     </b-container>
-    <b-table :items="items" :fields="fields">
-      <template v-slot:cell(detail)="{ item }">
-        <b-button
-          variant="primary"
-          :to="{ name: 'addressDetail', params: { id: item.admCode } }"
-        >
-          Detail
-        </b-button>
-      </template>
-    </b-table>
+    <div v-if="showResult === true">
+      <h3 v-bind:query="query">Výsledek vyhledávání pro: {{ query }}</h3>
+      <b-table :items="items" :fields="fields">
+        <template v-slot:cell(detail)="{ item }">
+          <b-button
+            variant="primary"
+            :to="{ name: 'addressDetail', params: { id: item.admCode } }"
+          >
+            Detail
+          </b-button>
+        </template>
+      </b-table>
+    </div>
+    <div v-else-if="noResult === true">
+      <p v-bind:query="query">Nebyl nalezen žádný výsledek pro: {{ query }}</p>
+    </div>
   </div>
 </template>
 
@@ -36,11 +42,15 @@ export default {
       fields: [
         { key: "admCode", label: "Kód ADM" },
         { key: "streetName", label: "Název ulice" },
+        { key: "buildingType", label: "Typ SO" },
+        { key: "houseNumber", label: "Identifikace" },
         { key: "boroughName", label: "Název části obce" },
         { key: "cityName", label: "Název obce" },
         { key: "detail", label: "" }
       ],
       items: [],
+      showResult: false,
+      noResult: false,
       error: null,
       query: null,
       admCode: null
@@ -48,11 +58,20 @@ export default {
   },
   methods: {
     search(query) {
+      this.showResult = false;
+      this.noResult = false;
+      this.query = query;
+
       api
         .getQueryResult(query)
         .then(result => {
           this.$log.debug("Query result is:" + result.data);
           this.items = result.data.content;
+          if (typeof this.items !== "undefined" && this.items.length > 0) {
+            this.showResult = true;
+          } else {
+            this.noResult = true;
+          }
         })
         .catch(error => {
           this.error = error.toString();
@@ -60,11 +79,20 @@ export default {
         });
     },
     searchByAdmCode(admCode) {
+      this.showResult = false;
+      this.noResult = false;
+      this.admCode = admCode;
+
       api
         .findByAdmCode(admCode)
         .then(result => {
           this.$log.debug("Query result is:" + result.data);
           this.items = result.data.content;
+          if (typeof this.items !== "undefined" && this.items.length > 0) {
+            this.showResult = true;
+          } else {
+            this.noResult = true;
+          }
         })
         .catch(error => {
           this.error = error.toString();

@@ -22,6 +22,17 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
+    public Page<Address> formSearch(
+            String streetName,
+            String houseNumber,
+            String boroughName,
+            String cityName,
+            Pageable pageable) {
+        return addressRepository.formSearch(
+                streetName, houseNumber, boroughName, cityName, pageable);
+    }
+    
+    @Override
     public Page<Address> findByAdmCodeStartsWith(String admCode, Pageable pageable) {
         return addressRepository.findByAdmCodeStartsWith(admCode, pageable);
     }

@@ -5,7 +5,7 @@
         <b-form-group
           label="Ulice:"
           label-for="street-input"
-          label-cols="1"
+          label-cols="2"
           label-align-sm="left"
         >
           <b-form-input
@@ -16,9 +16,22 @@
           ></b-form-input>
         </b-form-group>
         <b-form-group
+          label="Číslo domovní:"
+          label-for="houseNumber-input"
+          label-cols="2"
+          label-align-sm="left"
+        >
+          <b-form-input
+            id="houseNumber-input"
+            v-model="houseNumber"
+            size="sm"
+            trim
+          ></b-form-input>
+        </b-form-group>
+        <b-form-group
           label="Město:"
           label-for="city-input"
-          label-cols="1"
+          label-cols="2"
           label-align-sm="left"
         >
           <b-form-input
@@ -31,7 +44,7 @@
         <b-form-group
           label="Městská část/obvod:"
           label-for="borough-input"
-          label-cols="1"
+          label-cols="2"
           label-align-sm="left"
         >
           <b-form-input
@@ -42,7 +55,10 @@
           ></b-form-input>
         </b-form-group>
         <b-row>
-          <b-button v-on:click="search(street, city, borough)" variant="primary">
+          <b-button
+            v-on:click="search(street, houseNumber, city, borough)"
+            variant="primary"
+          >
             Vyhledat
           </b-button>
         </b-row>
@@ -56,18 +72,25 @@ export default {
   name: "SearchForm",
   props: {
     street: {
-      type: String
+      type: String,
+      default: ""
+    },
+    houseNumber: {
+      type: String,
+      default: ""
     },
     city: {
-      type: String
+      type: String,
+      default: ""
     },
     borough: {
-      type: String
+      type: String,
+      default: ""
     }
   },
   methods: {
-    search(street, city, borough) {
-      this.$emit("search", { street, city, borough });
+    search(street, houseNumber, city, borough) {
+      this.$emit("search", { street, houseNumber, city, borough });
     }
   }
 };
@@ -79,5 +102,8 @@ input {
 }
 div.container {
   margin: 1.2em 1em 1em 0.8em;
+}
+button {
+  margin-left: 1em;
 }
 </style>

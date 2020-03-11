@@ -8,6 +8,10 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -40,6 +44,11 @@ public class AddressController {
             @RequestParam(name = "city", required = false) String city,
             @RequestParam(name = "borough", required = false) String borough,
             @PageableDefault() Pageable pageable) {
+        List<String> params = Arrays.asList(street, houseNumber, city, borough);
+        if(paramsAreEmpty(params)) {
+            return Page.empty();
+        }
+
         return addressService.formSearch(
             street, houseNumber, borough, city, pageable);
     }
@@ -48,5 +57,15 @@ public class AddressController {
     @GetMapping({"/{admCode}", "/{admCode}/"})
     public Optional<Address> getAddressDetail(@PathVariable String admCode) {
         return addressService.findByAdmCode(admCode);
+    }
+
+    private boolean paramsAreEmpty(List<String> params) {
+        for(String param : params) {
+            if(param != "" && param != null) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

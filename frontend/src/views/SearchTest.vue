@@ -17,6 +17,7 @@
 
 <script>
 import SearchForm from "../components/SearchForm";
+import api from "../api.js";
 
 export default {
   name: "SearchTest",
@@ -41,6 +42,15 @@ export default {
   methods: {
     search(query) {
       this.$log.debug(query);
+      api
+        .getFormQueryResult(query)
+        .then(result => {
+          this.items = result.data.content;
+        })
+        .catch(error => {
+          this.error = error.toString();
+          this.$log.debug(error);
+        });
     }
   }
 };

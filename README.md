@@ -16,6 +16,8 @@ Aplikace využívá třívrstvou kontejnerizovanou architekturu. Na datové vrst
 - bash
 
 ## Spuštění
+>**Upozornění:** Pro spuštění je nutné zachovat unixové konce řádků (LF). Pokud máte v gitu nastavené automatické převádění na CRLF, vypněte toto nastavení pomocí příkazu `git config --global core.autocrlf input`. Popřípadě zkonvertujte konce řádků pomocí nástroje dos2unix nebo textového editoru.
+
 Po stažení/naklonování projektu je možné aplikaci sputit pomocí skriptu:
 ```
 ./init.sh

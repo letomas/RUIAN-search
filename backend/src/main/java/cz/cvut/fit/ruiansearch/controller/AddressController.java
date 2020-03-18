@@ -44,7 +44,7 @@ public class AddressController {
         }
 
         return addressService.search(
-            city, street, district, houseNumber, pageable);
+            city, district, street, houseNumber, pageable);
     }
 
 

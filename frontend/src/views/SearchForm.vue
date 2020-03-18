@@ -1,7 +1,10 @@
 <template>
   <div class="search">
     <h1>Vyhledávání v RÚIAN</h1>
-    <SearchForm v-bind:query="query" v-on:search="search($event)"></SearchForm>
+    <SearchForm
+      v-bind:query.sync="query"
+      v-on:search="search($event)"
+    ></SearchForm>
     <b-table :items="items" :fields="fields">
       <template v-slot:cell(detail)="{ item }">
         <b-button
@@ -35,13 +38,17 @@ export default {
       ],
       items: [],
       error: null,
-      query: null,
+      query: {
+        city: "",
+        borough: "",
+        street: "",
+        houseNumber: ""
+      },
       admCode: null
     };
   },
   methods: {
     search(query) {
-      this.$log.debug(query);
       api
         .getFormQueryResult(query)
         .then(result => {

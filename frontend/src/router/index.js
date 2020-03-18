@@ -1,6 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import SearchTest from "../views/SearchTest.vue";
+import SearchForm from "../views/SearchForm.vue";
 
 Vue.use(VueRouter);
 
@@ -8,7 +8,7 @@ const routes = [
   {
     path: "",
     name: "home",
-    component: SearchTest
+    component: SearchForm
   },
   {
     path: "/",

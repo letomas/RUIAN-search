@@ -9,14 +9,15 @@ import java.util.Optional;
 
 public interface AddressService {
     Page<Address> search(
-            String streetName,
+            String city,
+            String district,
+            String street,
             String houseNumber,
-            String boroughName,
-            String cityName,
             Pageable pageable);
     Page<Address> findByAdmCodeStartsWith(String admCode, Pageable pageable);
     Optional<Address> findByAdmCode(String admCode);
     List<Address> getCitySuggestions(String city);
-    List<Address> getStreetSuggestions(String city, String street);
-    List<Address> getHouseNumberSuggestions(String city, String street, String houseNumber);
+    List<Address> getDistrictSuggestions(String city, String district);
+    List<Address> getStreetSuggestions(String city, String district, String street);
+    List<Address> getHouseNumberSuggestions(String city, String district, String street, String houseNumber);
 }

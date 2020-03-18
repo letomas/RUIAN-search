@@ -3,10 +3,24 @@
     <div class="container" fluid>
       <b-row class="typehead">
         <b-col cols="2" align="left">
-          <label for="input">Město:</label>
+          <label for="input">Obec:</label>
         </b-col>
         <b-col>
           <Typeahead :data="citySuggestions" v-model="city" class="input">
+          </Typeahead>
+        </b-col>
+      </b-row>
+
+      <b-row class="typehead">
+        <b-col cols="2" align="left">
+          <label for="input">Část obce:</label>
+        </b-col>
+        <b-col>
+          <Typeahead
+            :data="districtSuggestions"
+            v-model="district"
+            class="input"
+          >
           </Typeahead>
         </b-col>
       </b-row>
@@ -38,7 +52,7 @@
 
       <b-row>
         <b-button
-          v-on:click="search(city, borough, street, houseNumber)"
+          v-on:click="search(city, district, street, houseNumber)"
           variant="primary"
         >
           Vyhledat
@@ -63,17 +77,18 @@ export default {
   data() {
     return {
       citySuggestions: [],
+      districtSuggestions: [],
       streetSuggestions: [],
       houseNumberSuggestions: [],
       city: this.query.city,
-      borough: this.query.borough,
+      district: this.query.district,
       street: this.query.street,
       houseNumber: this.query.houseNumber
     };
   },
   methods: {
-    search(city, borough, street, houseNumber) {
-      this.$emit("search", { city, borough, street, houseNumber });
+    search(city, district, street, houseNumber) {
+      this.$emit("search", { city, district, street, houseNumber });
     },
     getCitySuggestions(city) {
       api
@@ -86,9 +101,20 @@ export default {
           this.$log.debug(error);
         });
     },
-    getStreetSuggestions(city, street) {
+    getDistrictSuggestions(city, district) {
       api
-        .getStreetSuggestions(city, street)
+        .getDistrictSuggestions(city, district)
+        .then(result => {
+          this.districtSuggestions = result.data;
+        })
+        .catch(error => {
+          this.error = error.toString();
+          this.$log.debug(error);
+        });
+    },
+    getStreetSuggestions(city, district, street) {
+      api
+        .getStreetSuggestions(city, district, street)
         .then(result => {
           this.streetSuggestions = result.data;
         })
@@ -97,9 +123,9 @@ export default {
           this.$log.debug(error);
         });
     },
-    getHouseNumberSuggestions(city, street, houseNumber) {
+    getHouseNumberSuggestions(city, district, street, houseNumber) {
       api
-        .getHouseNumberSuggestions(city, street, houseNumber)
+        .getHouseNumberSuggestions(city, district, street, houseNumber)
         .then(result => {
           this.houseNumberSuggestions = result.data;
         })
@@ -113,11 +139,19 @@ export default {
     city: _.debounce(function(input) {
       this.getCitySuggestions(input);
     }, 400),
+    district: _.debounce(function(input) {
+      this.getDistrictSuggestions(this.city, input);
+    }, 400),
     street: _.debounce(function(input) {
-      this.getStreetSuggestions(this.city, input);
+      this.getStreetSuggestions(this.city, this.district, input);
     }, 400),
     houseNumber: _.debounce(function(input) {
-      this.getHouseNumberSuggestions(this.city, this.street, input);
+      this.getHouseNumberSuggestions(
+        this.city,
+        this.district,
+        this.street,
+        input
+      );
     }, 400)
   }
 };

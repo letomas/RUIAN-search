@@ -19,13 +19,13 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public Page<Address> search(
-            String streetName,
+            String city,
+            String district,
+            String street,
             String houseNumber,
-            String boroughName,
-            String cityName,
             Pageable pageable) {
         return addressRepository.search(
-                streetName, houseNumber, boroughName, cityName, pageable);
+                city, district, street, houseNumber, pageable);
     }
 
     @Override
@@ -44,13 +44,18 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public List<Address> getStreetSuggestions(String city, String street) {
-        return addressRepository.getStreetSuggestions(city, street);
+    public List<Address> getDistrictSuggestions(String city, String district) {
+        return addressRepository.getDistrictSuggestions(city, district);
+    }        
+
+    @Override
+    public List<Address> getStreetSuggestions(String city, String district, String street) {
+        return addressRepository.getStreetSuggestions(city, district, street);
     }
 
     @Override
-    public List<Address> getHouseNumberSuggestions(String city, String street, String houseNumber) {
-        return addressRepository.getHouseNumberSuggestions(city, street, houseNumber);
+    public List<Address> getHouseNumberSuggestions(String city, String district, String street, String houseNumber) {
+        return addressRepository.getHouseNumberSuggestions(city, district, street, houseNumber);
     }
 
 }

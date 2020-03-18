@@ -37,15 +37,32 @@ public class SuggestionController {
         return cities;
     }
 
+    @GetMapping("/district")
+    public Set<String> getDistrictSuggestions(
+        @RequestParam(defaultValue = "*") String city,
+        @RequestParam() String district) {
+        if (isEmptyOrNull(district)) {
+            return Collections.emptySet();
+        }
+
+        List<Address> addresses = addressService.getDistrictSuggestions(city, district);
+        Set<String> districts = addresses.stream()
+                .map(Address::getDistrictName)
+                .collect(Collectors.toSet());
+
+        return districts;
+    }
+
     @GetMapping("/street")
     public Set<String> getStreetSuggestions(
             @RequestParam(defaultValue = "*") String city,
+            @RequestParam(defaultValue = "*") String district,
             @RequestParam() String street) {
         if (isEmptyOrNull(street)) {
             return Collections.emptySet();
         }
 
-        List<Address> addresses = addressService.getStreetSuggestions(city, street);
+        List<Address> addresses = addressService.getStreetSuggestions(city, district, street);
         Set<String> streets = addresses.stream()
                 .map(Address::getStreetName)
                 .collect(Collectors.toSet());
@@ -56,13 +73,15 @@ public class SuggestionController {
     @GetMapping("/houseNumber")
     public Set<String> gethouseNumberSuggestions(
             @RequestParam(defaultValue = "*") String city,
+            @RequestParam(defaultValue = "*") String district,
             @RequestParam(defaultValue = "*") String street,
             @RequestParam() String houseNumber) {
         if (isEmptyOrNull(houseNumber) || street.equals("*")) {
             return Collections.emptySet();
         }
 
-        List<Address> addresses = addressService.getHouseNumberSuggestions(city, street, houseNumber);
+        List<Address> addresses = addressService
+                                    .getHouseNumberSuggestions(city, district, street, houseNumber);
         Set<String> houseNumbers = addresses.stream()
                 .map(Address::getHouseNumber)
                 .collect(Collectors.toSet());

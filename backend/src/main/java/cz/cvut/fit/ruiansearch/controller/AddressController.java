@@ -24,18 +24,18 @@ public class AddressController {
 
     @GetMapping("/search")
     public Page<Address> getAddresses(
+            @RequestParam(defaultValue= "*") String city,
+            @RequestParam(defaultValue= "*") String district,
             @RequestParam(defaultValue= "*") String street,
             @RequestParam(defaultValue= "*") String houseNumber,
-            @RequestParam(defaultValue= "*") String city,
-            @RequestParam(defaultValue= "*") String borough,
             @PageableDefault() Pageable pageable) {
-        List<String> params = Arrays.asList(street, houseNumber, city, borough);
+        List<String> params = Arrays.asList(street, houseNumber, city, district);
         if(paramsAreDefault(params, "*")) {
             return Page.empty();
         }
 
         return addressService.search(
-            street, houseNumber, borough, city, pageable);
+            city, street, district, houseNumber, pageable);
     }
 
 

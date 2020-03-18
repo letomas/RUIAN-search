@@ -15,8 +15,8 @@ export default {
     let params = "street=" + query.street;
     params += "&houseNumber=" + query.houseNumber;
     params += "&city=" + query.city;
-    params += "&borough=" + query.borough;
-    return ruian_api.get("/addresses/form-search?" + params);
+    params += "&district=" + query.district;
+    return ruian_api.get("/addresses/search?" + params);
   },
   getDetail: admCode => {
     return ruian_api.get("/addresses/" + admCode);
@@ -27,13 +27,20 @@ export default {
   getCitySuggestions: city => {
     return ruian_api.get("/suggestions/city?city=" + city);
   },
-  getStreetSuggestions: (city, street) => {
+  getDistrictSuggestions: (city, district) => {
     let params = "city=" + city;
+    params += "&district=" + district;
+    return ruian_api.get("/suggestions/district?" + params);
+  },
+  getStreetSuggestions: (city, district, street) => {
+    let params = "city=" + city;
+    params += "&district=" + district;
     params += "&street=" + street;
     return ruian_api.get("/suggestions/street?" + params);
   },
-  getHouseNumberSuggestions: (city, street, houseNumber) => {
+  getHouseNumberSuggestions: (city, district, street, houseNumber) => {
     let params = "city=" + city;
+    params += "&district=" + district;
     params += "&street=" + street;
     params += "&houseNumber=" + houseNumber;
     return ruian_api.get("/suggestions/houseNumber?" + params);

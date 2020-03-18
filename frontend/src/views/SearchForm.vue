@@ -3,7 +3,9 @@
     <h1>Vyhledávání v RÚIAN</h1>
     <SearchForm
       v-bind:query.sync="query"
+      v-bind:admCode.sync="admCode"
       v-on:search="search($event)"
+      v-on:searchByAdmCode="searchByAdmCode($event)"
     ></SearchForm>
     <div v-if="showResult === true">
       <b-table :items="items" :fields="fields">
@@ -69,8 +71,28 @@ export default {
     search(query) {
       this.showResult = false;
       this.noResult = false;
+
       api
         .getFormQueryResult(query)
+        .then(result => {
+          this.items = result.data.content;
+          if (typeof this.items !== "undefined" && this.items.length > 0) {
+            this.showResult = true;
+          } else {
+            this.noResult = true;
+          }
+        })
+        .catch(error => {
+          this.error = error.toString();
+          this.$log.debug(error);
+        });
+    },
+    searchByAdmCode(admCode) {
+      this.showResult = false;
+      this.noResult = false;
+
+      api
+        .findByAdmCode(admCode)
         .then(result => {
           this.items = result.data.content;
           if (typeof this.items !== "undefined" && this.items.length > 0) {

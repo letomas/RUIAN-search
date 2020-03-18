@@ -52,11 +52,35 @@
 
       <b-row>
         <b-button
+          class="form-button"
           v-on:click="search(city, district, street, houseNumber)"
           variant="primary"
         >
           Vyhledat
         </b-button>
+      </b-row>
+    </div>
+    <div id="code-container" class="container" fluid>
+      <b-row>
+        <h3>
+          Vyhledávání adresních míst podle jejich kódu:
+        </h3>
+      </b-row>
+
+      <b-row class="typehead">
+        <Typeahead
+          :data="codeSuggestions"
+          :serializer="address => address.admCode.toString()"
+          v-model="admCodeLocal"
+          id="code-search"
+          @hit="redirectToDetail($event)"
+        >
+          <template slot="append">
+            <b-button variant="primary" v-on:click="searchByAdmCode">
+              <BIconSearch></BIconSearch>
+            </b-button>
+          </template>
+        </Typeahead>
       </b-row>
     </div>
   </div>
@@ -73,22 +97,27 @@ export default {
   components: {
     Typeahead
   },
-  props: ["query"],
+  props: ["query", "admCode"],
   data() {
     return {
       citySuggestions: [],
       districtSuggestions: [],
       streetSuggestions: [],
       houseNumberSuggestions: [],
+      codeSuggestions: [],
       city: this.query.city,
       district: this.query.district,
       street: this.query.street,
-      houseNumber: this.query.houseNumber
+      houseNumber: this.query.houseNumber,
+      admCodeLocal: this.admCode
     };
   },
   methods: {
     search(city, district, street, houseNumber) {
       this.$emit("search", { city, district, street, houseNumber });
+    },
+    searchByAdmCode() {
+      this.$emit("searchByAdmCode", this.admCodeLocal);
     },
     getCitySuggestions(city) {
       api
@@ -133,6 +162,23 @@ export default {
           this.error = error.toString();
           this.$log.debug(error);
         });
+    },
+    getCodeSuggestions(admCode) {
+      api
+        .findByAdmCode(admCode)
+        .then(result => {
+          this.codeSuggestions = result.data.content;
+        })
+        .catch(error => {
+          this.error = error.toString();
+          this.$log.debug(error);
+        });
+    },
+    redirectToDetail(address) {
+      this.$router.push({
+        name: "addressDetail",
+        params: { id: address.admCode }
+      });
     }
   },
   watch: {
@@ -152,6 +198,9 @@ export default {
         this.street,
         input
       );
+    }, 400),
+    admCodeLocal: _.debounce(function(input) {
+      this.getCodeSuggestions(input);
     }, 400)
   }
 };
@@ -164,10 +213,19 @@ export default {
 .input {
   width: 50%;
 }
+#code-search {
+  width: 30%;
+}
 div.container {
   margin: 1.2em 1em 1em 0.8em;
 }
-button {
+#code-container {
+  margin-left: 2em;
+}
+.form-button {
   margin-left: 1em;
+}
+h3 {
+  font-size: 1.3em;
 }
 </style>

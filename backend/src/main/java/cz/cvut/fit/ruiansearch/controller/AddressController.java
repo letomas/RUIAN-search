@@ -21,7 +21,16 @@ public class AddressController {
     public AddressController(AddressService addressService) {
         this.addressService = addressService;
     }
+    @GetMapping("")
+    public Page<Address> getAdresssesByCode(
+        @RequestParam() String admCode,
+        @PageableDefault() Pageable pageable) {
+        if(isEmptyOrNull(admCode)) {
+            return Page.empty();
+        }
 
+        return addressService.findByAdmCodeStartsWith(admCode, pageable);
+    }
     @GetMapping("/search")
     public Page<Address> getAddresses(
             @RequestParam(defaultValue= "*") String city,
@@ -52,5 +61,9 @@ public class AddressController {
         }
 
         return true;
+    }
+
+    private boolean isEmptyOrNull(String input) {
+        return (input == null || input == "");
     }
 }

@@ -4,7 +4,7 @@ const SERVER_URL = "http://localhost:8081/api";
 
 const ruian_api = axios.create({
   baseURL: SERVER_URL,
-  timeout: 1000
+  timeout: 10000
 });
 
 export default {
@@ -23,6 +23,20 @@ export default {
   },
   findByAdmCode: admCode => {
     return ruian_api.get("/addresses?admCode=" + admCode);
+  },
+  getCitySuggestions: city => {
+    return ruian_api.get("/suggestions/city?city=" + city);
+  },
+  getStreetSuggestions: (city, street) => {
+    let params = "city=" + city;
+    params += "&street=" + street;
+    return ruian_api.get("/suggestions/street?" + params);
+  },
+  getHouseNumberSuggestions: (city, street, houseNumber) => {
+    let params = "city=" + city;
+    params += "&street=" + street;
+    params += "&houseNumber=" + houseNumber;
+    return ruian_api.get("/suggestions/houseNumber?" + params);
   },
   getHealthStatus: () => {
     return ruian_api.get("/health");

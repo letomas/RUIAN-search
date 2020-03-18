@@ -8,8 +8,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -24,47 +22,31 @@ public class AddressController {
         this.addressService = addressService;
     }
 
-    @GetMapping({"", "/"})
+    @GetMapping("/search")
     public Page<Address> getAddresses(
-            @RequestParam(name = "search", required = false) String term,
-            @RequestParam(name = "admCode", required = false) String admCode,
-            @PageableDefault() Pageable pageable) {
-
-        if(term != null && term != "") {
-            return addressService.search(term, pageable);
-        }
-        if(admCode != null && admCode != "") {
-            return addressService.findByAdmCodeStartsWith(admCode, pageable);
-        }
-
-        return Page.empty();
-    }
-
-    @GetMapping({"/form-search", "/form-search/"})
-    public Page<Address> getAddressesFromForm(
-            @RequestParam(name = "street", required = false) String street,
-            @RequestParam(name = "houseNumber", required = false) String houseNumber,
-            @RequestParam(name = "city", required = false) String city,
-            @RequestParam(name = "borough", required = false) String borough,
+            @RequestParam(defaultValue= "*") String street,
+            @RequestParam(defaultValue= "*") String houseNumber,
+            @RequestParam(defaultValue= "*") String city,
+            @RequestParam(defaultValue= "*") String borough,
             @PageableDefault() Pageable pageable) {
         List<String> params = Arrays.asList(street, houseNumber, city, borough);
-        if(paramsAreEmpty(params)) {
+        if(paramsAreDefault(params, "*")) {
             return Page.empty();
         }
 
-        return addressService.formSearch(
+        return addressService.search(
             street, houseNumber, borough, city, pageable);
     }
 
 
-    @GetMapping({"/{admCode}", "/{admCode}/"})
+    @GetMapping("/{admCode}")
     public Optional<Address> getAddressDetail(@PathVariable String admCode) {
         return addressService.findByAdmCode(admCode);
     }
 
-    private boolean paramsAreEmpty(List<String> params) {
+    private boolean paramsAreDefault(List<String> params, String defaultValue) {
         for(String param : params) {
-            if(param != "" && param != null) {
+            if(!param.equals(defaultValue)) {
                 return false;
             }
         }

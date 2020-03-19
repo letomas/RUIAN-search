@@ -21,7 +21,7 @@ waitContainers () {
   waitContainer frontend
 }
 
-if [ $1 == "build" ]; then
+if [ "$1" == "build" ]; then
 	docker-compose up --build -d
 else
 	docker-compose up -d

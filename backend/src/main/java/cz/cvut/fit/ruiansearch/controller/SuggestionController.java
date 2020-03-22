@@ -4,10 +4,9 @@ import cz.cvut.fit.ruiansearch.model.Address;
 import cz.cvut.fit.ruiansearch.service.AddressService;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RestController
 @CrossOrigin
@@ -24,12 +23,12 @@ public class SuggestionController {
     }
 
     @GetMapping("/city")
-    public Set<String> getCitySuggestions(@RequestParam() String city) {
+    public Set<String> getCitySuggestions(@RequestParam String city) {
         if (isEmptyOrNull(city)) {
             return Collections.emptySet();
         }
 
-        List<Address> addresses = addressService.getCitySuggestions(city);
+        List<Address> addresses = addressService.getCitySuggestions(wrapInQuotes(city));
         Set<String> cities = addresses.stream()
                 .map(Address::getCityName)
                 .collect(Collectors.toSet());
@@ -40,12 +39,17 @@ public class SuggestionController {
     @GetMapping("/district")
     public Set<String> getDistrictSuggestions(
         @RequestParam(defaultValue = "*") String city,
-        @RequestParam() String district) {
+        @RequestParam String district) {
         if (isEmptyOrNull(district)) {
             return Collections.emptySet();
         }
 
-        List<Address> addresses = addressService.getDistrictSuggestions(city, district);
+        Map <String, String> params = Stream.of(new String[][] {
+            { "city", city },
+            { "district", district }
+        }).collect(Collectors.toMap(data -> data[0], data -> wrapInQuotes(data[1])));
+
+        List<Address> addresses = addressService.getDistrictSuggestions(params.get("city"), params.get("district"));
         Set<String> districts = addresses.stream()
                 .map(Address::getDistrictName)
                 .collect(Collectors.toSet());
@@ -57,12 +61,18 @@ public class SuggestionController {
     public Set<String> getStreetSuggestions(
             @RequestParam(defaultValue = "*") String city,
             @RequestParam(defaultValue = "*") String district,
-            @RequestParam() String street) {
+            @RequestParam String street) {
         if (isEmptyOrNull(street)) {
             return Collections.emptySet();
         }
 
-        List<Address> addresses = addressService.getStreetSuggestions(city, district, street);
+        Map <String, String> params = Stream.of(new String[][] {
+            { "city", city },
+            { "district", district },
+            { "street", street }
+        }).collect(Collectors.toMap(data -> data[0], data -> wrapInQuotes(data[1])));
+
+        List<Address> addresses = addressService.getStreetSuggestions(params.get("city"), params.get("district"), params.get("street"));
         Set<String> streets = addresses.stream()
                 .map(Address::getStreetName)
                 .collect(Collectors.toSet());
@@ -75,21 +85,40 @@ public class SuggestionController {
             @RequestParam(defaultValue = "*") String city,
             @RequestParam(defaultValue = "*") String district,
             @RequestParam(defaultValue = "*") String street,
-            @RequestParam() String houseNumber) {
+            @RequestParam String houseNumber) {
         if (isEmptyOrNull(houseNumber) || street.equals("*")) {
             return Collections.emptySet();
         }
 
-        List<Address> addresses = addressService
-                                    .getHouseNumberSuggestions(city, district, street, houseNumber);
+        Map <String, String> params = Stream.of(new String[][] {
+            { "city", city },
+            { "district", district },
+            { "street", street },
+            { "houseNumber", houseNumber }
+        }).collect(Collectors.toMap(data -> data[0], data -> wrapInQuotes(data[1])));
+
+        List<Address> addresses = addressService.getHouseNumberSuggestions(
+            params.get("city"), params.get("district"), params.get("street"), params.get("houseNumber"));
         Set<String> houseNumbers = addresses.stream()
                 .map(Address::getHouseNumber)
-                .collect(Collectors.toSet());
+                .collect(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(Integer::valueOf))));
 
         return houseNumbers;
     }
 
     private boolean isEmptyOrNull(String input) {
         return (input == null || input == "");
+    }
+
+    private String wrapInQuotes(String input) {
+        if(input.equals("*")) {
+            return input;
+        }
+
+        StringBuilder output = new StringBuilder(input);
+        output.append("\"");
+        output.insert(0, "\"");
+
+        return output.toString();
     }
 }

@@ -3,7 +3,7 @@
     <div class="container" fluid>
       <b-row class="typehead">
         <b-col cols="2" align="left">
-          <label for="input">Obec:</label>
+          <label>Obec:</label>
         </b-col>
         <b-col>
           <Typeahead :data="citySuggestions" v-model="city" class="input">
@@ -13,7 +13,7 @@
 
       <b-row class="typehead">
         <b-col cols="2" align="left">
-          <label for="input">Část obce:</label>
+          <label>Část obce:</label>
         </b-col>
         <b-col>
           <Typeahead
@@ -27,7 +27,7 @@
 
       <b-row class="typehead">
         <b-col cols="2" align="left">
-          <label for="input">Ulice:</label>
+          <label>Ulice:</label>
         </b-col>
         <b-col>
           <Typeahead :data="streetSuggestions" v-model="street" class="input">
@@ -37,13 +37,13 @@
 
       <b-row class="typehead">
         <b-col cols="2" align="left">
-          <label for="input">Číslo domovní:</label>
+          <label>Číslo domovní:</label>
         </b-col>
         <b-col>
           <Typeahead
             :data="houseNumberSuggestions"
             v-model="houseNumber"
-            minMatchingChars="1"
+            v-bind:minMatchingChars="1"
             class="input"
           >
           </Typeahead>
@@ -168,6 +168,20 @@ export default {
         .findByAdmCode(admCode)
         .then(result => {
           this.codeSuggestions = result.data.content;
+        })
+        .catch(error => {
+          this.error = error.toString();
+          this.$log.debug(error);
+        });
+    },
+    prefillDistrict(city) {
+      api
+        .getDistrictSuggestions(city, "*")
+        .then(result => {
+          if (result.data.length == 1) {
+            this.district = result.data;
+            this.$forceUpdate();
+          }
         })
         .catch(error => {
           this.error = error.toString();

@@ -21,37 +21,41 @@ module.exports = {
 
     if (address.streetName === "") {
       if (address.cityName === address.districtName) {
-        result.firstRow = address.buildingType + " " + address.houseNumber;
+        let buildingType =
+          address.buildingType == "č.ev " ? " č. ev. " : "č. p. ";
+        result.firstRow = buildingType + address.houseNumber;
       } else {
         result.firstRow = address.districtName;
-        module.exports.addBuildingTypeAndHouseNumber(result, address);
+        result.firstRow += " " + module.exports.buildHouseNumber(address);
       }
 
-      module.exports.addOrientationalNumberAndLetter(result, address);
+      result.firstRow += module.exports.buildOrientationalNumber(address);
       module.exports.buildLastRow(result, address);
 
       return result;
     }
 
     result.firstRow = address.streetName;
-    module.exports.addBuildingTypeAndHouseNumber(result, address);
-    module.exports.addOrientationalNumberAndLetter(result, address);
+    result.firstRow += " " + module.exports.buildHouseNumber(address);
+    result.firstRow += module.exports.buildOrientationalNumber(address);
     module.exports.buildLastRow(result, address);
 
     return result;
   },
-  addBuildingTypeAndHouseNumber(result, address) {
+  buildHouseNumber: address => {
     if (address.buildingType === "č.ev.") {
-      result.firstRow += " " + address.buildingType + " " + address.houseNumber;
-    } else {
-      result.firstRow += " " + address.houseNumber;
+      return "č. ev. " + address.houseNumber;
     }
+
+    return address.houseNumber;
   },
-  addOrientationalNumberAndLetter: (result, address) => {
+  buildOrientationalNumber: address => {
     if (address.orientationalNumber) {
-      result.firstRow +=
-        "/" + address.orientationalNumber + address.orientationalNumberLetter;
+      return (
+        "/" + address.orientationalNumber + address.orientationalNumberLetter
+      );
     }
+    return "";
   },
   buildLastRow: (result, address) => {
     if (!result.secondRow) {

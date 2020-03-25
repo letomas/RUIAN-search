@@ -51,21 +51,48 @@
         <b-col>{{ inline }}</b-col>
       </b-row>
     </b-container>
+    <b-container id="map-container" fluid>
+      <l-map :center="coordinates" :zoom="zoom" :minZoom="3">
+        <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
+        <l-marker :lat-lng="coordinates" />
+      </l-map>
+    </b-container>
   </div>
 </template>
 
 <script>
+import "leaflet/dist/leaflet.css";
 import addressBuilder from "../addressBuilder.js";
+
+import { LMap, LTileLayer, LMarker } from "vue2-leaflet";
+import { Icon } from "leaflet";
+
+delete Icon.Default.prototype._getIconUrl;
+Icon.Default.mergeOptions({
+  iconRetinaUrl: require("leaflet/dist/images/marker-icon-2x.png"),
+  iconUrl: require("leaflet/dist/images/marker-icon.png"),
+  shadowUrl: require("leaflet/dist/images/marker-shadow.png")
+});
 
 export default {
   name: "Address",
   props: {
     address: {
       type: Object
+    },
+    coordinates: {
+      type: Array
     }
+  },
+  components: {
+    LMap,
+    LTileLayer,
+    LMarker
   },
   computed: {
     firstRow: function() {
+      this.$log.debug(this.address);
+      this.$log.debug(this.coordinates);
       return addressBuilder.build(this.address).firstRow;
     },
     secondRow: function() {
@@ -80,7 +107,11 @@ export default {
   },
   data() {
     return {
-      IRIBaseUrl: "https://linked.cuzk.cz/resource/ruian/adresni-misto/"
+      IRIBaseUrl: "https://linked.cuzk.cz/resource/ruian/adresni-misto/",
+      url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+      attribution:
+        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      zoom: 20
     };
   }
 };
@@ -92,10 +123,15 @@ export default {
   margin-bottom: 2em;
 }
 .inline-address {
-  margin-top: 1.3em;
+  margin-top: 1.2em;
+  margin-bottom: 2em;
 }
 
 .header {
   font-weight: bold;
+}
+#map-container {
+  height: 40em;
+  width: 90%;
 }
 </style>

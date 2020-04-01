@@ -28,8 +28,8 @@ public interface AddressRepository extends SolrCrudRepository<Address, String> {
     @Query(value="Ulice:(?2)", filters={"N_zev_obce:?0 AND N_zev___sti_obce:?1"}, fields="N_zev_ulice")
     List<Address> getStreetSuggestions(String city, String district, String street);
     @Query(
-        value="Cislo_domovni:(?3)",
+        value="Identifikace_cs:(?3)",
         filters={"N_zev_obce:?0 AND N_zev___sti_obce:?1 AND N_zev_ulice:?2"},
-        fields="__slo_domovn_")
+        fields="Identifikace")
     List<Address> getHouseNumberSuggestions(String city, String district, String street, String houseNumber);
 }

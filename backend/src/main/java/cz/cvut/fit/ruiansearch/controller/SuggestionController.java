@@ -100,8 +100,10 @@ public class SuggestionController {
         List<Address> addresses = addressService.getHouseNumberSuggestions(
             params.get("city"), params.get("district"), params.get("street"), params.get("houseNumber"));
         Set<String> houseNumbers = addresses.stream()
-                .map(Address::getHouseNumber)
-                .collect(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(Integer::valueOf))));
+                .map(Address::getIdentification)
+                .collect(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(
+                    x -> Integer.parseInt(x.split("/")[0]))
+                    )));
 
         return houseNumbers;
     }

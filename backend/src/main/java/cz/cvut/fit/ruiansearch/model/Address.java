@@ -80,6 +80,12 @@ public class Address {
     @Indexed(name="Cislo_domovni")
     private String houseNumberForQuery;
 
+    @Indexed(name="Identifikace")
+    private String identification;
+
+    @Indexed(name="Identifikace_cs")
+    private String identificationForQuery;
+
     public String getId() {
         return id;
     }
@@ -134,5 +140,9 @@ public class Address {
 
     public Double getCoordinateY() {
         return coordinateY;
+    }
+
+    public String getIdentification() {
+        return identification;
     }
 }

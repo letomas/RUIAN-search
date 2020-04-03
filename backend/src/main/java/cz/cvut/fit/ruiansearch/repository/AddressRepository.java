@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @Repository
 public interface AddressRepository extends SolrCrudRepository<Address, String> {
-    @Query("Obec:(?0) AND Cast_obce:(?1) AND Ulice:(?2) AND Cislo_domovni:(?3)")
+    @Query("Obec:(?0) AND Cast_obce:(?1) AND Ulice:(?2) AND Identifikace:(?3)")
     Page<Address> search(
             String city,
             String district,
@@ -28,7 +28,7 @@ public interface AddressRepository extends SolrCrudRepository<Address, String> {
     @Query(value="Ulice:(?2)", filters={"N_zev_obce:?0 AND N_zev___sti_obce:?1"}, fields="N_zev_ulice")
     List<Address> getStreetSuggestions(String city, String district, String street);
     @Query(
-        value="Identifikace_cs:(?3)",
+        value="Identifikace_cs:(?3) OR Cislo_orientacni:(?3)",
         filters={"N_zev_obce:?0 AND N_zev___sti_obce:?1 AND N_zev_ulice:?2"},
         fields="Identifikace")
     List<Address> getHouseNumberSuggestions(String city, String district, String street, String houseNumber);

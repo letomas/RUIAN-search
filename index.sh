@@ -29,7 +29,8 @@ echo "Indexing data"
 docker run --rm -v "$PWD/data:/data" --network=host solr:8.3 post -c ruian -params "separator=%3B" /data/
 
 if [[ "$?" != 0 ]]; then
-	echo "Failed to index data, check if docker is running	"
+	echo "Failed to index data, check if docker is running"
+	rm -rf -- *.zip CSV temp
 	exit 1
 fi
 

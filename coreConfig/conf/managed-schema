@@ -480,8 +480,9 @@
   <field name="Obec" type="custom_string" default="" />
   <field name="Mestska_cast" type="custom_string" default="" />
   <field name="Cast_obce" type="custom_string" default="" />
-  <field name="Cislo_domovni" type="custom_string" default="" />
+  <field name="Cislo_orientacni" type="custom_string" default="" />
   <field name="Identifikace_cs" type="custom_string" default="" />
+  <field name="Coordinates_lat_lon" type="location" />
   <dynamicField name="*_txt_en_split_tight" type="text_en_splitting_tight" indexed="true" stored="true"/>
   <dynamicField name="*_descendent_path" type="descendent_path" indexed="true" stored="true"/>
   <dynamicField name="*_ancestor_path" type="ancestor_path" indexed="true" stored="true"/>
@@ -555,6 +556,6 @@
   <copyField source="N_zev_obce" dest="Obec" />
   <copyField source="N_zev_MOMC" dest="Mestska_cast" />
   <copyField source="N_zev___sti_obce" dest="Cast_obce" />
-  <copyField source="__slo_domovn_" dest="Cislo_domovni" />
+  <copyField source="__slo_orienta_n_" dest="Cislo_orientacni" />
   <copyField source="Identifikace" dest="Identifikace_cs" />
 </schema>

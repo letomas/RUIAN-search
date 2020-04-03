@@ -77,8 +77,8 @@ public class Address {
     @Indexed(name="Ulice")
     private String streetForQuery;
 
-    @Indexed(name="Cislo_domovni")
-    private String houseNumberForQuery;
+    @Indexed(name="Cislo_orientacni")
+    private String orientationalNumberForQuery;
 
     @Indexed(name="Identifikace")
     private String identification;

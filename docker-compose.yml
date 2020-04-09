@@ -4,8 +4,6 @@ services:
   solr:
     container_name: solr
     image: solr:8.3
-    ports:
-     - "${RUIAN_SOLR_PORT}:8983"
     volumes:
       - data:/var/solr
       - ./coreConfig:/opt/solr/server/solr/configsets/ruianConfig:ro
@@ -17,10 +15,11 @@ services:
       - solr
     healthcheck:
       test: wget --spider -q http://localhost:8983 || exit 1
-      interval: 30s
+      interval: 20s
       timeout: 10s
   spring-boot:
     container_name: backend
+    hostname: spring-boot
     build:
       context: ./backend/
       args:
@@ -28,36 +27,44 @@ services:
     image: backend/spring-boot
     environment:
       RUIAN_SOLR_URL: http://solr:8983/solr      
-    ports:
-      - "${RUIAN_SPRING_PORT}:8080"
     networks:
       - solr
-      - spring
+      - proxy
     depends_on:
       - solr
     healthcheck:
       test: wget --spider -q http://localhost:8080 || exit 1
-      interval: 30s
+      interval: 20s
       timeout: 10s
   vue-app:
     container_name: frontend
+    hostname: vue-app
     build: ./frontend/
     image: frontend/vue
-    ports: 
-      - "${RUIAN_VUE_PORT}:80"
     networks:
-      - spring
+      - proxy
     depends_on: 
       - spring-boot
     healthcheck:
       test: wget --spider -q http://localhost:80 || exit 1
-      interval: 30s
+      interval: 20s
       timeout: 10s
+  proxy:
+    container_name: proxy
+    image: nginx:1.17-alpine
+    ports:
+      - 8000:80
+    networks:
+      - proxy
+    volumes:
+      - ./nginxConfig:/etc/nginx
+    depends_on:
+      - vue-app
 volumes:
   data:
 networks:
   solr:
     driver: bridge
-  spring:
+  proxy:
     driver: bridge
     

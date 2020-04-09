@@ -57,7 +57,8 @@ services:
     networks:
       - proxy
     volumes:
-      - ./nginxConfig:/etc/nginx
+      - ./nginxConfig/conf.d:/etc/nginx/conf.d
+      - ./nginxConfig/nginx.conf:/etc/nginx/nginx.conf
     depends_on:
       - vue-app
 volumes:

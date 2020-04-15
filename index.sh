@@ -14,9 +14,22 @@ for file in CSV/*.csv; do
 	# Convert encoding from Windows 1250 to UTF-8
 	iconv -f CP1250 -t UTF-8 "$file" -o "temp/$outputFile"
 	rm "$file"
-	# Add new column containing house number and orientational number combined
+	# Add new columns, column 20 containing house number and orientational number combined
+	# And column 21 containing coordinates converted from jtsk to lat lon format
 	# Column 13 contains house number, column 14 contains orientational number and column 15 contains orientational number letter
-	awk -F";" 'NR>1 {$20 = $14 ? $13 "/" $14 $15 : $13; print} NR==1 {$20 = "Identifikace"; print}' OFS=";" "temp/$outputFile" > "data/$outputFile"
+	awk -F";" '
+	function convert(x, y) {
+		if (! x || ! y) {
+			return 
+		} else {
+			cmd = "node jtskConverter.js "x" "y
+			cmd | getline result
+			close(cmd)
+			return result
+		}
+	}
+	NR>1 {$20 = $14 ? $13 "/" $14 $15 : $13; $21 = convert($18, $17); print}
+	NR==1 {$20 = "Identifikace"; $21 = "Coordinates_lat_lon"; print}' OFS=";" "temp/$outputFile" > "data/$outputFile"
 	rm "temp/$outputFile"
 done
 
@@ -35,7 +48,7 @@ if [[ "$?" != 0 ]]; then
 fi
 
 # Delete files
-rm -rf -- *.zip CSV temp data
+rm -rf -- *.zip CSV temp #data
 
 echo "Indexing done"
 exit 0

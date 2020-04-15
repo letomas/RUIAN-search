@@ -64,7 +64,7 @@ public class SuggestionController {
             @RequestParam(defaultValue = "*") String district,
             @RequestParam(defaultValue = "*") String street,
             @RequestParam String houseNumber) {
-        if (isEmptyOrNull(houseNumber) || street.equals("*")) {
+        if (isEmptyOrNull(houseNumber)) {
             return Collections.emptyList();
         }
         GroupResult<Address> groupResult = addressService.getHouseNumberSuggestions(city, district, street, houseNumber);

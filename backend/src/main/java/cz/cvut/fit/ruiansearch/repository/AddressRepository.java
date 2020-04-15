@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Repository
 public interface AddressRepository extends SolrCrudRepository<Address, String> {
-    @Query("Obec:(?0) AND Cast_obce:(?1) AND Ulice:(?2) AND (Identifikace_cs:(?3) OR Cislo_orientacni:(?3))")
+    @Query("Obec:(?0) AND Cast_obce:(?1) AND -(-Ulice:(?2) AND Ulice:*)  AND (Identifikace_cs:(?3) OR Cislo_orientacni:(?3))")
     Page<Address> search(
             String city,
             String district,

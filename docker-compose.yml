@@ -43,6 +43,8 @@ services:
     hostname: vue-app
     build: ./frontend/
     image: frontend/vue
+    ports:
+      - 8000:80
     networks:
       - proxy
     depends_on: 
@@ -51,18 +53,6 @@ services:
       test: wget --spider -q http://localhost:80 || exit 1
       interval: 20s
       timeout: 10s
-  proxy:
-    container_name: proxy
-    image: nginx:1.17-alpine
-    ports:
-      - 8000:80
-    networks:
-      - proxy
-    volumes:
-      - ./nginxConfig/conf.d:/etc/nginx/conf.d
-      - ./nginxConfig/nginx.conf:/etc/nginx/nginx.conf
-    depends_on:
-      - vue-app
 volumes:
   data:
 networks:

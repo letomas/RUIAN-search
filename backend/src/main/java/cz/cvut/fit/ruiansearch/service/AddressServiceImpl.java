@@ -36,6 +36,16 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
+    public Page<Address> searchWithEmptyStreet(
+            String city,
+            String district,
+            String houseNumber,
+            Pageable pageable) {
+        return addressRepository.searchWithEmptyStreet(
+                city, district, houseNumber, pageable);
+    }
+
+    @Override
     public Page<Address> findByAdmCodeStartsWith(String admCode, Pageable pageable) {
         return addressRepository.findByAdmCodeStartsWith(admCode, pageable);
     }

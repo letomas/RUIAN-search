@@ -15,6 +15,11 @@ public interface AddressService {
             String street,
             String houseNumber,
             Pageable pageable);
+    Page<Address> searchWithEmptyStreet(
+        String city,
+        String district,
+        String houseNumber,
+        Pageable pageable);
     Page<Address> findByAdmCodeStartsWith(String admCode, Pageable pageable);
     Optional<Address> findByAdmCode(String admCode);
     GroupResult<Address> getCitySuggestions(String city);

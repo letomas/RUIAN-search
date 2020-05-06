@@ -44,6 +44,10 @@ public class AddressController {
             return Page.empty();
         }
 
+        if(street.equals("*")) {
+            return addressService.searchWithEmptyStreet(city, district, houseNumber, pageable);
+        }
+
         return addressService.search(
             city, district, street, houseNumber, pageable);
     }

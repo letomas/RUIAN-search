@@ -1,14 +1,13 @@
 <template>
   <div>
     <h1>Detail adresního místa</h1>
-    <Address v-bind:address="address" v-bind:coordinates="coordinates" />
+    <Address v-bind:address="address" />
   </div>
 </template>
 
 <script>
 import Address from "../components/Address.vue";
 import api from "../api.js";
-import converter from "../jtskConverter.js";
 
 export default {
   name: "Search",
@@ -35,17 +34,9 @@ export default {
   methods: {
     setData(address) {
       this.address = address;
-      this.coordinates = this.getCoordinates(address);
     },
     setError(error) {
       this.error = error;
-    },
-    getCoordinates(address) {
-      const conversion = converter.jtsk_to_wgs(
-        address.coordinateX,
-        address.coordinateY
-      );
-      return [conversion.lat, conversion.lon];
     }
   }
 };

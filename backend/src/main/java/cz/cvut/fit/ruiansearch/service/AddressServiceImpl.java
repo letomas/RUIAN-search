@@ -5,7 +5,9 @@ import cz.cvut.fit.ruiansearch.repository.AddressRepository;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.geo.Distance;
 import org.springframework.data.solr.core.SolrTemplate;
+import org.springframework.data.solr.core.geo.Point;
 import org.springframework.data.solr.core.query.*;
 import org.springframework.data.solr.core.query.result.GroupPage;
 import org.springframework.data.solr.core.query.result.GroupResult;
@@ -109,6 +111,7 @@ public class AddressServiceImpl implements AddressService {
         AnnotationConfigApplicationContext context = 
                 new AnnotationConfigApplicationContext("cz.cvut.fit.ruiansearch.config");
         SolrTemplate solrTemplate = (SolrTemplate) context.getBean("solrTemplate");
+
         Field field = new SimpleField("Identifikace");
 
         Criteria queryCriteria = new Criteria("Identifikace_cs").is(houseNumber)
@@ -126,10 +129,26 @@ public class AddressServiceImpl implements AddressService {
             .addFilterQuery(districtFilter)
             .addFilterQuery(streetFilter);
         GroupPage<Address> page = solrTemplate.queryForGroupPage(collectionName, query, Address.class);
-
+        
         context.close();
         return page.getGroupResult(field);
     }
+
+    @Override
+    public Page<Address> getNearbyAddresses(Point center, Double distance) {
+        AnnotationConfigApplicationContext context =
+                new AnnotationConfigApplicationContext("cz.cvut.fit.ruiansearch.config");
+        SolrTemplate solrTemplate = (SolrTemplate) context.getBean("solrTemplate");
+
+        Criteria queryCriteria = new Criteria("Coordinates_lat_lon").near(center, new Distance(distance));
+
+        SimpleQuery query = new SimpleQuery(queryCriteria);
+        Page<Address> page = solrTemplate.query(collectionName, query, Address.class);
+
+        context.close();
+        return page;
+    }
+
 
     private void setGroupOptions(Field field, SimpleQuery query) {
         /*

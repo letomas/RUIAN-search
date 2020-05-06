@@ -45,6 +45,12 @@ export default {
     params += "&houseNumber=" + houseNumber;
     return ruian_api.get("/suggestions/houseNumber?" + params);
   },
+  getNearbyAddresses: (x, y, distance) => {
+    let params = "x=" + x;
+    params += "&y=" + y;
+    params += "&distance=" + distance;
+    return ruian_api.get("/addresses/nearby?" + params);
+  },
   getHealthStatus: () => {
     return ruian_api.get("/health");
   }

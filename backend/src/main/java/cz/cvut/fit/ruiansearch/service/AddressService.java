@@ -3,6 +3,7 @@ package cz.cvut.fit.ruiansearch.service;
 import cz.cvut.fit.ruiansearch.model.Address;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.solr.core.geo.Point;
 import org.springframework.data.solr.core.query.result.GroupResult;
 
 import java.util.Optional;
@@ -20,4 +21,5 @@ public interface AddressService {
     GroupResult<Address> getDistrictSuggestions(String city, String district);
     GroupResult<Address> getStreetSuggestions(String city, String district, String street);
     GroupResult<Address> getHouseNumberSuggestions(String city, String district, String street, String houseNumber);
+    Page<Address> getNearbyAddresses(Point center, Double distance);
 }

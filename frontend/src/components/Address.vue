@@ -32,7 +32,6 @@
             {{ IRIBaseUrl }}{{ address.admCode }}
           </a>
         </b-col>
-      </b-row>
     </b-container>
     <b-container class="text-left" fluid>
       <!-- Add tooltip https://www.zakonyprolidi.cz/cs/2011-359?citace=1#prilohy !-->
@@ -51,12 +50,30 @@
         <b-col>{{ inline }}</b-col>
       </b-row>
     </b-container>
-    <b-container id="map-container" fluid>
-      <l-map :center="coordinates" :zoom="zoom" :minZoom="3">
-        <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
-        <l-marker :lat-lng="coordinates" />
-      </l-map>
-    </b-container>
+    <div v-if="hasCoordinates">
+      <b-container class="text-left" fluid>
+        <b-row>
+          <b-col class="header" cols="3">Souřadnice v JTSK</b-col>
+        </b-row>
+        <b-row>
+          <b-col>
+            X: {{ address.coordinateX }}, Y: {{ address.coordinateY }}
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col class="header" cols="3">Souřadnice ve WGS84</b-col>
+        </b-row>
+        <b-row>
+          <b-col> X: {{ coordinates[0] }}, Y: {{ coordinates[1] }} </b-col>
+        </b-row>
+      </b-container>
+      <b-container id="map-container" fluid>
+        <l-map :center="coordinates" :zoom="zoom" :minZoom="3">
+          <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
+          <l-marker :lat-lng="coordinates" />
+        </l-map>
+      </b-container>
+    </div>
   </div>
 </template>
 
@@ -79,9 +96,6 @@ export default {
   props: {
     address: {
       type: Object
-    },
-    coordinates: {
-      type: Array
     }
   },
   components: {
@@ -91,8 +105,6 @@ export default {
   },
   computed: {
     firstRow: function() {
-      this.$log.debug(this.address);
-      this.$log.debug(this.coordinates);
       return addressBuilder.build(this.address).firstRow;
     },
     secondRow: function() {
@@ -103,6 +115,15 @@ export default {
     },
     inline: function() {
       return addressBuilder.buildInline(this.address);
+    },
+    coordinates: function() {
+      let coords = this.address.coordinatesLatLon;
+      if (!coords) {
+        // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+        this.hasCoordinates = false;
+        return null;
+      }
+      return [coords.x, coords.y];
     }
   },
   data() {
@@ -111,7 +132,8 @@ export default {
       url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
       attribution:
         '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-      zoom: 20
+      zoom: 20,
+      hasCoordinates: true
     };
   }
 };
@@ -133,5 +155,6 @@ export default {
 #map-container {
   height: 40em;
   width: 90%;
+  text-align: left;
 }
 </style>

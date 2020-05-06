@@ -5,6 +5,7 @@ url=$(wget -q -O - https://nahlizenidokn.cuzk.cz/StahniAdresniMistaRUIAN.aspx | 
 echo "Downloading RUIAN data"
 wget "$url"
 unzip -a -- *.zip
+rm -rf -- *.zip
 
 echo "Modifying csv files..."
 mkdir -p data
@@ -14,14 +15,19 @@ for file in CSV/*.csv; do
 	# Convert encoding from Windows 1250 to UTF-8
 	iconv -f CP1250 -t UTF-8 "$file" -o "temp/$outputFile"
 	rm "$file"
-	# Add new column containing house number and orientational number combined
-	# Column 13 contains house number, column 14 contains orientational number and column 15 contains orientational number letter
-	awk -F";" 'NR>1 {$20 = $14 ? $13 "/" $14 $15 : $13; print} NR==1 {$20 = "Identifikace"; print}' OFS=";" "temp/$outputFile" > "data/$outputFile"
-	rm "temp/$outputFile"
 done
 
+rm -rf CSV
+
+# Update data in csv files using java application
+# Add 2 new columns. One containing house number and orientational number combined
+# and the other containing coordinates converted to wgs84.
+java -jar ./CSVModifier.jar
+
+rm -rf temp
+
 # Delete data in core
-echo "Deleting existing data"
+echo "Deleting existing data from Solr"
 curl -X POST -H 'Content-Type: application/json' 'http://localhost:8983/solr/ruian/update?commit=true' -d '{ "delete": {"query":"*:*"} }'
 
 # Index data using post tool
@@ -30,12 +36,11 @@ docker run --rm -v "$PWD/data:/data" --network=host solr:8.3 post -c ruian -para
 
 if [[ "$?" != 0 ]]; then
 	echo "Failed to index data, check if docker is running"
-	rm -rf -- *.zip CSV temp
 	exit 1
 fi
 
 # Delete files
-rm -rf -- *.zip CSV temp data
+rm -rf data
 
 echo "Indexing done"
 exit 0

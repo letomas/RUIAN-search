@@ -11,16 +11,7 @@
     </b-container>
     <div v-if="showResult === true">
       <h3 v-bind:query="query">Výsledek vyhledávání pro: {{ query }}</h3>
-      <b-table :items="items" :fields="fields">
-        <template v-slot:cell(detail)="{ item }">
-          <b-button
-            variant="primary"
-            :to="{ name: 'addressDetail', params: { id: item.admCode } }"
-          >
-            Detail
-          </b-button>
-        </template>
-      </b-table>
+      <AddressTable />
     </div>
     <div v-else-if="noResult === true">
       <p v-bind:query="query">Nebyl nalezen žádný výsledek pro: {{ query }}</p>
@@ -29,26 +20,19 @@
 </template>
 
 <script>
+import { mapMutations } from "vuex";
 import Searchbar from "../components/Searchbar.vue";
+import AddressTable from "../components/AddressTable.vue";
 import api from "../api.js";
 
 export default {
   name: "Search",
   components: {
-    Searchbar
+    Searchbar,
+    AddressTable
   },
   data() {
     return {
-      fields: [
-        { key: "admCode", label: "Kód ADM" },
-        { key: "streetName", label: "Název ulice" },
-        { key: "buildingType", label: "Typ SO" },
-        { key: "houseNumber", label: "Identifikace" },
-        { key: "boroughName", label: "Název části obce" },
-        { key: "cityName", label: "Název obce" },
-        { key: "detail", label: "" }
-      ],
-      items: [],
       showResult: false,
       noResult: false,
       error: null,
@@ -57,6 +41,7 @@ export default {
     };
   },
   methods: {
+    ...mapMutations(["updateItems"]),
     search(query) {
       this.showResult = false;
       this.noResult = false;
@@ -65,9 +50,9 @@ export default {
       api
         .getQueryResult(query)
         .then(result => {
-          this.$log.debug("Query result is:" + result.data);
-          this.items = result.data.content;
-          if (typeof this.items !== "undefined" && this.items.length > 0) {
+          let items = result.data.content;
+          this.updateItems(items);
+          if (typeof items !== "undefined" && items.length > 0) {
             this.showResult = true;
           } else {
             this.noResult = true;
@@ -86,9 +71,9 @@ export default {
       api
         .findByAdmCode(admCode)
         .then(result => {
-          this.$log.debug("Query result is:" + result.data);
-          this.items = result.data.content;
-          if (typeof this.items !== "undefined" && this.items.length > 0) {
+          let items = result.data.content;
+          this.updateItems(items);
+          if (typeof items !== "undefined" && items.length > 0) {
             this.showResult = true;
           } else {
             this.noResult = true;

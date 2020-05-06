@@ -1,6 +1,7 @@
 package cz.cvut.fit.ruiansearch.model;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.geo.Point;
 import org.springframework.data.solr.core.mapping.Indexed;
 import org.springframework.data.solr.core.mapping.SolrDocument;
 
@@ -64,6 +65,9 @@ public class Address {
 
     @Indexed(name="Sou_adnice_Y")
     private Double coordinateY;
+
+    @Indexed(name="Coordinates_lat_lon")
+    private Point coordinatesLatLon;
 
     @Indexed(name="Obec")
     private String cityForQuery;
@@ -144,5 +148,9 @@ public class Address {
 
     public String getIdentification() {
         return identification;
+    }
+
+    public Point getCoordinatesLatLon() {
+        return coordinatesLatLon;
     }
 }

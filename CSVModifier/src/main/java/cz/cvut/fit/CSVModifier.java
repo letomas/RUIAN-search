@@ -1,15 +1,14 @@
 package cz.cvut.fit;
 
-import org.opengis.referencing.FactoryException;
-import org.opengis.referencing.operation.TransformException;
-
 import java.io.*;
 
 public class CSVModifier {
-    public static void main(String[] args) throws IOException, FactoryException, TransformException {
+    public static void main(String[] args) throws IOException {
+        String separator = System.getProperty("file.separator");
+
         System.setProperty("org.geotools.referencing.forceYX", "true");
         Modifier modifier = new Modifier();
-        String folderPath = "./temp";
+        String folderPath = "." + separator + "temp";
         modifier.modifyAll(folderPath);
     }
 }

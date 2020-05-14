@@ -6,7 +6,12 @@
           <label>Obec:</label>
         </b-col>
         <b-col>
-          <Typeahead :data="citySuggestions" v-model="city" class="input">
+          <Typeahead
+            :data="citySuggestions"
+            v-model="city"
+            v-bind:minMatchingChars="1"
+            class="input"
+          >
           </Typeahead>
         </b-col>
       </b-row>
@@ -19,6 +24,7 @@
           <Typeahead
             :data="districtSuggestions"
             v-model="district"
+            v-bind:minMatchingChars="1"
             class="input"
           >
           </Typeahead>
@@ -30,7 +36,12 @@
           <label>Ulice:</label>
         </b-col>
         <b-col>
-          <Typeahead :data="streetSuggestions" v-model="street" class="input">
+          <Typeahead
+            :data="streetSuggestions"
+            v-model="street"
+            v-bind:minMatchingChars="1"
+            class="input"
+          >
           </Typeahead>
         </b-col>
       </b-row>
@@ -71,6 +82,7 @@
         <Typeahead
           :data="codeSuggestions"
           :serializer="address => address.admCode.toString()"
+          v-bind:minMatchingChars="1"
           v-model="admCodeLocal"
           id="code-search"
           @hit="redirectToDetail($event)"

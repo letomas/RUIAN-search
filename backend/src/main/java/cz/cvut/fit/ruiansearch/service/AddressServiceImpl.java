@@ -2,6 +2,7 @@ package cz.cvut.fit.ruiansearch.service;
 
 import cz.cvut.fit.ruiansearch.model.Address;
 import cz.cvut.fit.ruiansearch.repository.AddressRepository;
+import lombok.Cleanup;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -57,7 +58,8 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public GroupResult<Address> getCitySuggestions(String city) {
-                AnnotationConfigApplicationContext context = 
+        @Cleanup
+        AnnotationConfigApplicationContext context =
                 new AnnotationConfigApplicationContext("cz.cvut.fit.ruiansearch.config");
         SolrTemplate solrTemplate = (SolrTemplate) context.getBean("solrTemplate");
         
@@ -67,12 +69,12 @@ public class AddressServiceImpl implements AddressService {
         setGroupOptions(field, query);
         GroupPage<Address> page = solrTemplate.queryForGroupPage(collectionName, query, Address.class);
 
-        context.close();
         return page.getGroupResult(field);
     }
 
     @Override
     public GroupResult<Address> getDistrictSuggestions(String city, String district) {
+        @Cleanup
         AnnotationConfigApplicationContext context = 
                 new AnnotationConfigApplicationContext("cz.cvut.fit.ruiansearch.config");
         SolrTemplate solrTemplate = (SolrTemplate) context.getBean("solrTemplate");
@@ -86,12 +88,12 @@ public class AddressServiceImpl implements AddressService {
         query.addFilterQuery(cityFilter);
         GroupPage<Address> page = solrTemplate.queryForGroupPage(collectionName, query, Address.class);
 
-        context.close();
         return page.getGroupResult(field);
     }
 
     @Override
     public GroupResult<Address> getStreetSuggestions(String city, String district, String street) {
+        @Cleanup
         AnnotationConfigApplicationContext context = 
                 new AnnotationConfigApplicationContext("cz.cvut.fit.ruiansearch.config");
         SolrTemplate solrTemplate = (SolrTemplate) context.getBean("solrTemplate");
@@ -108,7 +110,6 @@ public class AddressServiceImpl implements AddressService {
             .addFilterQuery(districtFilter);
         GroupPage<Address> page = solrTemplate.queryForGroupPage(collectionName, query, Address.class);
 
-        context.close();
         return page.getGroupResult(field);
     }
 
@@ -118,6 +119,7 @@ public class AddressServiceImpl implements AddressService {
             String district,
             String street,
             String houseNumber) {
+        @Cleanup
         AnnotationConfigApplicationContext context = 
                 new AnnotationConfigApplicationContext("cz.cvut.fit.ruiansearch.config");
         SolrTemplate solrTemplate = (SolrTemplate) context.getBean("solrTemplate");
@@ -139,13 +141,13 @@ public class AddressServiceImpl implements AddressService {
             .addFilterQuery(districtFilter)
             .addFilterQuery(streetFilter);
         GroupPage<Address> page = solrTemplate.queryForGroupPage(collectionName, query, Address.class);
-        
-        context.close();
+
         return page.getGroupResult(field);
     }
 
     @Override
     public Page<Address> getNearbyAddresses(Point center, Double distance) {
+        @Cleanup
         AnnotationConfigApplicationContext context =
                 new AnnotationConfigApplicationContext("cz.cvut.fit.ruiansearch.config");
         SolrTemplate solrTemplate = (SolrTemplate) context.getBean("solrTemplate");
@@ -155,7 +157,6 @@ public class AddressServiceImpl implements AddressService {
         SimpleQuery query = new SimpleQuery(queryCriteria);
         Page<Address> page = solrTemplate.query(collectionName, query, Address.class);
 
-        context.close();
         return page;
     }
 

@@ -1,26 +1,43 @@
 package cz.cvut.fit;
 
 import org.geotools.geometry.DirectPosition2D;
-import org.opengis.referencing.FactoryException;
-import org.opengis.referencing.operation.TransformException;
+
+import lombok.Cleanup;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
 
 import static cz.cvut.fit.CoordinatesConverter.convert;
 
+@Slf4j
 public class Modifier {
-    public void modifyAll(String path) throws IOException, FactoryException, TransformException {
+    private String separator = System.getProperty("file.separator");
+
+    public void modifyAll(String path) throws IOException {
         File folder = new File(path);
+        if(!folder.exists()) {
+            log.error("Folder " + folder.getCanonicalPath() + " doesn't exist.");
+            return;
+        }
         File[] files = folder.listFiles();
         for(File file : files) {
             modifyFile(file);
+            file.delete();
         }
+        log.info("Modifying files completed.");
     }
 
-    public void modifyFile(File file) throws IOException, FactoryException, TransformException {
+    public void modifyFile(File file) throws IOException {
         File csvFile = file;
-        File output = new File("./data/" + csvFile.getName());
+        File output = new File("." + separator + "data" + separator + csvFile.getName());
+        output.createNewFile();
+        if(!output.exists()) {
+            log.error("Couldn't create " + output.getCanonicalPath());
+            return;
+        }
+        @Cleanup
         BufferedWriter csvWriter = new BufferedWriter(new FileWriter(output));
+        @Cleanup 
         BufferedReader csvReader = new BufferedReader(new FileReader(csvFile));
         String row = csvReader.readLine();
         csvWriter.write(row + ";Identifikace;Coordinates_lat_lon\n");
@@ -53,16 +70,11 @@ public class Modifier {
 
                 transformedCoordinates = transformedX + "," + transformedY;
             } catch(Exception e) {
-                System.err.println("Can't transform record without coordinates");
             } finally {
                 csvWriter.write(row + ";"
                         + identification + ";"
                         + transformedCoordinates + "\n");
             }
         }
-        
-        csvWriter.close();
-        csvReader.close();
-        csvFile.delete();
     }
 }

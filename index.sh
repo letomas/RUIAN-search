@@ -1,5 +1,9 @@
 #!/bin/bash
 
+if [ "$1" == "build" ]; then
+	docker build --tag csvmodifier ./CSVModifier/
+fi
+
 # Download RUIAN data
 url=$(wget -q -O - https://nahlizenidokn.cuzk.cz/StahniAdresniMistaRUIAN.aspx | grep 'id="ctl00_bodyPlaceHolder_linkCR"' | sed -r 's/^.+href="([^"]+)".+$/\1/')
 echo "Downloading RUIAN data"
@@ -19,10 +23,10 @@ done
 
 rm -rf CSV
 
-# Update data in csv files using java application
+# Update data in csv files using java application.
 # Add 2 new columns. One containing house number and orientational number combined
 # and the other containing coordinates converted to wgs84.
-java -jar ./CSVModifier.jar
+docker run --rm -v "$PWD/temp:/temp" -v "$PWD/data:/data" csvmodifier
 
 rm -rf temp
 

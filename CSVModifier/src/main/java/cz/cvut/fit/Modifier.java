@@ -52,12 +52,12 @@ public class Modifier {
             String transformedCoordinates = "";
             String identification = "";
 
-            if(orientationalNumber.equals(null) && orientationalNumber.isEmpty()) {
-                identification = houseNumber + "/"
-                        + orientationalNumber
-                        + orientationalNumberLetter;
-            } else {
+            if(orientationalNumber.equals(null) || orientationalNumber.isEmpty()) {
                 identification = houseNumber;
+            } else {
+                identification = houseNumber + "/"
+                + orientationalNumber
+                + orientationalNumberLetter;
             }
 
             try {

@@ -2,6 +2,11 @@
 
 if [ "$1" == "build" ]; then
 	docker build --tag csvmodifier ./CSVModifier/
+	
+	if [[ "$?" != 0 ]]; then
+		echo "Failed to index data, check if docker is running"
+		exit 1
+	fi
 fi
 
 # Download RUIAN data
@@ -28,6 +33,11 @@ rm -rf CSV
 # and the other containing coordinates converted to wgs84.
 docker run --rm -v "$PWD/temp:/temp" -v "$PWD/data:/data" csvmodifier
 
+if [[ "$?" != 0 ]]; then
+	echo "Failed to index data, check if docker is running"
+	exit 1
+fi
+
 rm -rf temp
 
 # Delete data in core
@@ -37,11 +47,6 @@ curl -X POST -H 'Content-Type: application/json' 'http://localhost:8983/solr/rui
 # Index data using post tool
 echo "Indexing data"
 docker run --rm -v "$PWD/data:/data" --network=host solr:8.3 post -c ruian -params "separator=%3B" /data/
-
-if [[ "$?" != 0 ]]; then
-	echo "Failed to index data, check if docker is running"
-	exit 1
-fi
 
 # Delete files
 rm -rf data

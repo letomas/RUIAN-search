@@ -1,6 +1,7 @@
 package cz.cvut.fit.ruiansearch.model;
 
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.geo.Point;
 import org.springframework.data.solr.core.mapping.Indexed;
@@ -106,4 +107,7 @@ public class Address {
 
     @Indexed(name="Identifikace_cs")
     private String identificationForQuery;
+
+    @Indexed(value = "score", readonly = true)
+    private Double score;
 }

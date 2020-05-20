@@ -6,6 +6,7 @@ import lombok.Cleanup;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.geo.Distance;
 import org.springframework.data.solr.core.SolrTemplate;
 import org.springframework.data.solr.core.geo.Point;
@@ -152,9 +153,17 @@ public class AddressServiceImpl implements AddressService {
                 new AnnotationConfigApplicationContext("cz.cvut.fit.ruiansearch.config");
         SolrTemplate solrTemplate = (SolrTemplate) context.getBean("solrTemplate");
 
-        Criteria queryCriteria = new Criteria("Coordinates_lat_lon").near(center, new Distance(distance));
+        StringBuffer queryCriteria = new StringBuffer();
+        queryCriteria.append("{!geofilt pt=");
+        queryCriteria.append(center.getX());
+        queryCriteria.append(",");
+        queryCriteria.append(center.getY());
+        queryCriteria.append(" sfield=Coordinates_lat_lon d=");
+        queryCriteria.append(distance);
+        queryCriteria.append(" score=distance}");
 
-        SimpleQuery query = new SimpleQuery(queryCriteria);
+        SimpleQuery query = new SimpleQuery(new SimpleStringCriteria(queryCriteria.toString()));
+        query.addSort(Sort.by(Sort.Direction.ASC, "score"));
         Page<Address> page = solrTemplate.query(collectionName, query, Address.class);
 
         return page;

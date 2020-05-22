@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const SERVER_URL = "http://localhost:8000/api";
+const SERVER_URL = "/api";
 
 const ruian_api = axios.create({
   baseURL: SERVER_URL,

@@ -1,7 +1,6 @@
 package cz.cvut.fit.ruiansearch.model;
 
 import lombok.Getter;
-import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.geo.Point;
 import org.springframework.data.solr.core.mapping.Indexed;

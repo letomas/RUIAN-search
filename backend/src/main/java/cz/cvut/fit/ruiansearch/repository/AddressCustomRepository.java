@@ -23,7 +23,7 @@ public class AddressCustomRepository {
         SolrTemplate solrTemplate = (SolrTemplate) context.getBean("solrTemplate");
 
         Field field = new SimpleField("N_zev_obce");
-        SimpleQuery query = new SimpleQuery(new SimpleStringCriteria("Obec:" + city));
+        SimpleQuery query = new SimpleQuery(new SimpleStringCriteria("Obec:" + wrapInQuotes(city)));
 
         setGroupOptions(field, query);
         GroupPage<Address> page = solrTemplate.queryForGroupPage(collectionName, query, Address.class);
@@ -38,7 +38,7 @@ public class AddressCustomRepository {
         SolrTemplate solrTemplate = (SolrTemplate) context.getBean("solrTemplate");
 
         Field field = new SimpleField("N_zev___sti_obce");
-        SimpleQuery query = new SimpleQuery(new SimpleStringCriteria("Cast_obce:" + district));
+        SimpleQuery query = new SimpleQuery(new SimpleStringCriteria("Cast_obce:" + wrapInQuotes(district)));
         FilterQuery cityFilter = new SimpleFilterQuery(
                 new Criteria("N_zev_obce").expression(wrapInQuotes(city)));
 
@@ -56,7 +56,7 @@ public class AddressCustomRepository {
         SolrTemplate solrTemplate = (SolrTemplate) context.getBean("solrTemplate");
 
         Field field = new SimpleField("N_zev_ulice");
-        SimpleQuery query = new SimpleQuery(new SimpleStringCriteria("Ulice:" + street));
+        SimpleQuery query = new SimpleQuery(new SimpleStringCriteria("Ulice:" + wrapInQuotes(street)));
         FilterQuery cityFilter = new SimpleFilterQuery(
                 new Criteria("N_zev_obce").expression(wrapInQuotes(city)));
         FilterQuery districtFilter = new SimpleFilterQuery(

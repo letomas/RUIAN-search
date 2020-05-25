@@ -1,6 +1,6 @@
 <template>
   <div class="search">
-    <h1>Vyhledávání v RÚIAN</h1>
+    <h1>Vyhledávání adresních míst v RÚIAN</h1>
     <SearchForm
       v-on:search="search(1)"
       v-on:searchByAdmCode="searchByAdmCode(1)"

@@ -85,7 +85,7 @@
           v-bind:minMatchingChars="1"
           v-model="admCode"
           id="code-search"
-          @hit="redirectToDetail"
+          @hit="redirectToDetail($event)"
         >
           <template slot="append">
             <b-button variant="primary" v-on:click="searchByAdmCode">
@@ -232,10 +232,10 @@ export default {
           this.$log.debug(error);
         });
     },
-    redirectToDetail() {
+    redirectToDetail(address) {
       this.$router.push({
         name: "addressDetail",
-        params: { id: this.admCode }
+        params: { id: address.admCode }
       });
     }
   }

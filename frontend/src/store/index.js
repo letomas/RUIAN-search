@@ -9,7 +9,7 @@ export default new Vuex.Store({
     district: "",
     street: "",
     houseNumber: "",
-    admCode: null,
+    admCode: "",
     items: [],
     location: null,
     locationAvailable: false
@@ -36,6 +36,13 @@ export default new Vuex.Store({
     updateLocation(state, payload) {
       state.location = payload;
       state.locationAvailable = true;
+    },
+    resetQueryState(state) {
+      state.city = "";
+      state.district = "";
+      state.street = "";
+      state.houseNumber = "";
+      state.admCode = "";
     }
   },
   getters: {

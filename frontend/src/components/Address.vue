@@ -1,5 +1,5 @@
 <template>
-  <div id="address">
+  <div v-if="address" id="address">
     <b-container class="address-info" fluid>
       <b-row>
         <b-col class="header" cols="3">Kód:</b-col>

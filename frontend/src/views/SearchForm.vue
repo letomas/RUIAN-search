@@ -34,12 +34,17 @@
 import SearchForm from "../components/SearchForm";
 import api from "../api.js";
 
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
 
 export default {
   name: "SearchTest",
   components: {
     SearchForm
+  },
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      vm.resetQueryState();
+    });
   },
   computed: {
     ...mapState(["city"]),
@@ -69,6 +74,7 @@ export default {
     };
   },
   methods: {
+    ...mapMutations(["resetQueryState"]),
     search(page) {
       this.page = page;
       this.isSearchingByCode = false;

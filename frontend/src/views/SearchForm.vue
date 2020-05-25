@@ -2,10 +2,8 @@
   <div class="search">
     <h1>Vyhledávání v RÚIAN</h1>
     <SearchForm
-      v-bind:query.sync="query"
-      v-bind:admCode.sync="admCode"
-      v-on:search="search($event)"
-      v-on:searchByAdmCode="searchByAdmCode($event)"
+      v-on:search="search(1)"
+      v-on:searchByAdmCode="searchByAdmCode(1)"
     ></SearchForm>
     <div v-if="showResult === true">
       <b-table :items="items" :fields="fields">
@@ -17,16 +15,14 @@
             Detail
           </b-button>
         </template>
-        <template v-slot:cell(identification)="{ item }">
-          <span v-if="item.orientationalNumber">
-            {{ item.houseNumber }}/{{ item.orientationalNumber
-            }}{{ item.orientationalNumberLetter }}
-          </span>
-          <span v-else>
-            {{ item.houseNumber }}
-          </span>
-        </template>
       </b-table>
+      <b-pagination
+        v-model="page"
+        :total-rows="totalElements"
+        :per-page="10"
+        align="center"
+        @input="changePage"
+      ></b-pagination>
     </div>
     <div v-else-if="noResult === true">
       <h3>Nebyl nalezen žádný výsledek.</h3>
@@ -38,10 +34,19 @@
 import SearchForm from "../components/SearchForm";
 import api from "../api.js";
 
+import { mapState } from "vuex";
+
 export default {
   name: "SearchTest",
   components: {
     SearchForm
+  },
+  computed: {
+    ...mapState(["city"]),
+    ...mapState(["district"]),
+    ...mapState(["street"]),
+    ...mapState(["houseNumber"]),
+    ...mapState(["admCode"])
   },
   data() {
     return {
@@ -55,27 +60,32 @@ export default {
         { key: "detail", label: "" }
       ],
       items: [],
+      page: 1,
+      totalElements: null,
       error: null,
-      query: {
-        city: "",
-        district: "",
-        street: "",
-        houseNumber: ""
-      },
-      admCode: null,
       showResult: false,
-      noResult: false
+      noResult: false,
+      isSearchingByCode: false
     };
   },
   methods: {
-    search(query) {
+    search(page) {
+      this.page = page;
+      this.isSearchingByCode = false;
+      const query = {
+        city: this.city,
+        district: this.district,
+        street: this.street,
+        houseNumber: this.houseNumber
+      };
       this.showResult = false;
       this.noResult = false;
 
       api
-        .getFormQueryResult(query)
+        .getFormQueryResult(query, page - 1)
         .then(result => {
           this.items = result.data.content;
+          this.totalElements = result.data.totalElements;
           if (typeof this.items !== "undefined" && this.items.length > 0) {
             this.showResult = true;
           } else {
@@ -87,14 +97,18 @@ export default {
           this.$log.debug(error);
         });
     },
-    searchByAdmCode(admCode) {
+    searchByAdmCode(page) {
+      this.page = page;
+      this.isSearchingByCode = true;
       this.showResult = false;
       this.noResult = false;
 
       api
-        .findByAdmCode(admCode)
+        .findByAdmCode(this.admCode, page - 1)
         .then(result => {
           this.items = result.data.content;
+          this.totalElements = result.data.totalElements;
+
           if (typeof this.items !== "undefined" && this.items.length > 0) {
             this.showResult = true;
           } else {
@@ -105,6 +119,13 @@ export default {
           this.error = error.toString();
           this.$log.debug(error);
         });
+    },
+    changePage() {
+      if (this.isSearchingByCode) {
+        this.searchByAdmCode(this.page);
+      } else {
+        this.search(this.page);
+      }
     }
   }
 };

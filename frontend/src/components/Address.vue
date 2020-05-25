@@ -32,6 +32,7 @@
             {{ IRIBaseUrl }}{{ address.admCode }}
           </a>
         </b-col>
+      </b-row>
     </b-container>
     <b-container class="text-left" fluid>
       <!-- Add tooltip https://www.zakonyprolidi.cz/cs/2011-359?citace=1#prilohy !-->

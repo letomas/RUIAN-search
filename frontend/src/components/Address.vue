@@ -1,5 +1,5 @@
 <template>
-  <div id="address">
+  <div v-if="address" id="address">
     <b-container class="address-info" fluid>
       <b-row>
         <b-col class="header" cols="3">Kód:</b-col>
@@ -32,6 +32,7 @@
             {{ IRIBaseUrl }}{{ address.admCode }}
           </a>
         </b-col>
+      </b-row>
     </b-container>
     <b-container class="text-left" fluid>
       <!-- Add tooltip https://www.zakonyprolidi.cz/cs/2011-359?citace=1#prilohy !-->

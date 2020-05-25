@@ -4,25 +4,25 @@ const SERVER_URL = "/api";
 
 const ruian_api = axios.create({
   baseURL: SERVER_URL,
-  timeout: 1000
+  timeout: 2000
 });
 
 export default {
-  getQueryResult: query => {
-    return ruian_api.get("/addresses?search=" + query);
-  },
-  getFormQueryResult: query => {
+  getFormQueryResult: (query, page) => {
     let params = "street=" + query.street;
     params += "&houseNumber=" + query.houseNumber;
     params += "&city=" + query.city;
     params += "&district=" + query.district;
+    params += "&page=" + page;
     return ruian_api.get("/addresses/search?" + params);
   },
   getDetail: admCode => {
     return ruian_api.get("/addresses/" + admCode);
   },
-  findByAdmCode: admCode => {
-    return ruian_api.get("/addresses?admCode=" + admCode);
+  findByAdmCode: (admCode, page) => {
+    let params = "admCode=" + admCode;
+    params += "&page=" + page;
+    return ruian_api.get("/addresses?" + params);
   },
   getCitySuggestions: city => {
     return ruian_api.get("/suggestions/city?city=" + city);

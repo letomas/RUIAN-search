@@ -27,7 +27,7 @@ export default {
         { key: "admCode", label: "Kód ADM" },
         { key: "streetName", label: "Název ulice" },
         { key: "buildingType", label: "Typ SO" },
-        { key: "houseNumber", label: "Identifikace" },
+        { key: "identification", label: "Identifikace" },
         { key: "boroughName", label: "Název části obce" },
         { key: "cityName", label: "Název obce" },
         { key: "detail", label: "" }

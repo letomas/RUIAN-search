@@ -26,6 +26,17 @@
         <b-col>{{ address.postalCode }}</b-col>
       </b-row>
       <b-row>
+        <b-col class="header" cols="3">Číslo domovní:</b-col>
+        <b-col>{{ address.houseNumber }}</b-col>
+      </b-row>
+      <b-row>
+        <b-col class="header" cols="3">Číslo orientační</b-col>
+        <b-col>
+          {{ address.orientationalNumber }}
+          {{ address.orientationalNumberLetter }}
+        </b-col>
+      </b-row>
+      <b-row>
         <b-col class="header" cols="3">IRI:</b-col>
         <b-col>
           <a :href="IRIBaseUrl + address.admCode">
@@ -67,8 +78,43 @@
         <b-row>
           <b-col> X: {{ coordinates[0] }}, Y: {{ coordinates[1] }} </b-col>
         </b-row>
+        <b-row>
+          <b-col>
+            <a
+              :href="
+                'https://www.google.com/maps/search/?api=1&query=' + coordinates
+              "
+              >Google maps
+            </a>
+          </b-col>
+          <b-col>
+            <a
+              :href="
+                'https://mapy.cz/?source=coor&id=' +
+                  coordinates[1] +
+                  ',' +
+                  coordinates[0]
+              "
+            >
+              Mapy.cz
+            </a>
+          </b-col>
+          <b-col>
+            <a
+              :href="
+                'http://www.openstreetmap.org/?mlat=' +
+                  coordinates[0] +
+                  '&mlon=' +
+                  coordinates[1] +
+                  '&zoom=20'
+              "
+            >
+              OpenStreetMap
+            </a>
+          </b-col>
+        </b-row>
       </b-container>
-      <b-container id="map-container" fluid>
+      <b-container id="map-container" class="mt-4" fluid>
         <l-map :center="coordinates" :zoom="zoom" :minZoom="3">
           <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
           <l-marker :lat-lng="coordinates" />
@@ -154,8 +200,8 @@ export default {
   font-weight: bold;
 }
 #map-container {
-  height: 40em;
-  width: 90%;
+  height: 40rem;
+  width: 100%;
   text-align: left;
 }
 </style>

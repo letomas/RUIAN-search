@@ -1,17 +1,15 @@
 <template>
-  <div id="app">
-    <header>
-      <Navigation />
-    </header>
-    <main>
+  <v-app>
+    <Navigation />
+
+    <v-content>
       <router-view />
-    </main>
-  </div>
+    </v-content>
+  </v-app>
 </template>
 
 <script>
-import Navigation from "./components/Navigation.vue";
-
+import Navigation from "./components/Navigation";
 export default {
   name: "app",
   components: {

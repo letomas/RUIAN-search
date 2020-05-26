@@ -1,164 +1,146 @@
 <template>
-  <div class="search-form">
-    <div class="container" fluid>
-      <b-row class="typehead">
-        <b-col cols="2" align="left">
-          <label>Obec:</label>
-        </b-col>
-        <b-col>
-          <Typeahead
-            :data="citySuggestions"
-            v-model="city"
-            v-bind:minMatchingChars="1"
-            class="input"
+  <v-container class="text-left">
+    <v-container>
+      <v-row>
+        <v-col>
+          <v-autocomplete
+            label="Obec"
+            no-data-text="Žádný výsledek"
+            append-icon=""
+            :items="citySuggestions"
+            :search-input.sync="searchCity"
+            clearable
+          ></v-autocomplete>
+        </v-col>
+      </v-row>
+
+      <v-row>
+        <v-col>
+          <v-autocomplete
+            label="Část obce"
+            no-data-text="Žádný výsledek"
+            append-icon=""
+            :items="districtSuggestions"
+            :search-input.sync="searchDistrict"
+            clearable
+          ></v-autocomplete>
+        </v-col>
+      </v-row>
+
+      <v-row>
+        <v-col>
+          <v-autocomplete
+            label="Ulice"
+            no-data-text="Žádný výsledek"
+            append-icon=""
+            :items="streetSuggestions"
+            :search-input.sync="searchStreet"
+            clearable
+          ></v-autocomplete>
+        </v-col>
+      </v-row>
+
+      <v-row>
+        <v-col>
+          <v-autocomplete
+            label="Číslo domovní/orientační"
+            no-data-text="Žádný výsledek"
+            append-icon=""
+            :items="houseNumberSuggestions"
+            :search-input.sync="searchHouseNumber"
+            clearable
           >
-          </Typeahead>
-        </b-col>
-      </b-row>
+          </v-autocomplete>
+        </v-col>
+      </v-row>
 
-      <b-row class="typehead">
-        <b-col cols="2" align="left">
-          <label>Část obce:</label>
-        </b-col>
-        <b-col>
-          <Typeahead
-            :data="districtSuggestions"
-            v-model="district"
-            v-bind:minMatchingChars="1"
-            class="input"
+      <v-row>
+        <v-col>
+          <v-btn
+            @click="search(city, district, street, houseNumber)"
+            color="indigo accent-2"
+            dark
           >
-          </Typeahead>
-        </b-col>
-      </b-row>
+            Vyhledat
+          </v-btn>
+        </v-col>
+      </v-row>
+    </v-container>
+    <v-container>
+      <v-row>
+        <v-col>
+          <h3>
+            Vyhledávání adresních míst podle jejich kódu:
+          </h3>
+        </v-col>
+      </v-row>
 
-      <b-row class="typehead">
-        <b-col cols="2" align="left">
-          <label>Ulice:</label>
-        </b-col>
-        <b-col>
-          <Typeahead
-            :data="streetSuggestions"
-            v-model="street"
-            v-bind:minMatchingChars="1"
-            class="input"
-          >
-          </Typeahead>
-        </b-col>
-      </b-row>
-
-      <b-row class="typehead">
-        <b-col cols="2" align="left">
-          <label>Číslo domovní/orientační:</label>
-        </b-col>
-        <b-col>
-          <Typeahead
-            :data="houseNumberSuggestions"
-            v-model="houseNumber"
-            v-bind:minMatchingChars="1"
-            class="input"
-          >
-          </Typeahead>
-        </b-col>
-      </b-row>
-
-      <b-row>
-        <b-button
-          class="ml-3"
-          v-on:click="search(city, district, street, houseNumber)"
-          variant="primary"
-        >
-          Vyhledat
-        </b-button>
-      </b-row>
-    </div>
-    <div id="code-container" class="container ml-4" fluid>
-      <b-row>
-        <h3>
-          Vyhledávání adresních míst podle jejich kódu:
-        </h3>
-      </b-row>
-
-      <b-row class="typehead">
-        <Typeahead
-          :data="codeSuggestions"
-          :serializer="address => address.admCode.toString()"
-          v-bind:minMatchingChars="1"
-          v-model="admCode"
-          id="code-search"
-          @hit="redirectToDetail($event)"
-        >
-          <template slot="append">
-            <b-button variant="primary" v-on:click="searchByAdmCode">
-              <BIconSearch />
-            </b-button>
-          </template>
-        </Typeahead>
-      </b-row>
-    </div>
-  </div>
+      <v-row>
+        <v-col>
+          <v-autocomplete
+            label="Kód adresního místa"
+            no-data-text="Žádný výsledek"
+            append-icon=""
+            :items="codeSuggestions"
+            :search-input.sync="searchCode"
+            item-text="admCode"
+            item-value="admCode"
+            @input="redirectToDetail($event)"
+            clearable
+          ></v-autocomplete>
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-container>
 </template>
 
 <script>
-import Typeahead from "vue-bootstrap-typeahead";
 import _ from "underscore";
 
 import api from "../api.js";
 
 export default {
   name: "SearchForm",
-  components: {
-    Typeahead
-  },
   computed: {
     city: {
       get() {
         return this.$store.state.city;
       },
-      set: _.debounce(function(val) {
+      set(val) {
         this.$store.commit("updateCity", val);
-        this.getCitySuggestions(val);
-      }, 400)
+      }
     },
     district: {
       get() {
         return this.$store.state.district;
       },
-      set: _.debounce(function(val) {
+      set(val) {
         this.$store.commit("updateDistrict", val);
-        this.getDistrictSuggestions(this.city, val);
-      }, 400)
+      }
     },
     street: {
       get() {
         return this.$store.state.street;
       },
-      set: _.debounce(function(val) {
+      set(val) {
         this.$store.commit("updateStreet", val);
-        this.getStreetSuggestions(this.city, this.district, val);
-      }, 400)
+      }
     },
     houseNumber: {
       get() {
         return this.$store.state.houseNumber;
       },
-      set: _.debounce(function(val) {
+      set(val) {
         this.$store.commit("updateHouseNumber", val);
-        this.getHouseNumberSuggestions(
-          this.city,
-          this.district,
-          this.street,
-          val
-        );
-      }, 400)
+      }
     },
     admCode: {
       get() {
         return this.$store.state.admCode;
       },
-      set: _.debounce(function(val) {
+      set(val) {
         this.$store.commit("updateAdmCode", val);
-        this.getCodeSuggestions(val);
-      }, 400)
+      }
     }
   },
   data() {
@@ -167,7 +149,12 @@ export default {
       districtSuggestions: [],
       streetSuggestions: [],
       houseNumberSuggestions: [],
-      codeSuggestions: []
+      codeSuggestions: [],
+      searchCity: "",
+      searchDistrict: "",
+      searchStreet: "",
+      searchHouseNumber: "",
+      searchCode: ""
     };
   },
   methods: {
@@ -222,6 +209,12 @@ export default {
         });
     },
     getCodeSuggestions(admCode) {
+      if (!admCode) {
+        this.admCode = "";
+        this.codeSuggestions = [];
+        return;
+      }
+
       api
         .findByAdmCode(admCode, 0)
         .then(result => {
@@ -232,39 +225,46 @@ export default {
           this.$log.debug(error);
         });
     },
-    redirectToDetail(address) {
+    redirectToDetail(admCode) {
+      this.$log.debug(admCode);
       this.$router.push({
         name: "addressDetail",
-        params: { id: address.admCode }
+        params: { id: admCode }
       });
+    }
+  },
+  watch: {
+    searchCity(value) {
+      this.city = value ? value : "";
+      _.debounce(this.getCitySuggestions(value), 400);
+    },
+    searchDistrict(value) {
+      this.district = value ? value : "";
+      _.debounce(this.getDistrictSuggestions(this.city, value), 400);
+    },
+    searchStreet(value) {
+      this.street = value ? value : "";
+      _.debounce(
+        this.getStreetSuggestions(this.city, this.district, value),
+        400
+      );
+    },
+    searchHouseNumber(value) {
+      this.houseNumber = value ? value : "";
+      _.debounce(
+        this.getCitySuggestions(this.city, this.district, this.street, value),
+        400
+      );
+    },
+    searchCode(value) {
+      this.admCode = value ? value : "";
+      _.debounce(this.getCodeSuggestions(value), 400);
     }
   }
 };
 </script>
 
 <style scoped>
-@media only screen and (max-width: 768px) {
-  .input {
-    width: 100%;
-  }
-
-  #code-search {
-    width: 100%;
-  }
-}
-
-.typehead {
-  margin-bottom: 1rem;
-}
-.input {
-  width: 50%;
-}
-#code-search {
-  width: 30%;
-}
-div.container {
-  margin: 1.2em 1em 1em 0.8em;
-}
 h3 {
   font-size: 1.3em;
 }

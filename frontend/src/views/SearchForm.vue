@@ -6,21 +6,7 @@
       v-on:searchByAdmCode="searchByAdmCode(1)"
     ></SearchForm>
     <div v-if="showResult === true">
-      <b-table :items="items" :fields="fields">
-        <template v-slot:cell(fullOrientationalNumber)="{ item }">
-          <div>
-            {{ item.orientationalNumber }}{{ item.orientationalNumberLetter }}
-          </div>
-        </template>
-        <template v-slot:cell(detail)="{ item }">
-          <b-button
-            variant="primary"
-            :to="{ name: 'addressDetail', params: { id: item.admCode } }"
-          >
-            Detail
-          </b-button>
-        </template>
-      </b-table>
+      <AddressTable />
       <b-pagination
         v-model="page"
         :total-rows="totalElements"
@@ -37,6 +23,7 @@
 
 <script>
 import SearchForm from "../components/SearchForm";
+import AddressTable from "../components/AddressTable.vue";
 import api from "../api.js";
 
 import { mapState, mapMutations } from "vuex";
@@ -44,7 +31,8 @@ import { mapState, mapMutations } from "vuex";
 export default {
   name: "SearchTest",
   components: {
-    SearchForm
+    SearchForm,
+    AddressTable
   },
   beforeRouteEnter(to, from, next) {
     next(vm => {
@@ -52,6 +40,7 @@ export default {
     });
   },
   computed: {
+    ...mapState(["items"]),
     ...mapState(["city"]),
     ...mapState(["district"]),
     ...mapState(["street"]),
@@ -70,7 +59,6 @@ export default {
         { key: "cityName", label: "Název obce" },
         { key: "detail", label: "" }
       ],
-      items: [],
       page: 1,
       totalElements: null,
       error: null,
@@ -80,23 +68,24 @@ export default {
     };
   },
   methods: {
+    ...mapMutations(["updateItems"]),
     ...mapMutations(["resetQueryState"]),
     search(page) {
-      this.page = page;
-      this.isSearchingByCode = false;
       const query = {
         city: this.city,
         district: this.district,
         street: this.street,
         houseNumber: this.houseNumber
       };
+      this.page = page;
+      this.isSearchingByCode = false;
       this.showResult = false;
       this.noResult = false;
 
       api
         .getFormQueryResult(query, page - 1)
         .then(result => {
-          this.items = result.data.content;
+          this.updateItems(result.data.content);
           this.totalElements = result.data.totalElements;
           if (typeof this.items !== "undefined" && this.items.length > 0) {
             this.showResult = true;
@@ -118,7 +107,7 @@ export default {
       api
         .findByAdmCode(this.admCode, page - 1)
         .then(result => {
-          this.items = result.data.content;
+          this.updateItems(result.data.content);
           this.totalElements = result.data.totalElements;
 
           if (typeof this.items !== "undefined" && this.items.length > 0) {

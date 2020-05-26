@@ -56,8 +56,7 @@ import "leaflet/dist/leaflet.css";
 import AddressTable from "../components/AddressTable.vue";
 import api from "../api.js";
 
-import { mapMutations } from "vuex";
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
 import { LMap, LTileLayer, LMarker } from "vue2-leaflet";
 import { Icon } from "leaflet";
 

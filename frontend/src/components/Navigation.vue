@@ -1,6 +1,6 @@
 <template>
   <nav>
-    <v-app-bar app dark>
+    <v-app-bar app dark hide-on-scroll>
       <v-app-bar-nav-icon
         class="hidden-md-and-up"
         @click.stop="drawer = !drawer"
@@ -23,7 +23,7 @@
       </v-app-bar-items>
     </v-app-bar>
 
-    <v-navigation-drawer v-model="drawer" absolute temporary>
+    <v-navigation-drawer v-model="drawer" absolute temporary hide-on-scroll>
       <v-list nav>
         <v-list-item
           v-for="item in items"

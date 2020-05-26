@@ -4,9 +4,11 @@
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav tabs>
-          <b-nav-item :to="{ name: 'home' }">Vyhledávání</b-nav-item>
+          <b-nav-item :to="{ name: 'home' }"
+            ><BIconSearch /> Vyhledávání</b-nav-item
+          >
           <b-nav-item :to="{ name: 'nearbyAddresses' }">
-            Adresní místa v okolí
+            <BIconMap /> Adresní místa v okolí
           </b-nav-item>
         </b-navbar-nav>
       </b-collapse>
@@ -23,5 +25,6 @@ export default {
 <style scoped>
 .nav-item {
   margin-right: 1.2em;
+  font-weight: 400;
 }
 </style>

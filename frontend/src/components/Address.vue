@@ -1,127 +1,80 @@
 <template>
-  <div v-if="address" id="address">
-    <b-container class="address-info" fluid>
-      <b-row>
-        <b-col class="header" cols="3">Kód:</b-col>
-        <b-col>{{ address.admCode }}</b-col>
-      </b-row>
-      <b-row>
-        <b-col class="header" cols="3">Obec:</b-col>
-        <b-col>{{ address.cityName }}</b-col>
-      </b-row>
-      <b-row>
-        <b-col class="header" cols="3">Část obce:</b-col>
-        <b-col>{{ address.districtName }}</b-col>
-      </b-row>
-      <b-row>
-        <b-col class="header" cols="3">Městská část/obvod:</b-col>
-        <b-col>{{ address.boroughName }}</b-col>
-      </b-row>
-      <b-row>
-        <b-col class="header" cols="3">Ulice:</b-col>
-        <b-col>{{ address.streetName }}</b-col>
-      </b-row>
-      <b-row>
-        <b-col class="header" cols="3">PSČ:</b-col>
-        <b-col>{{ address.postalCode }}</b-col>
-      </b-row>
-      <b-row>
-        <b-col class="header" cols="3">Číslo domovní:</b-col>
-        <b-col>{{ address.houseNumber }}</b-col>
-      </b-row>
-      <b-row>
-        <b-col class="header" cols="3">Číslo orientační</b-col>
-        <b-col>
-          {{ address.orientationalNumber }}
-          {{ address.orientationalNumberLetter }}
-        </b-col>
-      </b-row>
-      <b-row>
-        <b-col class="header" cols="3">IRI:</b-col>
-        <b-col>
+  <v-container class="text-left px-5" v-if="address" fluid>
+    <v-container fluid>
+      <v-row v-for="item in items" :key="item.name">
+        <v-col class="font-weight-bold py-1" cols="12" sm="3">{{
+          item.name
+        }}</v-col>
+        <v-col class="py-1">{{ item.value }} </v-col>
+      </v-row>
+
+      <v-row>
+        <v-col class="font-weight-bold py-1" cols="12" sm="3">IRI:</v-col>
+        <v-col class="py-1">
           <a :href="IRIBaseUrl + address.admCode">
             {{ IRIBaseUrl }}{{ address.admCode }}
           </a>
-        </b-col>
-      </b-row>
-    </b-container>
-    <b-container class="text-left" fluid>
+        </v-col>
+      </v-row>
+    </v-container>
+
+    <v-divider></v-divider>
+
+    <v-container class="mt-4" fluid>
       <!-- Add tooltip https://www.zakonyprolidi.cz/cs/2011-359?citace=1#prilohy !-->
       <h3>Adresa dle vyhlášky č. 359/2011 Sb.</h3>
-      <b-row>
-        <b-col>{{ firstRow }}</b-col>
-      </b-row>
-      <b-row>
-        <b-col>{{ secondRow }}</b-col>
-      </b-row>
-      <b-row>
-        <b-col>{{ thirdRow }}</b-col>
-      </b-row>
-      <b-row class="inline-address">
-        <b-col class="header" cols="2">Adresa v řádku: </b-col>
-        <b-col>{{ inline }}</b-col>
-      </b-row>
-    </b-container>
+      <v-row>
+        <v-col class="py-1">{{ firstRow }}</v-col>
+      </v-row>
+      <v-row>
+        <v-col class="py-1">{{ secondRow }}</v-col>
+      </v-row>
+      <v-row>
+        <v-col class="py-1">{{ thirdRow }}</v-col>
+      </v-row>
+      <v-row class="my-1">
+        <v-col class="font-weight-bold" cols="12" sm="3"
+          >Adresa v řádku:
+        </v-col>
+        <v-col>{{ inline }}</v-col>
+      </v-row>
+    </v-container>
+
     <div v-if="hasCoordinates">
-      <b-container class="text-left" fluid>
-        <b-row>
-          <b-col class="header" cols="3">Souřadnice v JTSK</b-col>
-        </b-row>
-        <b-row>
-          <b-col>
+      <v-divider></v-divider>
+      <v-container fluid>
+        <v-row>
+          <v-col class="font-weight-bold">Souřadnice v JTSK</v-col>
+        </v-row>
+        <v-row>
+          <v-col class="py-1">
             X: {{ address.coordinateX }}, Y: {{ address.coordinateY }}
-          </b-col>
-        </b-row>
-        <b-row>
-          <b-col class="header" cols="3">Souřadnice ve WGS84</b-col>
-        </b-row>
-        <b-row>
-          <b-col> X: {{ coordinates[0] }}, Y: {{ coordinates[1] }} </b-col>
-        </b-row>
-        <b-row>
-          <b-col>
-            <a
-              :href="
-                'https://www.google.com/maps/search/?api=1&query=' + coordinates
-              "
-              >Google maps
-            </a>
-          </b-col>
-          <b-col>
-            <a
-              :href="
-                'https://mapy.cz/?source=coor&id=' +
-                  coordinates[1] +
-                  ',' +
-                  coordinates[0]
-              "
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col class="font-weight-bold">Souřadnice ve WGS84</v-col>
+        </v-row>
+        <v-row>
+          <v-col class="py-1">
+            X: {{ coordinates[0] }}, Y: {{ coordinates[1] }}
+          </v-col>
+        </v-row>
+        <v-row v-for="mapLink in mapLinks" :key="mapLink.name">
+          <v-col class="py-1">
+            <a :href="mapLink.link" rel="noopener noreferrer" target="_blank"
+              ><v-icon>{{ mapLink.icon }}</v-icon> {{ mapLink.name }}</a
             >
-              Mapy.cz
-            </a>
-          </b-col>
-          <b-col>
-            <a
-              :href="
-                'http://www.openstreetmap.org/?mlat=' +
-                  coordinates[0] +
-                  '&mlon=' +
-                  coordinates[1] +
-                  '&zoom=20'
-              "
-            >
-              OpenStreetMap
-            </a>
-          </b-col>
-        </b-row>
-      </b-container>
-      <b-container id="map-container" class="mt-4" fluid>
+          </v-col>
+        </v-row>
+      </v-container>
+      <v-container id="map-container" class="mt-4" fluid>
         <l-map :center="coordinates" :zoom="zoom" :minZoom="3">
           <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
           <l-marker :lat-lng="coordinates" />
         </l-map>
-      </b-container>
+      </v-container>
     </div>
-  </div>
+  </v-container>
 </template>
 
 <script>
@@ -171,6 +124,53 @@ export default {
         return null;
       }
       return [coords.x, coords.y];
+    },
+    items: function() {
+      return [
+        { name: "Kód:", value: this.address.admCode },
+        { name: "Obec:", value: this.address.cityName },
+        { name: "Část obce:", value: this.address.districtName },
+        { name: "Městská část/obvod:", value: this.address.boroughName },
+        { name: "Název ulice:", value: this.address.streetName },
+        { name: "PSČ:", value: this.address.postalCode },
+        { name: "Číslo domovní:", value: this.address.houseNumber },
+        {
+          name: "Číslo orientační:",
+          value:
+            this.address.orientationalNumber +
+            this.address.orientationalNumberLetter
+        }
+      ];
+    },
+    mapLinks: function() {
+      return [
+        {
+          name: "Google Maps",
+          icon: "room",
+          link:
+            "https://www.google.com/maps/search/?api=1&query=" +
+            this.coordinates
+        },
+        {
+          name: "Mapy.cz",
+          icon: "explore",
+          link:
+            "https://mapy.cz/?source=coor&id=" +
+            this.coordinates[1] +
+            "," +
+            this.coordinates[0]
+        },
+        {
+          name: "OpenStreetMap",
+          icon: "map",
+          link:
+            "http://www.openstreetmap.org/?mlat=" +
+            this.coordinates[0] +
+            "&mlon=" +
+            this.coordinates[1] +
+            "&zoom=20"
+        }
+      ];
     }
   },
   data() {
@@ -187,21 +187,11 @@ export default {
 </script>
 
 <style scoped>
-.address-info {
-  text-align: left;
-  margin-bottom: 2em;
-}
-.inline-address {
-  margin-top: 1.2em;
-  margin-bottom: 2em;
+#map-container {
+  height: 35rem;
 }
 
-.header {
-  font-weight: bold;
-}
-#map-container {
-  height: 40rem;
-  width: 100%;
-  text-align: left;
+a {
+  text-decoration: none;
 }
 </style>

@@ -28,7 +28,7 @@
     </v-form>
 
     <v-container id="map-container" fluid v-if="locationAvailable">
-      <l-map :center="location" :zoom.sync="zoom" :minZoom="3">
+      <l-map :center.sync="location" :zoom.sync="zoom" :minZoom="3">
         <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
         <ul v-for="item in items" v-bind:key="item.admCode">
           <li>
@@ -76,7 +76,6 @@ export default {
   },
   computed: {
     ...mapState(["items"]),
-    ...mapState(["location"]),
     ...mapState(["locationAvailable"])
   },
   data() {
@@ -87,6 +86,7 @@ export default {
         '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       coordinateX: null,
       coordinateY: null,
+      location: [],
       distance: "0.2",
       error: null
     };
@@ -100,7 +100,8 @@ export default {
         next(vm => {
           x = position.coords.latitude;
           y = position.coords.longitude;
-          vm.updateLocation([x, y]);
+          vm.location = [x, y];
+          vm.updateLocationAvailable(true);
           if (position) {
             vm.getNearbyAddresses(x, y, vm.distance);
           }
@@ -113,21 +114,22 @@ export default {
           x = 49.7437572;
           y = 15.3386383;
           vm.zoom = 7;
-          vm.updateLocation([x, y]);
+          vm.location = [x, y];
+          vm.updateLocationAvailable(true);
         });
       }
     );
   },
   methods: {
     ...mapMutations(["updateItems"]),
-    ...mapMutations(["updateLocation"]),
+    ...mapMutations(["updateLocationAvailable"]),
     setError(error) {
       this.error = error;
     },
     onSubmit(evt) {
       evt.preventDefault();
       this.zoom = 20;
-      this.updateLocation([this.coordinateX, this.coordinateY]);
+      this.location = [this.coordinateX, this.coordinateY];
       this.getNearbyAddresses(
         this.coordinateX,
         this.coordinateY,
@@ -147,12 +149,13 @@ export default {
     resetLocation() {
       let x;
       let y;
+
       navigator.geolocation.getCurrentPosition(
         position => {
           x = position.coords.latitude;
           y = position.coords.longitude;
           this.zoom = 20;
-          this.updateLocation([x, y]);
+          this.location = [x, y];
           this.getNearbyAddresses(x, y, this.distance);
         },
         error => {
@@ -161,7 +164,7 @@ export default {
           x = 49.7437572;
           y = 15.3386383;
           this.zoom = 7;
-          this.updateLocation([x, y]);
+          this.location = [x, y];
           this.updateItems([]);
         }
       );

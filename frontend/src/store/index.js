@@ -37,6 +37,9 @@ export default new Vuex.Store({
       state.location = payload;
       state.locationAvailable = true;
     },
+    updateLocationAvailable(state, payload) {
+      state.locationAvailable = payload;
+    },
     resetQueryState(state) {
       state.city = "";
       state.district = "";

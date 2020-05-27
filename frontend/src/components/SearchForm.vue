@@ -3,7 +3,7 @@
     <v-container>
       <v-row>
         <v-col>
-          <v-autocomplete
+          <v-combobox
             label="Obec"
             no-data-text="Žádný výsledek"
             placeholder=" "
@@ -11,13 +11,13 @@
             :items="citySuggestions"
             :search-input.sync="searchCity"
             clearable
-          ></v-autocomplete>
+          ></v-combobox>
         </v-col>
       </v-row>
 
       <v-row>
         <v-col>
-          <v-autocomplete
+          <v-combobox
             label="Část obce"
             no-data-text="Žádný výsledek"
             placeholder=" "
@@ -25,13 +25,13 @@
             :items="districtSuggestions"
             :search-input.sync="searchDistrict"
             clearable
-          ></v-autocomplete>
+          ></v-combobox>
         </v-col>
       </v-row>
 
       <v-row>
         <v-col>
-          <v-autocomplete
+          <v-combobox
             label="Ulice"
             no-data-text="Žádný výsledek"
             placeholder=" "
@@ -39,13 +39,13 @@
             :items="streetSuggestions"
             :search-input.sync="searchStreet"
             clearable
-          ></v-autocomplete>
+          ></v-combobox>
         </v-col>
       </v-row>
 
       <v-row>
         <v-col>
-          <v-autocomplete
+          <v-combobox
             label="Číslo domovní/orientační"
             no-data-text="Žádný výsledek"
             placeholder=" "
@@ -54,7 +54,7 @@
             :search-input.sync="searchHouseNumber"
             clearable
           >
-          </v-autocomplete>
+          </v-combobox>
         </v-col>
       </v-row>
 
@@ -81,7 +81,7 @@
 
       <v-row>
         <v-col>
-          <v-autocomplete
+          <v-combobox
             label="Kód adresního místa"
             no-data-text="Žádný výsledek"
             placeholder=" "
@@ -92,7 +92,7 @@
             item-value="admCode"
             @input="redirectToDetail($event)"
             clearable
-          ></v-autocomplete>
+          ></v-combobox>
         </v-col>
       </v-row>
     </v-container>

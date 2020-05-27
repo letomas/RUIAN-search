@@ -2,18 +2,17 @@
   <div class="search">
     <h1>Vyhledávání adresních míst v RÚIAN</h1>
     <SearchForm
-      v-on:search="search(1)"
-      v-on:searchByAdmCode="searchByAdmCode(1)"
+      @search="search(1)"
+      @searchByAdmCode="searchByAdmCode(1)"
     ></SearchForm>
     <div v-if="showResult === true">
-      <AddressTable />
-      <b-pagination
+      <AddressTable v-on:changePage="changePage" :pageCount="pageCount" />
+      <v-pagination
         v-model="page"
-        :total-rows="totalElements"
-        :per-page="10"
-        align="center"
+        :length="pageCount"
+        total-visible="8"
         @input="changePage"
-      ></b-pagination>
+      ></v-pagination>
     </div>
     <div v-else-if="noResult === true">
       <h3>Nebyl nalezen žádný výsledek.</h3>
@@ -60,7 +59,7 @@ export default {
         { key: "detail", label: "" }
       ],
       page: 1,
-      totalElements: null,
+      pageCount: 0,
       error: null,
       showResult: false,
       noResult: false,
@@ -86,7 +85,7 @@ export default {
         .getFormQueryResult(query, page - 1)
         .then(result => {
           this.updateItems(result.data.content);
-          this.totalElements = result.data.totalElements;
+          this.pageCount = result.data.totalPages;
           if (typeof this.items !== "undefined" && this.items.length > 0) {
             this.showResult = true;
           } else {
@@ -108,7 +107,7 @@ export default {
         .findByAdmCode(this.admCode, page - 1)
         .then(result => {
           this.updateItems(result.data.content);
-          this.totalElements = result.data.totalElements;
+          this.pageCount = result.data.totalPages;
 
           if (typeof this.items !== "undefined" && this.items.length > 0) {
             this.showResult = true;
@@ -118,14 +117,13 @@ export default {
         })
         .catch(error => {
           this.error = error.toString();
-          this.$log.debug(error);
         });
     },
-    changePage() {
+    changePage(page) {
       if (this.isSearchingByCode) {
-        this.searchByAdmCode(this.page);
+        this.searchByAdmCode(page);
       } else {
-        this.search(this.page);
+        this.search(page);
       }
     }
   }

@@ -89,7 +89,6 @@
             :items="codeSuggestions"
             :search-input.sync="searchCode"
             item-text="admCode"
-            item-value="admCode"
             @input="redirectToDetail($event)"
             clearable
           ></v-combobox>
@@ -169,7 +168,7 @@ export default {
     searchByAdmCode() {
       this.$emit("searchByAdmCode");
     },
-    getCitySuggestions(city) {
+    getCitySuggestions: _.debounce(function(city) {
       api
         .getCitySuggestions(city)
         .then(result => {
@@ -179,8 +178,8 @@ export default {
           this.error = error.toString();
           this.$log.debug(error);
         });
-    },
-    getDistrictSuggestions(city, district) {
+    }, 250),
+    getDistrictSuggestions: _.debounce(function(city, district) {
       api
         .getDistrictSuggestions(city, district)
         .then(result => {
@@ -190,8 +189,8 @@ export default {
           this.error = error.toString();
           this.$log.debug(error);
         });
-    },
-    getStreetSuggestions(city, district, street) {
+    }, 250),
+    getStreetSuggestions: _.debounce(function(city, district, street) {
       api
         .getStreetSuggestions(city, district, street)
         .then(result => {
@@ -201,8 +200,13 @@ export default {
           this.error = error.toString();
           this.$log.debug(error);
         });
-    },
-    getHouseNumberSuggestions(city, district, street, houseNumber) {
+    }, 250),
+    getHouseNumberSuggestions: _.debounce(function(
+      city,
+      district,
+      street,
+      houseNumber
+    ) {
       api
         .getHouseNumberSuggestions(city, district, street, houseNumber)
         .then(result => {
@@ -213,13 +217,8 @@ export default {
           this.$log.debug(error);
         });
     },
-    getCodeSuggestions(admCode) {
-      if (!admCode) {
-        this.admCode = "";
-        this.codeSuggestions = [];
-        return;
-      }
-
+    250),
+    getCodeSuggestions: _.debounce(function(admCode) {
       api
         .findByAdmCode(admCode, 0)
         .then(result => {
@@ -229,41 +228,36 @@ export default {
           this.error = error.toString();
           this.$log.debug(error);
         });
-    },
-    redirectToDetail(admCode) {
-      this.$log.debug(admCode);
+    }, 250),
+    redirectToDetail(address) {
+      this.$log.debug(address);
       this.$router.push({
         name: "addressDetail",
-        params: { id: admCode }
+        params: { id: address.admCode }
       });
     }
   },
   watch: {
     searchCity(value) {
       this.city = value ? value : "";
-      _.debounce(this.getCitySuggestions(value), 400);
+      this.getCitySuggestions(value);
     },
     searchDistrict(value) {
       this.district = value ? value : "";
-      _.debounce(this.getDistrictSuggestions(this.city, value), 400);
+      this.getDistrictSuggestions(this.city, value);
     },
     searchStreet(value) {
       this.street = value ? value : "";
-      _.debounce(
-        this.getStreetSuggestions(this.city, this.district, value),
-        400
-      );
+      this.getStreetSuggestions(this.city, this.district, value);
     },
     searchHouseNumber(value) {
       this.houseNumber = value ? value : "";
-      _.debounce(
-        this.getCitySuggestions(this.city, this.district, this.street, value),
-        400
-      );
+
+      this.getCitySuggestions(this.city, this.district, this.street, value);
     },
     searchCode(value) {
       this.admCode = value ? value : "";
-      _.debounce(this.getCodeSuggestions(value), 400);
+      this.getCodeSuggestions(value);
     }
   }
 };

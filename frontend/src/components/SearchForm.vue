@@ -48,7 +48,7 @@
 
       <b-row class="typehead">
         <b-col cols="2" align="left">
-          <label>Číslo domovní:</label>
+          <label>Číslo domovní/orientační:</label>
         </b-col>
         <b-col>
           <Typeahead
@@ -89,7 +89,7 @@
         >
           <template slot="append">
             <b-button variant="primary" v-on:click="searchByAdmCode">
-              <BIconSearch></BIconSearch>
+              <BIconSearch />
             </b-button>
           </template>
         </Typeahead>
@@ -243,6 +243,16 @@ export default {
 </script>
 
 <style scoped>
+@media only screen and (max-width: 768px) {
+  .input {
+    width: 100%;
+  }
+
+  #code-search {
+    width: 100%;
+  }
+}
+
 .typehead {
   margin-bottom: 1rem;
 }

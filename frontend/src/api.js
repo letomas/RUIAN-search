@@ -4,7 +4,7 @@ const SERVER_URL = "/api";
 
 const ruian_api = axios.create({
   baseURL: SERVER_URL,
-  timeout: 2000
+  timeout: 3500
 });
 
 export default {

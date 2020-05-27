@@ -29,6 +29,6 @@ export default {
 }
 
 .v-label {
-  font-size: 1.3em;
+  font-size: 1.12em;
 }
 </style>

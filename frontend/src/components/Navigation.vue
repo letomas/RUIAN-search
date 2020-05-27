@@ -23,7 +23,7 @@
       </v-app-bar-items>
     </v-app-bar>
 
-    <v-navigation-drawer v-model="drawer" absolute temporary hide-on-scroll>
+    <v-navigation-drawer v-model="drawer" fixed temporary hide-on-scroll app>
       <v-list nav>
         <v-list-item
           v-for="item in items"

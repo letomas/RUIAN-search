@@ -52,7 +52,7 @@
         </ul>
       </l-map>
     </v-container>
-    <v-btn @click="resetLocation" color="red lighten-1" dark>
+    <v-btn class="mb-5" @click="resetLocation" color="red lighten-1" dark>
       Reset
     </v-btn>
 
@@ -134,6 +134,10 @@ export default {
         });
       }
     );
+  },
+  beforeRouteLeave(to, from, next) {
+    this.updateLocationAvailable(false);
+    next();
   },
   methods: {
     ...mapMutations(["updateItems"]),

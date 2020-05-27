@@ -7,15 +7,25 @@
       adresních míst.
     </div>
 
-    <v-form>
+    <v-form ref="form" v-model="valid">
       <v-container fluid>
         <v-row>
           <v-col cols="12" sm="5">
-            <v-text-field label="Souřadnice X" v-model="coordinateX" required>
+            <v-text-field
+              label="Souřadnice X"
+              v-model="coordinateX"
+              :rules="coordinateRules"
+              required
+            >
             </v-text-field>
           </v-col>
           <v-col cols="12" sm="5">
-            <v-text-field label="Souřadnice Y" v-model="coordinateY" required>
+            <v-text-field
+              label="Souřadnice Y"
+              v-model="coordinateY"
+              :rules="coordinateRules"
+              required
+            >
             </v-text-field>
           </v-col>
           <v-col class="pt-0 text-left" align-self="center">
@@ -88,7 +98,12 @@ export default {
       coordinateY: null,
       location: [],
       distance: "0.2",
-      error: null
+      error: null,
+      valid: false,
+      coordinateRules: [
+        v => !!v || "Zadejde prosím souřadnici X",
+        v => !isNaN(parseFloat(v)) || "Zadejte prosím platnou souřadnici"
+      ]
     };
   },
   beforeRouteEnter(to, from, next) {
@@ -127,6 +142,9 @@ export default {
       this.error = error;
     },
     onSubmit(evt) {
+      if (!this.valid) {
+        return;
+      }
       evt.preventDefault();
       this.zoom = 20;
       this.location = [this.coordinateX, this.coordinateY];
@@ -149,7 +167,7 @@ export default {
     resetLocation() {
       let x;
       let y;
-
+      this.$refs.form.resetValidation();
       navigator.geolocation.getCurrentPosition(
         position => {
           x = position.coords.latitude;

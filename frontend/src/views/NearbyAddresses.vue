@@ -1,36 +1,34 @@
 <template>
-  <div class="nearbyAddresses">
+  <v-container class="pt-0" fluid>
     <h1>Adresní místa v okolí</h1>
-    <div id="form-label">
+    <div class="text-left">
       Pro vyhledání adresních míst zadejte souřadnice bodu v zobrazení WGS84.
       Mapa se vycentruje na vámi zadaný bod a pod mapou bude seznam blízkych
       adresních míst.
     </div>
-    <b-container fluid v-if="locationAvailable">
-      <b-form @submit="onSubmit" inline>
-        <b-form-group label="X:" label-for="input-coord-x">
-          <b-form-input
-            id="input-coord-x"
-            v-model="coordinateX"
-            required
-            placeholder="49.7437506"
-          ></b-form-input>
-        </b-form-group>
-        <b-form-group label="Y:" label-for="input-coord-y">
-          <b-form-input
-            id="input-coord-y"
-            v-model="coordinateY"
-            required
-            placeholder="15.3386478"
-          ></b-form-input>
-        </b-form-group>
-        <b-button type="submit" variant="primary" style="float:left"
-          >Vyhledat</b-button
-        >
-      </b-form>
-    </b-container>
-    <b-container id="map-container" fluid v-if="locationAvailable">
-      <l-map :center="location" :zoom="zoom" :minZoom="3">
+
+    <v-form>
+      <v-container fluid>
+        <v-row>
+          <v-col cols="12" sm="5">
+            <v-text-field label="Souřadnice X" v-model="coordinateX" required>
+            </v-text-field>
+          </v-col>
+          <v-col cols="12" sm="5">
+            <v-text-field label="Souřadnice Y" v-model="coordinateY" required>
+            </v-text-field>
+          </v-col>
+          <v-col class="pt-0 text-left" align-self="center">
+            <v-btn @click="onSubmit" color="indigo accent-2" dark
+              >Vyhledat</v-btn
+            >
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-form>
+
+    <v-container id="map-container" fluid v-if="locationAvailable">
+      <l-map :center="location" :zoom.sync="zoom" :minZoom="3">
         <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
         <ul v-for="item in items" v-bind:key="item.admCode">
           <li>
@@ -43,12 +41,13 @@
           </li>
         </ul>
       </l-map>
-    </b-container>
-    <b-button id="reset-button" type="warning" @click="resetLocation">
+    </v-container>
+    <v-btn @click="resetLocation" color="red lighten-1" dark>
       Reset
-    </b-button>
+    </v-btn>
+
     <AddressTable />
-  </div>
+  </v-container>
 </template>
 
 <script>
@@ -88,7 +87,8 @@ export default {
         '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       coordinateX: null,
       coordinateY: null,
-      distance: "0.2"
+      distance: "0.2",
+      error: null
     };
   },
   beforeRouteEnter(to, from, next) {
@@ -101,23 +101,32 @@ export default {
           x = position.coords.latitude;
           y = position.coords.longitude;
           vm.updateLocation([x, y]);
-          vm.getNearbyAddresses(x, y, vm.distance);
+          if (position) {
+            vm.getNearbyAddresses(x, y, vm.distance);
+          }
         });
       },
       error => {
-        next(vm => vm.setError(error));
+        next(vm => {
+          vm.setError(error);
+          // set coordinates to Czech republic's center if user denies permissions to his position
+          x = 49.7437572;
+          y = 15.3386383;
+          vm.zoom = 7;
+          vm.updateLocation([x, y]);
+        });
       }
     );
   },
   methods: {
     ...mapMutations(["updateItems"]),
     ...mapMutations(["updateLocation"]),
-    ...mapMutations(["updateLocationAvailable"]),
     setError(error) {
       this.error = error;
     },
     onSubmit(evt) {
       evt.preventDefault();
+      this.zoom = 20;
       this.updateLocation([this.coordinateX, this.coordinateY]);
       this.getNearbyAddresses(
         this.coordinateX,
@@ -138,33 +147,31 @@ export default {
     resetLocation() {
       let x;
       let y;
-      navigator.geolocation.getCurrentPosition(position => {
-        x = position.coords.latitude;
-        y = position.coords.longitude;
-        this.updateLocation([x, y]);
-        this.getNearbyAddresses(x, y, this.distance);
-      });
+      navigator.geolocation.getCurrentPosition(
+        position => {
+          x = position.coords.latitude;
+          y = position.coords.longitude;
+          this.zoom = 20;
+          this.updateLocation([x, y]);
+          this.getNearbyAddresses(x, y, this.distance);
+        },
+        error => {
+          this.setError(error);
+          // set coordinates to Czech republic's center if user denies permissions to his position
+          x = 49.7437572;
+          y = 15.3386383;
+          this.zoom = 7;
+          this.updateLocation([x, y]);
+          this.updateItems([]);
+        }
+      );
     }
   }
 };
 </script>
 
 <style scoped>
-input {
-  margin: 0 0.8em 0 0.2em;
-}
-#reset-button {
-  margin-bottom: 0.5em;
-}
-#form-label {
-  margin-left: 0.4em;
-  font-size: 1.1em;
-  text-align: left;
-}
 #map-container {
-  margin-top: 2em;
-  margin-bottom: 0.8em;
   height: 30em;
-  width: 70%;
 }
 </style>

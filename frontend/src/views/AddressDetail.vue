@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>Detail adresního místa</h1>
-    <Address v-bind:address="address" />
+    <Address :address="address" />
   </div>
 </template>
 

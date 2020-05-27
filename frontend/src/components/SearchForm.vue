@@ -6,6 +6,7 @@
           <v-autocomplete
             label="Obec"
             no-data-text="Žádný výsledek"
+            placeholder=" "
             append-icon=""
             :items="citySuggestions"
             :search-input.sync="searchCity"
@@ -19,6 +20,7 @@
           <v-autocomplete
             label="Část obce"
             no-data-text="Žádný výsledek"
+            placeholder=" "
             append-icon=""
             :items="districtSuggestions"
             :search-input.sync="searchDistrict"
@@ -32,6 +34,7 @@
           <v-autocomplete
             label="Ulice"
             no-data-text="Žádný výsledek"
+            placeholder=" "
             append-icon=""
             :items="streetSuggestions"
             :search-input.sync="searchStreet"
@@ -45,6 +48,7 @@
           <v-autocomplete
             label="Číslo domovní/orientační"
             no-data-text="Žádný výsledek"
+            placeholder=" "
             append-icon=""
             :items="houseNumberSuggestions"
             :search-input.sync="searchHouseNumber"
@@ -80,6 +84,7 @@
           <v-autocomplete
             label="Kód adresního místa"
             no-data-text="Žádný výsledek"
+            placeholder=" "
             append-icon=""
             :items="codeSuggestions"
             :search-input.sync="searchCode"

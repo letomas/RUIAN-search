@@ -40,7 +40,7 @@
       </v-row>
     </v-container>
 
-    <div v-if="hasCoordinates">
+    <div v-if="coordinates">
       <v-divider></v-divider>
       <v-container fluid>
         <v-row>
@@ -119,15 +119,14 @@ export default {
     coordinates: function() {
       let coords = this.address.coordinatesLatLon;
       if (!coords) {
-        // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-        this.hasCoordinates = false;
         return null;
       }
+
       return [coords.x, coords.y];
     },
     items: function() {
       return [
-        { name: "Kód:", value: this.address.admCode },
+        { name: "Kód adresního místa:", value: this.address.admCode },
         { name: "Obec:", value: this.address.cityName },
         { name: "Část obce:", value: this.address.districtName },
         { name: "Městská část/obvod:", value: this.address.boroughName },

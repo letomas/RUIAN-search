@@ -2,7 +2,7 @@
   <v-app>
     <Navigation />
 
-    <v-content>
+    <v-content class="pt-7">
       <router-view />
     </v-content>
   </v-app>
@@ -26,5 +26,9 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+.v-label {
+  font-size: 1.3em;
 }
 </style>

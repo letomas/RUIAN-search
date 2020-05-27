@@ -1,5 +1,10 @@
 <template>
-  <v-data-table :headers="headers" :items="items" hide-default-footer>
+  <v-data-table
+    :headers="headers"
+    :items="items"
+    no-data-text="Nebyl nalezen žádný výsledek"
+    hide-default-footer
+  >
     <template v-slot:item.fullOrientationalNumber="{ item }">
       {{ item.orientationalNumber }}{{ item.orientationalNumberLetter }}
     </template>

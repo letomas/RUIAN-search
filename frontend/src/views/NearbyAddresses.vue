@@ -5,9 +5,10 @@
       Pro vyhledání adresních míst v okolí bodu zadejte GPS souřadnice bodu v
       desítkové soustavě (např. 49.7437572, 15.3386383). Nezadávejte souřadnice
       ve stupních, minutách a vteřinách. Mapa se vycentruje na vámi zadaný bod a
-      pod mapou bude seznam blízkych adresních míst. Tlačítko reset vrátí mapu
-      do původního stavu (zpět na vaše okolí, pokud jste povolili sdílení
-      polohy).
+      blízká adresní místa se zobrazí na mapě. Na značky je možné kliknout, po
+      kliknutí se zobrazí bublina s adresou a odkazem na detail. Tlačítko reset
+      vrátí mapu do původního stavu (zpět na vaše okolí, pokud jste povolili
+      sdílení polohy).
     </v-container>
 
     <v-form ref="form" v-model="valid">

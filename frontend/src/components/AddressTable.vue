@@ -13,6 +13,7 @@
         :to="{ name: 'addressDetail', params: { id: item.admCode } }"
         color="indigo accent-2"
         dark
+        exact
       >
         Detail
       </v-btn>

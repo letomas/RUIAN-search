@@ -107,6 +107,7 @@
             ref="codeAutocomplete"
             placeholder=" "
             append-icon=""
+            no-data-text="Žádný výsledek"
             :loading="loadingCode"
             append-outer-icon="search"
             :items="codeSuggestions"

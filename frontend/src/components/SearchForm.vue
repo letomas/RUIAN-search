@@ -22,12 +22,14 @@
       <v-row>
         <v-col>
           <v-combobox
+            ref="districtInput"
             label="Část obce"
             placeholder=" "
             append-icon=""
             :loading="loadingDistrict"
             :items="districtSuggestions"
             :search-input.sync="searchDistrict"
+            @focus="showDistrictsInCity"
             clearable
           >
             <template v-if="this.searchDistrict" v-slot:no-data>
@@ -40,12 +42,14 @@
       <v-row>
         <v-col>
           <v-combobox
+            ref="streetInput"
             label="Ulice"
             placeholder=" "
             append-icon=""
             :loading="loadingStreet"
             :items="streetSuggestions"
             :search-input.sync="searchStreet"
+            @focus="showStreetsInCity"
             clearable
           >
             <template v-if="this.searchStreet" v-slot:no-data>
@@ -58,12 +62,14 @@
       <v-row>
         <v-col>
           <v-combobox
+            ref="houseNumberInput"
             label="Číslo domovní/orientační"
             placeholder=" "
             append-icon=""
             :loading="loadingHouseNumber"
             :items="houseNumberSuggestions"
             :search-input.sync="searchHouseNumber"
+            @focus="showHouseNumbers"
             clearable
           >
             <template v-if="this.searchHouseNumber" v-slot:no-data>
@@ -119,52 +125,18 @@
 
 <script>
 import _ from "underscore";
+import { mapState, mapMutations } from "vuex";
 
 import api from "../api.js";
 
 export default {
   name: "SearchForm",
   computed: {
-    city: {
-      get() {
-        return this.$store.state.city;
-      },
-      set(val) {
-        this.$store.commit("updateCity", val);
-      }
-    },
-    district: {
-      get() {
-        return this.$store.state.district;
-      },
-      set(val) {
-        this.$store.commit("updateDistrict", val);
-      }
-    },
-    street: {
-      get() {
-        return this.$store.state.street;
-      },
-      set(val) {
-        this.$store.commit("updateStreet", val);
-      }
-    },
-    houseNumber: {
-      get() {
-        return this.$store.state.houseNumber;
-      },
-      set(val) {
-        this.$store.commit("updateHouseNumber", val);
-      }
-    },
-    admCode: {
-      get() {
-        return this.$store.state.admCode;
-      },
-      set(val) {
-        this.$store.commit("updateAdmCode", val);
-      }
-    }
+    ...mapState(["city"]),
+    ...mapState(["district"]),
+    ...mapState(["street"]),
+    ...mapState(["houseNumber"]),
+    ...mapState(["admCode"])
   },
   data() {
     return {
@@ -186,6 +158,11 @@ export default {
     };
   },
   methods: {
+    ...mapMutations(["updateCity"]),
+    ...mapMutations(["updateDistrict"]),
+    ...mapMutations(["updateStreet"]),
+    ...mapMutations(["updateHouseNumber"]),
+    ...mapMutations(["updateAdmCode"]),
     search() {
       this.$emit("search");
     },
@@ -278,6 +255,30 @@ export default {
           this.loadingCode = false;
         });
     }, 250),
+    showDistrictsInCity() {
+      if (!this.city) {
+        return;
+      }
+
+      this.getDistrictSuggestions(this.city, "");
+      this.$refs.districtInput.isMenuActive = true;
+    },
+    showStreetsInCity() {
+      if (!this.city) {
+        return;
+      }
+
+      this.getStreetSuggestions(this.city, this.district, this.street);
+      this.$refs.streetInput.isMenuActive = true;
+    },
+    showHouseNumbers() {
+      if (!this.city || !this.street) {
+        return;
+      }
+
+      this.getHouseNumberSuggestions(this.city, this.district, this.street, "");
+      this.$refs.houseNumberInput.isMenuActive = true;
+    },
     redirectToDetail(admCode) {
       this.$router.push({
         name: "addressDetail",
@@ -287,21 +288,34 @@ export default {
   },
   watch: {
     searchCity(value) {
-      this.city = value ? value : "";
+      const city = value ? value : "";
+      this.updateCity(city);
+      this.districtSuggestions = [];
+      this.streetSuggestions = [];
+      this.houseNumberSuggestions = [];
+
       this.getCitySuggestions(this.city);
     },
     searchDistrict(value) {
-      this.district = value ? value : "";
+      const district = value ? value : "";
+      this.updateDistrict(district);
+      this.streetSuggestions = [];
+      this.houseNumberSuggestions = [];
+
       this.getDistrictSuggestions(this.city, this.district);
     },
     searchStreet(value) {
-      this.street = value ? value : "";
+      const street = value ? value : "";
+      this.updateStreet(street);
+      this.houseNumberSuggestions = [];
+
       this.getStreetSuggestions(this.city, this.district, this.street);
     },
     searchHouseNumber(value) {
-      this.houseNumber = value ? value : "";
+      const houseNumber = value ? value : "";
+      this.updateHouseNumber(houseNumber);
 
-      this.getCitySuggestions(
+      this.getHouseNumberSuggestions(
         this.city,
         this.district,
         this.street,
@@ -309,7 +323,9 @@ export default {
       );
     },
     searchCode(value) {
-      this.admCode = value ? value : "";
+      const admCode = value ? value : "";
+      this.updateAdmCode(admCode);
+
       this.getCodeSuggestions(this.admCode);
     }
   }

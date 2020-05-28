@@ -1,5 +1,5 @@
 <template>
-  <v-container class="text-left">
+  <v-container class="text-left px-0">
     <v-container>
       <v-row>
         <v-col>
@@ -107,6 +107,7 @@
             ref="codeAutocomplete"
             placeholder=" "
             append-icon=""
+            no-data-text="Žádný výsledek"
             :loading="loadingCode"
             append-outer-icon="search"
             :items="codeSuggestions"

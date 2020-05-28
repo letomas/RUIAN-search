@@ -1,14 +1,14 @@
 <template>
   <v-container class="pt-0" fluid>
     <h1>Adresní místa v okolí</h1>
-    <div class="text-left">
+    <v-container class="text-left" fluid>
       Pro vyhledání adresních míst v okolí bodu zadejte GPS souřadnice bodu v
       desítkové soustavě (např. 49.7437572, 15.3386383). Nezadávejte souřadnice
       ve stupních, minutách a vteřinách. Mapa se vycentruje na vámi zadaný bod a
       pod mapou bude seznam blízkych adresních míst. Tlačítko reset vrátí mapu
       do původního stavu (zpět na vaše okolí, pokud jste povolili sdílení
       polohy).
-    </div>
+    </v-container>
 
     <v-form ref="form" v-model="valid">
       <v-container fluid>
@@ -47,7 +47,36 @@
           <li>
             <l-marker
               :lat-lng="[item.coordinatesLatLon.x, item.coordinatesLatLon.y]"
-            />
+            >
+              <l-popup>
+                <v-container>
+                  <v-row class="font-weight-bold">
+                    Adresní místo {{ item.admCode }}
+                  </v-row>
+                  <v-row>
+                    {{ buildFirstRow(item) }}
+                  </v-row>
+                  <v-row>
+                    {{ buildSecondRow(item) }}
+                  </v-row>
+                  <v-row v-if="buildThirdRow(item)">
+                    {{ buildThirdRow(item) }}
+                  </v-row>
+                  <v-row class="mt-3">
+                    <v-btn
+                      :to="{
+                        name: 'addressDetail',
+                        params: { id: item.admCode }
+                      }"
+                      color="indigo accent-2"
+                      exact
+                      dark
+                      >Detail</v-btn
+                    >
+                  </v-row>
+                </v-container>
+              </l-popup>
+            </l-marker>
           </li>
         </ul>
       </l-map>
@@ -55,18 +84,16 @@
     <v-btn class="mb-5" @click="resetLocation" color="red lighten-1" dark>
       Reset
     </v-btn>
-
-    <AddressTable />
   </v-container>
 </template>
 
 <script>
 import "leaflet/dist/leaflet.css";
-import AddressTable from "../components/AddressTable.vue";
 import api from "../api.js";
+import addressBuilder from "../addressBuilder.js";
 
 import { mapState, mapMutations } from "vuex";
-import { LMap, LTileLayer, LMarker } from "vue2-leaflet";
+import { LMap, LTileLayer, LMarker, LPopup } from "vue2-leaflet";
 import { Icon } from "leaflet";
 
 delete Icon.Default.prototype._getIconUrl;
@@ -79,10 +106,10 @@ Icon.Default.mergeOptions({
 export default {
   name: "Search",
   components: {
-    AddressTable,
     LMap,
     LTileLayer,
-    LMarker
+    LMarker,
+    LPopup
   },
   computed: {
     ...mapState(["items"]),
@@ -97,6 +124,7 @@ export default {
       coordinateX: null,
       coordinateY: null,
       location: [],
+      defaultLocation: [49.7437572, 15.3386383],
       distance: "0.2",
       error: null,
       valid: false,
@@ -125,11 +153,9 @@ export default {
       error => {
         next(vm => {
           vm.setError(error);
-          // set coordinates to Czech republic's center if user denies permissions to his position
-          x = 49.7437572;
-          y = 15.3386383;
           vm.zoom = 7;
-          vm.location = [x, y];
+          // set coordinates to Czech republic's center if user denies permissions to his position
+          vm.location = vm.defaultLocation;
           vm.updateLocationAvailable(true);
         });
       }
@@ -182,14 +208,21 @@ export default {
         },
         error => {
           this.setError(error);
-          // set coordinates to Czech republic's center if user denies permissions to his position
-          x = 49.7437572;
-          y = 15.3386383;
           this.zoom = 7;
-          this.location = [x, y];
+          // set coordinates to Czech republic's center if user denies permissions to his position
+          this.location = this.defaultLocation;
           this.updateItems([]);
         }
       );
+    },
+    buildFirstRow(address) {
+      return addressBuilder.build(address).firstRow;
+    },
+    buildSecondRow(address) {
+      return addressBuilder.build(address).secondRow;
+    },
+    buildThirdRow(address) {
+      return addressBuilder.build(address).thirdRow;
     }
   }
 };

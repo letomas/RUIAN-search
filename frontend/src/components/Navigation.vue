@@ -20,6 +20,15 @@
           ><v-icon>{{ item.icon }}</v-icon
           >{{ item.title }}</v-btn
         >
+        <a
+          href="https://github.com/letomas/RUIAN-search"
+          rel="noopener noreferrer"
+        >
+          <v-btn>
+            <img src="../../public/assets/icons/GitHub-Mark-Light-32px.png" />
+            Github repozitář
+          </v-btn>
+        </a>
       </v-app-bar-items>
     </v-app-bar>
 
@@ -37,6 +46,15 @@
 
           <v-list-item-content>
             <v-list-item-title>{{ item.title }}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item href="https://github.com/letomas/RUIAN-search">
+          <v-list-item-icon>
+            <v-icon>computer</v-icon>
+          </v-list-item-icon>
+
+          <v-list-item-content>
+            <v-list-item-title>Github repozitář</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>

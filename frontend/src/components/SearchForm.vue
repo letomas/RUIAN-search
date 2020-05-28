@@ -5,13 +5,17 @@
         <v-col>
           <v-combobox
             label="Obec"
-            no-data-text="Žádný výsledek"
             placeholder=" "
             append-icon=""
+            :loading="loadingCity"
             :items="citySuggestions"
             :search-input.sync="searchCity"
             clearable
-          ></v-combobox>
+          >
+            <template v-if="this.searchCity" v-slot:no-data>
+              <div>Žádný výsledek</div>
+            </template>
+          </v-combobox>
         </v-col>
       </v-row>
 
@@ -19,13 +23,17 @@
         <v-col>
           <v-combobox
             label="Část obce"
-            no-data-text="Žádný výsledek"
             placeholder=" "
             append-icon=""
+            :loading="loadingDistrict"
             :items="districtSuggestions"
             :search-input.sync="searchDistrict"
             clearable
-          ></v-combobox>
+          >
+            <template v-if="this.searchDistrict" v-slot:no-data>
+              <div>Žádný výsledek</div>
+            </template>
+          </v-combobox>
         </v-col>
       </v-row>
 
@@ -33,13 +41,17 @@
         <v-col>
           <v-combobox
             label="Ulice"
-            no-data-text="Žádný výsledek"
             placeholder=" "
             append-icon=""
+            :loading="loadingStreet"
             :items="streetSuggestions"
             :search-input.sync="searchStreet"
             clearable
-          ></v-combobox>
+          >
+            <template v-if="this.searchStreet" v-slot:no-data>
+              <div>Žádný výsledek</div>
+            </template>
+          </v-combobox>
         </v-col>
       </v-row>
 
@@ -47,13 +59,16 @@
         <v-col>
           <v-combobox
             label="Číslo domovní/orientační"
-            no-data-text="Žádný výsledek"
             placeholder=" "
             append-icon=""
+            :loading="loadingHouseNumber"
             :items="houseNumberSuggestions"
             :search-input.sync="searchHouseNumber"
             clearable
           >
+            <template v-if="this.searchHouseNumber" v-slot:no-data>
+              <div>Žádný výsledek</div>
+            </template>
           </v-combobox>
         </v-col>
       </v-row>
@@ -81,17 +96,21 @@
 
       <v-row>
         <v-col>
-          <v-combobox
+          <v-autocomplete
             label="Kód adresního místa"
-            no-data-text="Žádný výsledek"
+            ref="codeAutocomplete"
             placeholder=" "
             append-icon=""
+            :loading="loadingCode"
+            append-outer-icon="search"
             :items="codeSuggestions"
             :search-input.sync="searchCode"
             item-text="admCode"
             @input="redirectToDetail($event)"
+            @click:append-outer="searchByAdmCode"
             clearable
-          ></v-combobox>
+          >
+          </v-autocomplete>
         </v-col>
       </v-row>
     </v-container>
@@ -158,7 +177,12 @@ export default {
       searchDistrict: "",
       searchStreet: "",
       searchHouseNumber: "",
-      searchCode: ""
+      searchCode: "",
+      loadingCity: false,
+      loadingDistrict: false,
+      loadingStreet: false,
+      loadingHouseNumber: false,
+      loadingCode: false
     };
   },
   methods: {
@@ -166,9 +190,11 @@ export default {
       this.$emit("search");
     },
     searchByAdmCode() {
+      this.$refs.codeAutocomplete.isMenuActive = false;
       this.$emit("searchByAdmCode");
     },
     getCitySuggestions: _.debounce(function(city) {
+      this.loadingCity = true;
       api
         .getCitySuggestions(city)
         .then(result => {
@@ -177,9 +203,14 @@ export default {
         .catch(error => {
           this.error = error.toString();
           this.$log.debug(error);
+        })
+        .finally(() => {
+          this.loadingCity = false;
         });
     }, 250),
     getDistrictSuggestions: _.debounce(function(city, district) {
+      this.loadingDistrict = true;
+
       api
         .getDistrictSuggestions(city, district)
         .then(result => {
@@ -188,9 +219,14 @@ export default {
         .catch(error => {
           this.error = error.toString();
           this.$log.debug(error);
+        })
+        .finally(() => {
+          this.loadingDistrict = false;
         });
     }, 250),
     getStreetSuggestions: _.debounce(function(city, district, street) {
+      this.loadingStreet = true;
+
       api
         .getStreetSuggestions(city, district, street)
         .then(result => {
@@ -199,6 +235,9 @@ export default {
         .catch(error => {
           this.error = error.toString();
           this.$log.debug(error);
+        })
+        .finally(() => {
+          this.loadingStreet = false;
         });
     }, 250),
     getHouseNumberSuggestions: _.debounce(function(
@@ -207,6 +246,8 @@ export default {
       street,
       houseNumber
     ) {
+      this.loadingHouseNumber = true;
+
       api
         .getHouseNumberSuggestions(city, district, street, houseNumber)
         .then(result => {
@@ -215,10 +256,15 @@ export default {
         .catch(error => {
           this.error = error.toString();
           this.$log.debug(error);
+        })
+        .finally(() => {
+          this.loadingHouseNumber = false;
         });
     },
     250),
     getCodeSuggestions: _.debounce(function(admCode) {
+      this.loadingCode = true;
+
       api
         .findByAdmCode(admCode, 0)
         .then(result => {
@@ -227,37 +273,44 @@ export default {
         .catch(error => {
           this.error = error.toString();
           this.$log.debug(error);
+        })
+        .finally(() => {
+          this.loadingCode = false;
         });
     }, 250),
-    redirectToDetail(address) {
-      this.$log.debug(address);
+    redirectToDetail(admCode) {
       this.$router.push({
         name: "addressDetail",
-        params: { id: address.admCode }
+        params: { id: admCode }
       });
     }
   },
   watch: {
     searchCity(value) {
       this.city = value ? value : "";
-      this.getCitySuggestions(value);
+      this.getCitySuggestions(this.city);
     },
     searchDistrict(value) {
       this.district = value ? value : "";
-      this.getDistrictSuggestions(this.city, value);
+      this.getDistrictSuggestions(this.city, this.district);
     },
     searchStreet(value) {
       this.street = value ? value : "";
-      this.getStreetSuggestions(this.city, this.district, value);
+      this.getStreetSuggestions(this.city, this.district, this.street);
     },
     searchHouseNumber(value) {
       this.houseNumber = value ? value : "";
 
-      this.getCitySuggestions(this.city, this.district, this.street, value);
+      this.getCitySuggestions(
+        this.city,
+        this.district,
+        this.street,
+        this.houseNumber
+      );
     },
     searchCode(value) {
       this.admCode = value ? value : "";
-      this.getCodeSuggestions(value);
+      this.getCodeSuggestions(this.admCode);
     }
   }
 };

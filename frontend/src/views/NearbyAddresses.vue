@@ -40,13 +40,10 @@
     <v-container id="map-container" fluid v-if="locationAvailable">
       <l-map :center.sync="location" :zoom.sync="zoom" :minZoom="3">
         <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
-        <ul v-for="item in items" v-bind:key="item.admCode">
+        <ul v-for="item in items" :key="item.admCode">
           <li>
             <l-marker
-              v-bind:lat-lng="[
-                item.coordinatesLatLon.x,
-                item.coordinatesLatLon.y
-              ]"
+              :lat-lng="[item.coordinatesLatLon.x, item.coordinatesLatLon.y]"
             />
           </li>
         </ul>

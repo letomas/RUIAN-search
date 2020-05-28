@@ -6,7 +6,7 @@
       @searchByAdmCode="searchByAdmCode(1)"
     ></SearchForm>
     <div v-if="showResult === true">
-      <AddressTable v-on:changePage="changePage" :pageCount="pageCount" />
+      <AddressTable @changePage="changePage" :pageCount="pageCount" />
       <v-pagination
         v-model="page"
         :length="pageCount"

@@ -2,14 +2,22 @@
   <v-container class="text-left px-5" v-if="address" fluid>
     <v-container fluid>
       <v-row v-for="item in items" :key="item.name">
-        <v-col class="font-weight-bold py-1" cols="12" sm="3">{{
+        <v-col class="font-weight-bold py-1" cols="12" md="3">{{
           item.name
         }}</v-col>
         <v-col class="py-1">{{ item.value }} </v-col>
       </v-row>
 
       <v-row>
-        <v-col class="font-weight-bold py-1" cols="12" sm="3">IRI:</v-col>
+        <v-col class="font-weight-bold py-1" cols="12" md="3">
+          <a
+            id="iri"
+            href="https://ofn.gov.cz/adresy/draft/#vlastnost-adresa-adresní-místo"
+            rel="noopener noreferrer"
+          >
+            IRI:
+          </a>
+        </v-col>
         <v-col class="py-1">
           <a :href="IRIBaseUrl + address.admCode">
             {{ IRIBaseUrl }}{{ address.admCode }}
@@ -21,8 +29,16 @@
     <v-divider></v-divider>
 
     <v-container class="mt-4" fluid>
-      <!-- Add tooltip https://www.zakonyprolidi.cz/cs/2011-359?citace=1#prilohy !-->
-      <h3>Adresa dle vyhlášky č. 359/2011 Sb.</h3>
+      <h3>
+        Adresa dle vyhlášky č. 359/2011 Sb.
+        <v-btn
+          href="https://www.zakonyprolidi.cz/cs/2011-359?citace=1#prilohy"
+          rel="noopener noreferrer"
+          small
+          icon
+          ><v-icon>help_outline</v-icon></v-btn
+        >
+      </h3>
       <v-row>
         <v-col class="py-1">{{ firstRow }}</v-col>
       </v-row>
@@ -33,7 +49,7 @@
         <v-col class="py-1">{{ thirdRow }}</v-col>
       </v-row>
       <v-row class="my-1">
-        <v-col class="font-weight-bold" cols="12" sm="3"
+        <v-col class="font-weight-bold" cols="12" md="3"
           >Adresa v řádku:
         </v-col>
         <v-col>{{ inline }}</v-col>
@@ -44,7 +60,16 @@
       <v-divider></v-divider>
       <v-container fluid>
         <v-row>
-          <v-col class="font-weight-bold">Souřadnice v JTSK</v-col>
+          <v-col class="font-weight-bold"
+            >Souřadnice S-JTSK
+            <v-btn
+              href="https://geoportal.cuzk.cz/(S(we0f0rkrjb0vrqvoy4akhx3u))/Default.aspx?mode=TextMeta&side=sit.trans&text=souradsystemy"
+              rel="noopener noreferrer"
+              small
+              icon
+              ><v-icon>help_outline</v-icon></v-btn
+            >
+          </v-col>
         </v-row>
         <v-row>
           <v-col class="py-1">
@@ -52,7 +77,7 @@
           </v-col>
         </v-row>
         <v-row>
-          <v-col class="font-weight-bold">Souřadnice ve WGS84</v-col>
+          <v-col class="font-weight-bold">Souřadnice GPS</v-col>
         </v-row>
         <v-row>
           <v-col class="py-1">
@@ -129,7 +154,10 @@ export default {
         { name: "Kód adresního místa:", value: this.address.admCode },
         { name: "Obec:", value: this.address.cityName },
         { name: "Část obce:", value: this.address.districtName },
-        { name: "Městská část/obvod:", value: this.address.boroughName },
+        {
+          name: "Městský obvod/městská část:",
+          value: this.address.boroughName
+        },
         { name: "Název ulice:", value: this.address.streetName },
         { name: "PSČ:", value: this.address.postalCode },
         { name: "Číslo domovní:", value: this.address.houseNumber },
@@ -192,5 +220,14 @@ export default {
 
 a {
   text-decoration: none;
+}
+
+#iri {
+  text-decoration: underline dotted;
+  color: black;
+}
+
+#iri:hover {
+  cursor: help;
 }
 </style>

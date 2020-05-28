@@ -2,9 +2,12 @@
   <v-container class="pt-0" fluid>
     <h1>Adresní místa v okolí</h1>
     <div class="text-left">
-      Pro vyhledání adresních míst zadejte souřadnice bodu v zobrazení WGS84.
-      Mapa se vycentruje na vámi zadaný bod a pod mapou bude seznam blízkych
-      adresních míst.
+      Pro vyhledání adresních míst v okolí bodu zadejte GPS souřadnice bodu v
+      desítkové soustavě (např. 49.7437572, 15.3386383). Nezadávejte souřadnice
+      ve stupních, minutách a vteřinách. Mapa se vycentruje na vámi zadaný bod a
+      pod mapou bude seznam blízkych adresních míst. Tlačítko reset vrátí mapu
+      do původního stavu (zpět na vaše okolí, pokud jste povolili sdílení
+      polohy).
     </div>
 
     <v-form ref="form" v-model="valid">

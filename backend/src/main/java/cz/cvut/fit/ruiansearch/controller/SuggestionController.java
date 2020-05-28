@@ -33,8 +33,8 @@ public class SuggestionController {
     @GetMapping("/district")
     public List<String> getDistrictSuggestions(
         @RequestParam(defaultValue = "*") String city,
-        @RequestParam String district) {
-        if (isEmptyOrNull(district)) {
+        @RequestParam(defaultValue = "*") String district) {
+        if (city.equals("*") && district.equals("*")) {
             return Collections.emptyList();
         }
 
@@ -47,8 +47,8 @@ public class SuggestionController {
     public List<String> getStreetSuggestions(
             @RequestParam(defaultValue = "*") String city,
             @RequestParam(defaultValue = "*") String district,
-            @RequestParam String street) {
-        if (isEmptyOrNull(street)) {
+            @RequestParam(defaultValue = "*") String street) {
+        if (city.equals("*") && street.equals("*")) {
             return Collections.emptyList();
         }
 
@@ -63,10 +63,11 @@ public class SuggestionController {
             @RequestParam(defaultValue = "*") String city,
             @RequestParam(defaultValue = "*") String district,
             @RequestParam(defaultValue = "*") String street,
-            @RequestParam String houseNumber) {
-        if (isEmptyOrNull(houseNumber)) {
+            @RequestParam(defaultValue = "*") String houseNumber) {
+        if (city.equals("*") && street.equals("*") && houseNumber.equals("*")) {
             return Collections.emptyList();
         }
+
         GroupResult<Address> groupResult = addressService.getHouseNumberSuggestions(city, district, street, houseNumber);
         List<GroupEntry<Address>> groupEntries = groupResult.getGroupEntries().getContent();
         List<String> suggestions = groupEntries.stream()

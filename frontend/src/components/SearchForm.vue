@@ -1,165 +1,142 @@
 <template>
-  <div class="search-form">
-    <div class="container" fluid>
-      <b-row class="typehead">
-        <b-col cols="2" align="left">
-          <label>Obec:</label>
-        </b-col>
-        <b-col>
-          <Typeahead
-            :data="citySuggestions"
-            v-model="city"
-            v-bind:minMatchingChars="1"
-            class="input"
+  <v-container class="text-left">
+    <v-container>
+      <v-row>
+        <v-col>
+          <v-combobox
+            label="Obec"
+            placeholder=" "
+            append-icon=""
+            :loading="loadingCity"
+            :items="citySuggestions"
+            :search-input.sync="searchCity"
+            clearable
           >
-          </Typeahead>
-        </b-col>
-      </b-row>
+            <template v-if="this.searchCity" v-slot:no-data>
+              <div>Žádný výsledek</div>
+            </template>
+          </v-combobox>
+        </v-col>
+      </v-row>
 
-      <b-row class="typehead">
-        <b-col cols="2" align="left">
-          <label>Část obce:</label>
-        </b-col>
-        <b-col>
-          <Typeahead
-            :data="districtSuggestions"
-            v-model="district"
-            v-bind:minMatchingChars="1"
-            class="input"
+      <v-row>
+        <v-col>
+          <v-combobox
+            ref="districtInput"
+            label="Část obce"
+            placeholder=" "
+            append-icon=""
+            :loading="loadingDistrict"
+            :items="districtSuggestions"
+            :search-input.sync="searchDistrict"
+            @focus="showDistrictsInCity"
+            clearable
           >
-          </Typeahead>
-        </b-col>
-      </b-row>
+            <template v-if="this.searchDistrict" v-slot:no-data>
+              <div>Žádný výsledek</div>
+            </template>
+          </v-combobox>
+        </v-col>
+      </v-row>
 
-      <b-row class="typehead">
-        <b-col cols="2" align="left">
-          <label>Ulice:</label>
-        </b-col>
-        <b-col>
-          <Typeahead
-            :data="streetSuggestions"
-            v-model="street"
-            v-bind:minMatchingChars="1"
-            class="input"
+      <v-row>
+        <v-col>
+          <v-combobox
+            ref="streetInput"
+            label="Ulice"
+            placeholder=" "
+            append-icon=""
+            :loading="loadingStreet"
+            :items="streetSuggestions"
+            :search-input.sync="searchStreet"
+            @focus="showStreetsInCity"
+            clearable
           >
-          </Typeahead>
-        </b-col>
-      </b-row>
+            <template v-if="this.searchStreet" v-slot:no-data>
+              <div>Žádný výsledek</div>
+            </template>
+          </v-combobox>
+        </v-col>
+      </v-row>
 
-      <b-row class="typehead">
-        <b-col cols="2" align="left">
-          <label>Číslo domovní/orientační:</label>
-        </b-col>
-        <b-col>
-          <Typeahead
-            :data="houseNumberSuggestions"
-            v-model="houseNumber"
-            v-bind:minMatchingChars="1"
-            class="input"
+      <v-row>
+        <v-col>
+          <v-combobox
+            ref="houseNumberInput"
+            label="Číslo domovní/orientační"
+            placeholder=" "
+            append-icon=""
+            :loading="loadingHouseNumber"
+            :items="houseNumberSuggestions"
+            :search-input.sync="searchHouseNumber"
+            @focus="showHouseNumbers"
+            clearable
           >
-          </Typeahead>
-        </b-col>
-      </b-row>
+            <template v-if="this.searchHouseNumber" v-slot:no-data>
+              <div>Žádný výsledek</div>
+            </template>
+          </v-combobox>
+        </v-col>
+      </v-row>
 
-      <b-row>
-        <b-button
-          class="ml-3"
-          v-on:click="search(city, district, street, houseNumber)"
-          variant="primary"
-        >
-          Vyhledat
-        </b-button>
-      </b-row>
-    </div>
-    <div id="code-container" class="container ml-4" fluid>
-      <b-row>
-        <h3>
-          Vyhledávání adresních míst podle jejich kódu:
-        </h3>
-      </b-row>
+      <v-row>
+        <v-col>
+          <v-btn
+            @click="search(city, district, street, houseNumber)"
+            color="indigo accent-2"
+            dark
+          >
+            Vyhledat
+          </v-btn>
+        </v-col>
+      </v-row>
+    </v-container>
+    <v-container>
+      <v-row>
+        <v-col>
+          <h3>
+            Vyhledávání adresních míst podle jejich kódu:
+          </h3>
+        </v-col>
+      </v-row>
 
-      <b-row class="typehead">
-        <Typeahead
-          :data="codeSuggestions"
-          :serializer="address => address.admCode.toString()"
-          v-bind:minMatchingChars="1"
-          v-model="admCode"
-          id="code-search"
-          @hit="redirectToDetail($event)"
-        >
-          <template slot="append">
-            <b-button variant="primary" v-on:click="searchByAdmCode">
-              <BIconSearch />
-            </b-button>
-          </template>
-        </Typeahead>
-      </b-row>
-    </div>
-  </div>
+      <v-row>
+        <v-col>
+          <v-autocomplete
+            label="Kód adresního místa"
+            ref="codeAutocomplete"
+            placeholder=" "
+            append-icon=""
+            :loading="loadingCode"
+            append-outer-icon="search"
+            :items="codeSuggestions"
+            :search-input.sync="searchCode"
+            item-text="admCode"
+            @input="redirectToDetail($event)"
+            @click:append-outer="searchByAdmCode"
+            clearable
+          >
+          </v-autocomplete>
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-container>
 </template>
 
 <script>
-import Typeahead from "vue-bootstrap-typeahead";
 import _ from "underscore";
+import { mapState, mapMutations } from "vuex";
 
 import api from "../api.js";
 
 export default {
   name: "SearchForm",
-  components: {
-    Typeahead
-  },
   computed: {
-    city: {
-      get() {
-        return this.$store.state.city;
-      },
-      set: _.debounce(function(val) {
-        this.$store.commit("updateCity", val);
-        this.getCitySuggestions(val);
-      }, 400)
-    },
-    district: {
-      get() {
-        return this.$store.state.district;
-      },
-      set: _.debounce(function(val) {
-        this.$store.commit("updateDistrict", val);
-        this.getDistrictSuggestions(this.city, val);
-      }, 400)
-    },
-    street: {
-      get() {
-        return this.$store.state.street;
-      },
-      set: _.debounce(function(val) {
-        this.$store.commit("updateStreet", val);
-        this.getStreetSuggestions(this.city, this.district, val);
-      }, 400)
-    },
-    houseNumber: {
-      get() {
-        return this.$store.state.houseNumber;
-      },
-      set: _.debounce(function(val) {
-        this.$store.commit("updateHouseNumber", val);
-        this.getHouseNumberSuggestions(
-          this.city,
-          this.district,
-          this.street,
-          val
-        );
-      }, 400)
-    },
-    admCode: {
-      get() {
-        return this.$store.state.admCode;
-      },
-      set: _.debounce(function(val) {
-        this.$store.commit("updateAdmCode", val);
-        this.getCodeSuggestions(val);
-      }, 400)
-    }
+    ...mapState(["city"]),
+    ...mapState(["district"]),
+    ...mapState(["street"]),
+    ...mapState(["houseNumber"]),
+    ...mapState(["admCode"])
   },
   data() {
     return {
@@ -167,17 +144,34 @@ export default {
       districtSuggestions: [],
       streetSuggestions: [],
       houseNumberSuggestions: [],
-      codeSuggestions: []
+      codeSuggestions: [],
+      searchCity: "",
+      searchDistrict: "",
+      searchStreet: "",
+      searchHouseNumber: "",
+      searchCode: "",
+      loadingCity: false,
+      loadingDistrict: false,
+      loadingStreet: false,
+      loadingHouseNumber: false,
+      loadingCode: false
     };
   },
   methods: {
+    ...mapMutations(["updateCity"]),
+    ...mapMutations(["updateDistrict"]),
+    ...mapMutations(["updateStreet"]),
+    ...mapMutations(["updateHouseNumber"]),
+    ...mapMutations(["updateAdmCode"]),
     search() {
       this.$emit("search");
     },
     searchByAdmCode() {
+      this.$refs.codeAutocomplete.isMenuActive = false;
       this.$emit("searchByAdmCode");
     },
-    getCitySuggestions(city) {
+    getCitySuggestions: _.debounce(function(city) {
+      this.loadingCity = true;
       api
         .getCitySuggestions(city)
         .then(result => {
@@ -186,9 +180,14 @@ export default {
         .catch(error => {
           this.error = error.toString();
           this.$log.debug(error);
+        })
+        .finally(() => {
+          this.loadingCity = false;
         });
-    },
-    getDistrictSuggestions(city, district) {
+    }, 250),
+    getDistrictSuggestions: _.debounce(function(city, district) {
+      this.loadingDistrict = true;
+
       api
         .getDistrictSuggestions(city, district)
         .then(result => {
@@ -197,9 +196,14 @@ export default {
         .catch(error => {
           this.error = error.toString();
           this.$log.debug(error);
+        })
+        .finally(() => {
+          this.loadingDistrict = false;
         });
-    },
-    getStreetSuggestions(city, district, street) {
+    }, 250),
+    getStreetSuggestions: _.debounce(function(city, district, street) {
+      this.loadingStreet = true;
+
       api
         .getStreetSuggestions(city, district, street)
         .then(result => {
@@ -208,9 +212,19 @@ export default {
         .catch(error => {
           this.error = error.toString();
           this.$log.debug(error);
+        })
+        .finally(() => {
+          this.loadingStreet = false;
         });
-    },
-    getHouseNumberSuggestions(city, district, street, houseNumber) {
+    }, 250),
+    getHouseNumberSuggestions: _.debounce(function(
+      city,
+      district,
+      street,
+      houseNumber
+    ) {
+      this.loadingHouseNumber = true;
+
       api
         .getHouseNumberSuggestions(city, district, street, houseNumber)
         .then(result => {
@@ -219,9 +233,15 @@ export default {
         .catch(error => {
           this.error = error.toString();
           this.$log.debug(error);
+        })
+        .finally(() => {
+          this.loadingHouseNumber = false;
         });
     },
-    getCodeSuggestions(admCode) {
+    250),
+    getCodeSuggestions: _.debounce(function(admCode) {
+      this.loadingCode = true;
+
       api
         .findByAdmCode(admCode, 0)
         .then(result => {
@@ -230,41 +250,89 @@ export default {
         .catch(error => {
           this.error = error.toString();
           this.$log.debug(error);
+        })
+        .finally(() => {
+          this.loadingCode = false;
         });
+    }, 250),
+    showDistrictsInCity() {
+      if (!this.city) {
+        return;
+      }
+
+      this.getDistrictSuggestions(this.city, "");
+      this.$refs.districtInput.isMenuActive = true;
     },
-    redirectToDetail(address) {
+    showStreetsInCity() {
+      if (!this.city) {
+        return;
+      }
+
+      this.getStreetSuggestions(this.city, this.district, this.street);
+      this.$refs.streetInput.isMenuActive = true;
+    },
+    showHouseNumbers() {
+      if (!this.city || !this.street) {
+        return;
+      }
+
+      this.getHouseNumberSuggestions(this.city, this.district, this.street, "");
+      this.$refs.houseNumberInput.isMenuActive = true;
+    },
+    redirectToDetail(admCode) {
       this.$router.push({
         name: "addressDetail",
-        params: { id: address.admCode }
+        params: { id: admCode }
       });
+    }
+  },
+  watch: {
+    searchCity(value) {
+      const city = value ? value : "";
+      this.updateCity(city);
+      this.districtSuggestions = [];
+      this.streetSuggestions = [];
+      this.houseNumberSuggestions = [];
+
+      this.getCitySuggestions(this.city);
+    },
+    searchDistrict(value) {
+      const district = value ? value : "";
+      this.updateDistrict(district);
+      this.streetSuggestions = [];
+      this.houseNumberSuggestions = [];
+
+      this.getDistrictSuggestions(this.city, this.district);
+    },
+    searchStreet(value) {
+      const street = value ? value : "";
+      this.updateStreet(street);
+      this.houseNumberSuggestions = [];
+
+      this.getStreetSuggestions(this.city, this.district, this.street);
+    },
+    searchHouseNumber(value) {
+      const houseNumber = value ? value : "";
+      this.updateHouseNumber(houseNumber);
+
+      this.getHouseNumberSuggestions(
+        this.city,
+        this.district,
+        this.street,
+        this.houseNumber
+      );
+    },
+    searchCode(value) {
+      const admCode = value ? value : "";
+      this.updateAdmCode(admCode);
+
+      this.getCodeSuggestions(this.admCode);
     }
   }
 };
 </script>
 
 <style scoped>
-@media only screen and (max-width: 768px) {
-  .input {
-    width: 100%;
-  }
-
-  #code-search {
-    width: 100%;
-  }
-}
-
-.typehead {
-  margin-bottom: 1rem;
-}
-.input {
-  width: 50%;
-}
-#code-search {
-  width: 30%;
-}
-div.container {
-  margin: 1.2em 1em 1em 0.8em;
-}
 h3 {
   font-size: 1.3em;
 }

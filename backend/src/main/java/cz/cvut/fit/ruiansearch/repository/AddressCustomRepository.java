@@ -82,8 +82,8 @@ public class AddressCustomRepository {
 
         Field field = new SimpleField("Identifikace");
 
-        Criteria queryCriteria = new Criteria("Identifikace_cs").is(houseNumber)
-                .or("Cislo_orientacni").is(houseNumber);
+        SimpleStringCriteria queryCriteria = new SimpleStringCriteria("Identifikace_cs:" + wrapInQuotes(houseNumber) + 
+                " OR Cislo_orientacni:" + wrapInQuotes(houseNumber));
         SimpleQuery query = new SimpleQuery(queryCriteria);
         FilterQuery cityFilter = new SimpleFilterQuery(
                 new Criteria("N_zev_obce").expression(wrapInQuotes(city)));

@@ -1,30 +1,64 @@
 <template>
-  <div id="nav">
-    <b-navbar toggleable="lg" type="dark" variant="dark" fixed="top">
-      <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
-      <b-collapse id="nav-collapse" is-nav>
-        <b-navbar-nav tabs>
-          <b-nav-item :to="{ name: 'home' }"
-            ><BIconSearch /> Vyhledávání</b-nav-item
-          >
-          <b-nav-item :to="{ name: 'nearbyAddresses' }">
-            <BIconMap /> Adresní místa v okolí
-          </b-nav-item>
-        </b-navbar-nav>
-      </b-collapse>
-    </b-navbar>
-  </div>
+  <nav>
+    <v-app-bar app dark hide-on-scroll>
+      <v-app-bar-nav-icon
+        class="hidden-md-and-up"
+        @click.stop="drawer = !drawer"
+      ></v-app-bar-nav-icon>
+      <v-toolbar-title>
+        <router-link to="/" tag="span" style="cursor: pointer">
+          Vyhledávání adresních míst
+        </router-link>
+      </v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-app-bar-items class="hidden-sm-and-down">
+        <v-btn
+          v-for="item in items"
+          :key="item.path"
+          :to="{ name: item.path }"
+          exact
+          ><v-icon>{{ item.icon }}</v-icon
+          >{{ item.title }}</v-btn
+        >
+      </v-app-bar-items>
+    </v-app-bar>
+
+    <v-navigation-drawer v-model="drawer" fixed temporary hide-on-scroll app>
+      <v-list nav>
+        <v-list-item
+          v-for="item in items"
+          :key="item.path"
+          :to="{ name: item.path }"
+          exact
+        >
+          <v-list-item-icon>
+            <v-icon>{{ item.icon }}</v-icon>
+          </v-list-item-icon>
+
+          <v-list-item-content>
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+    </v-navigation-drawer>
+  </nav>
 </template>
 
 <script>
 export default {
-  name: "Navigation"
+  name: "Navigation",
+  data() {
+    return {
+      drawer: false,
+      items: [
+        { title: "Vyhledávání", path: "home", icon: "search" },
+        {
+          title: "Adresní místa v okolí",
+          path: "nearbyAddresses",
+          icon: "map"
+        }
+      ]
+    };
+  }
 };
 </script>
-
-<style scoped>
-.nav-item {
-  margin-right: 1.2em;
-  font-weight: 400;
-}
-</style>

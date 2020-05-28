@@ -1,21 +1,23 @@
 <template>
-  <div id="address_table">
-    <b-table :items="items" :fields="fields">
-      <template v-slot:cell(fullOrientationalNumber)="{ item }">
-        <div>
-          {{ item.orientationalNumber }}{{ item.orientationalNumberLetter }}
-        </div>
-      </template>
-      <template v-slot:cell(detail)="{ item }">
-        <b-button
-          variant="primary"
-          :to="{ name: 'addressDetail', params: { id: item.admCode } }"
-        >
-          Detail
-        </b-button>
-      </template>
-    </b-table>
-  </div>
+  <v-data-table
+    :headers="headers"
+    :items="items"
+    no-data-text="Nebyl nalezen žádný výsledek"
+    hide-default-footer
+  >
+    <template v-slot:item.fullOrientationalNumber="{ item }">
+      {{ item.orientationalNumber }}{{ item.orientationalNumberLetter }}
+    </template>
+    <template v-slot:item.detail="{ item }">
+      <v-btn
+        :to="{ name: 'addressDetail', params: { id: item.admCode } }"
+        color="indigo accent-2"
+        dark
+      >
+        Detail
+      </v-btn>
+    </template>
+  </v-data-table>
 </template>
 
 <script>
@@ -28,15 +30,15 @@ export default {
   },
   data() {
     return {
-      fields: [
-        { key: "admCode", label: "Kód adresního místa" },
-        { key: "streetName", label: "Název ulice" },
-        { key: "buildingType", label: "Typ čísla domovního" },
-        { key: "houseNumber", label: "Číslo domovní" },
-        { key: "fullOrientationalNumber", label: "Číslo orientační" },
-        { key: "district", label: "Název části obce" },
-        { key: "cityName", label: "Název obce" },
-        { key: "detail", label: "" }
+      headers: [
+        { value: "admCode", text: "Kód adresního místa" },
+        { value: "streetName", text: "Název ulice" },
+        { value: "buildingType", text: "Typ čísla domovního" },
+        { value: "houseNumber", text: "Číslo domovní" },
+        { value: "fullOrientationalNumber", text: "Číslo orientační" },
+        { value: "district", text: "Název části obce" },
+        { value: "cityName", text: "Název obce" },
+        { value: "detail", text: "" }
       ]
     };
   }

@@ -2,32 +2,17 @@
   <div class="search">
     <h1>Vyhledávání adresních míst v RÚIAN</h1>
     <SearchForm
-      v-on:search="search(1)"
-      v-on:searchByAdmCode="searchByAdmCode(1)"
+      @search="search(1)"
+      @searchByAdmCode="searchByAdmCode(1)"
     ></SearchForm>
     <div v-if="showResult === true">
-      <b-table :items="items" :fields="fields">
-        <template v-slot:cell(fullOrientationalNumber)="{ item }">
-          <div>
-            {{ item.orientationalNumber }}{{ item.orientationalNumberLetter }}
-          </div>
-        </template>
-        <template v-slot:cell(detail)="{ item }">
-          <b-button
-            variant="primary"
-            :to="{ name: 'addressDetail', params: { id: item.admCode } }"
-          >
-            Detail
-          </b-button>
-        </template>
-      </b-table>
-      <b-pagination
+      <AddressTable @changePage="changePage" :pageCount="pageCount" />
+      <v-pagination
         v-model="page"
-        :total-rows="totalElements"
-        :per-page="10"
-        align="center"
+        :length="pageCount"
+        total-visible="8"
         @input="changePage"
-      ></b-pagination>
+      ></v-pagination>
     </div>
     <div v-else-if="noResult === true">
       <h3>Nebyl nalezen žádný výsledek.</h3>
@@ -37,6 +22,7 @@
 
 <script>
 import SearchForm from "../components/SearchForm";
+import AddressTable from "../components/AddressTable.vue";
 import api from "../api.js";
 
 import { mapState, mapMutations } from "vuex";
@@ -44,7 +30,8 @@ import { mapState, mapMutations } from "vuex";
 export default {
   name: "SearchTest",
   components: {
-    SearchForm
+    SearchForm,
+    AddressTable
   },
   beforeRouteEnter(to, from, next) {
     next(vm => {
@@ -52,6 +39,7 @@ export default {
     });
   },
   computed: {
+    ...mapState(["items"]),
     ...mapState(["city"]),
     ...mapState(["district"]),
     ...mapState(["street"]),
@@ -70,9 +58,8 @@ export default {
         { key: "cityName", label: "Název obce" },
         { key: "detail", label: "" }
       ],
-      items: [],
       page: 1,
-      totalElements: null,
+      pageCount: 0,
       error: null,
       showResult: false,
       noResult: false,
@@ -80,24 +67,25 @@ export default {
     };
   },
   methods: {
+    ...mapMutations(["updateItems"]),
     ...mapMutations(["resetQueryState"]),
     search(page) {
-      this.page = page;
-      this.isSearchingByCode = false;
       const query = {
         city: this.city,
         district: this.district,
         street: this.street,
         houseNumber: this.houseNumber
       };
+      this.page = page;
+      this.isSearchingByCode = false;
       this.showResult = false;
       this.noResult = false;
 
       api
         .getFormQueryResult(query, page - 1)
         .then(result => {
-          this.items = result.data.content;
-          this.totalElements = result.data.totalElements;
+          this.updateItems(result.data.content);
+          this.pageCount = result.data.totalPages;
           if (typeof this.items !== "undefined" && this.items.length > 0) {
             this.showResult = true;
           } else {
@@ -118,8 +106,8 @@ export default {
       api
         .findByAdmCode(this.admCode, page - 1)
         .then(result => {
-          this.items = result.data.content;
-          this.totalElements = result.data.totalElements;
+          this.updateItems(result.data.content);
+          this.pageCount = result.data.totalPages;
 
           if (typeof this.items !== "undefined" && this.items.length > 0) {
             this.showResult = true;
@@ -129,14 +117,13 @@ export default {
         })
         .catch(error => {
           this.error = error.toString();
-          this.$log.debug(error);
         });
     },
-    changePage() {
+    changePage(page) {
       if (this.isSearchingByCode) {
-        this.searchByAdmCode(this.page);
+        this.searchByAdmCode(page);
       } else {
-        this.search(this.page);
+        this.search(page);
       }
     }
   }

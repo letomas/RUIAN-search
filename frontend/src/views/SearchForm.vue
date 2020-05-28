@@ -1,6 +1,12 @@
 <template>
-  <div class="search">
+  <v-container class="search">
     <h1>Vyhledávání adresních míst v RÚIAN</h1>
+    <v-container class="text-left">
+      Tato aplikace slouží pro vyhledávání adresních míst v RÚIAN. Vyhledávat
+      lze buď pomocí adresy, nebo pomocí identifikátoru adresního místa.
+      Jednotlivé položky formuláře nabízí našeptávání, které se aktualizuje na
+      základě již vyplněných položek.
+    </v-container>
     <SearchForm
       @search="search(1)"
       @searchByAdmCode="searchByAdmCode(1)"
@@ -17,7 +23,7 @@
     <div v-else-if="noResult === true">
       <h3>Nebyl nalezen žádný výsledek.</h3>
     </div>
-  </div>
+  </v-container>
 </template>
 
 <script>

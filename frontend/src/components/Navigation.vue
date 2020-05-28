@@ -20,12 +20,12 @@
           ><v-icon>{{ item.icon }}</v-icon
           >{{ item.title }}</v-btn
         >
-        <a
-          href="https://github.com/letomas/RUIAN-search"
-          rel="noopener noreferrer"
-        >
+        <a href="https://github.com/letomas/RUIAN-search">
           <v-btn>
-            <img src="../../public/assets/icons/GitHub-Mark-Light-32px.png" />
+            <img
+              alt="github-logo"
+              src="../../public/assets/icons/GitHub-Mark-Light-32px.png"
+            />
             Github repozitář
           </v-btn>
         </a>
@@ -80,3 +80,9 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+a {
+  text-decoration: none;
+}
+</style>

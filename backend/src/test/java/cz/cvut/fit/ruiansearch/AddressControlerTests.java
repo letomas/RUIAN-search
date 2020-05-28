@@ -1,10 +1,10 @@
 package cz.cvut.fit.ruiansearch;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import cz.cvut.fit.ruiansearch.controller.AddressController;
 import cz.cvut.fit.ruiansearch.model.Address;
 import cz.cvut.fit.ruiansearch.service.AddressService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;

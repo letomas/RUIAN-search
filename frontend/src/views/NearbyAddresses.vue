@@ -41,7 +41,7 @@
       </v-container>
     </v-form>
 
-    <v-container id="map-container" fluid v-if="locationAvailable">
+    <v-container id="map-container" class="map" fluid v-if="locationAvailable">
       <l-map :center.sync="location" :zoom.sync="zoom" :minZoom="3">
         <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
         <ul v-for="item in items" :key="item.admCode">

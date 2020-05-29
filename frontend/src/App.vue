@@ -27,8 +27,11 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
-
 .v-label {
   font-size: 1.12em;
+}
+.map {
+  position: relative;
+  z-index: 0;
 }
 </style>

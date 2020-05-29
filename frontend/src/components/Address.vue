@@ -92,7 +92,7 @@
           </v-col>
         </v-row>
       </v-container>
-      <v-container id="map-container" class="mt-4" fluid>
+      <v-container id="map-container" class="mt-4 map" fluid>
         <l-map :center="coordinates" :zoom="zoom" :minZoom="3">
           <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
           <l-marker :lat-lng="coordinates" />
@@ -223,7 +223,7 @@ a {
 }
 
 #iri {
-  text-decoration: underline dotted;
+  border-bottom: 2px dotted;
   color: black;
 }
 

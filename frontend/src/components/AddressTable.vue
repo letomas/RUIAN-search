@@ -37,7 +37,7 @@ export default {
         { value: "buildingType", text: "Typ čísla domovního" },
         { value: "houseNumber", text: "Číslo domovní" },
         { value: "fullOrientationalNumber", text: "Číslo orientační" },
-        { value: "district", text: "Název části obce" },
+        { value: "districtName", text: "Název části obce" },
         { value: "cityName", text: "Název obce" },
         { value: "detail", text: "" }
       ]

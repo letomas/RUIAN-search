@@ -6,10 +6,11 @@ Tato apliakce slouží k usnadnění vyhledávání v registru územní identifi
   - [Požadavky](#sw-po%c5%beadavky)
   - [Spuštění](#spu%c5%a1t%c4%9bn%c3%ad)
   - [Indexace dat](#indexace-dat)
+  - [Open API](#open-api)
   - [Konfigurace](#konfigurace)
 
 ## O projektu
-Aplikace využívá třívrstvou kontejnerizovanou architekturu. Na datové vrstvě je použit Apache Solr, na aplikační vrstvě spring-boot a na prezentační vrstvě vue a bootstrap. Data jsou získávána pomocí skriptu z [této stránky](https://nahlizenidokn.cuzk.cz/StahniAdresniMistaRUIAN.aspx) ve formátu csv. Data na stránce jsou aktualizována každý měsíc (poslední den v měsíci). Pro aktualizaci dat v aplikaci je nutné ručně sputit k tomu určený skript (viz [Spuštění](#spuštění)).
+Aplikace využívá třívrstvou kontejnerizovanou architekturu. Na datové vrstvě je použit Apache Solr, na aplikační vrstvě spring-boot a na prezentační vrstvě vue a vuetify. Data jsou získávána pomocí skriptu z [této stránky](https://nahlizenidokn.cuzk.cz/StahniAdresniMistaRUIAN.aspx) ve formátu csv. Data na stránce jsou aktualizována každý měsíc (poslední den v měsíci). Pro aktualizaci dat v aplikaci je nutné ručně sputit k tomu určený skript (viz [Spuštění](#spuštění)).
 
 ## SW Požadavky
 - Docker
@@ -53,3 +54,7 @@ Po spuštění je aplikace dostupná z [http://localhost:8000](http://localhost:
 
 ## Konfigurace
 Aplikace je ve výchozím stavu dostupná z portu 8000. Toto nastavení je možné změnit v `Docker-compose.yml`. Je třeba změnit nastavení portů u služby **vue-app**.
+
+## Open API
+Restové rohzraní je popsáno pomocí specifikace Open API. Dokumentace je dostupná na adrese:
+[https://app.swaggerhub.com/apis-docs/letomas/Address-search-RUIAN/1.0.0-oas3#/](https://app.swaggerhub.com/apis-docs/letomas/Address-search-RUIAN/1.0.0-oas3)

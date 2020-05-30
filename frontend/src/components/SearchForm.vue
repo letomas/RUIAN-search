@@ -90,6 +90,15 @@
           </v-btn>
         </v-col>
       </v-row>
+      <v-row>
+        <v-col class="pt-0">
+          <a
+            v-if="(showResult || noResult) && !isSearchingByCode"
+            href="#results"
+            >Přejít na výsledky</a
+          >
+        </v-col>
+      </v-row>
     </v-container>
     <v-container>
       <v-row>
@@ -109,15 +118,27 @@
             append-icon=""
             no-data-text="Žádný výsledek"
             :loading="loadingCode"
-            append-outer-icon="search"
             :items="codeSuggestions"
             :search-input.sync="searchCode"
             item-text="admCode"
             @input="redirectToDetail($event)"
-            @click:append-outer="searchByAdmCode"
             clearable
           >
+            <template v-slot:append-outer>
+              <v-btn @click="searchByAdmCode" color="indigo accent-2" dark>
+                Vyhledat
+              </v-btn>
+            </template>
           </v-autocomplete>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col class="pt-0">
+          <a
+            v-if="(showResult || noResult) && isSearchingByCode"
+            href="#results"
+            >Přejít na výsledky</a
+          >
         </v-col>
       </v-row>
     </v-container>
@@ -132,6 +153,7 @@ import api from "../api.js";
 
 export default {
   name: "SearchForm",
+  props: ["showResult", "noResult", "isSearchingByCode"],
   computed: {
     ...mapState(["city"]),
     ...mapState(["district"]),
@@ -336,5 +358,8 @@ export default {
 <style scoped>
 h3 {
   font-size: 1.3em;
+}
+a {
+  text-decoration: none;
 }
 </style>

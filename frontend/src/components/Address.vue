@@ -14,6 +14,7 @@
             id="iri"
             href="https://ofn.gov.cz/adresy/draft/#vlastnost-adresa-adresní-místo"
             rel="noopener noreferrer"
+            target="_blank"
           >
             IRI:
           </a>
@@ -34,6 +35,7 @@
         <v-btn
           href="https://www.zakonyprolidi.cz/cs/2011-359?citace=1#prilohy"
           rel="noopener noreferrer"
+          target="_blank"
           small
           icon
           ><v-icon>help_outline</v-icon></v-btn
@@ -65,6 +67,7 @@
             <v-btn
               href="https://geoportal.cuzk.cz/(S(we0f0rkrjb0vrqvoy4akhx3u))/Default.aspx?mode=TextMeta&side=sit.trans&text=souradsystemy"
               rel="noopener noreferrer"
+              target="_blank"
               small
               icon
               ><v-icon>help_outline</v-icon></v-btn

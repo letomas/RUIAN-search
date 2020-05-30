@@ -18,7 +18,7 @@
             <v-text-field
               label="Souřadnice X"
               v-model="coordinateX"
-              :rules="coordinateRules"
+              :rules="coordinateXRules"
               required
             >
             </v-text-field>
@@ -27,7 +27,7 @@
             <v-text-field
               label="Souřadnice Y"
               v-model="coordinateY"
-              :rules="coordinateRules"
+              :rules="coordinateYRules"
               required
             >
             </v-text-field>
@@ -129,8 +129,12 @@ export default {
       distance: "0.2",
       error: null,
       valid: false,
-      coordinateRules: [
-        v => !!v || "Zadejde prosím souřadnici X",
+      coordinateXRules: [
+        v => !!v || "Zadejte prosím souřadnici X",
+        v => !isNaN(parseFloat(v)) || "Zadejte prosím platnou souřadnici"
+      ],
+      coordinateYRules: [
+        v => !!v || "Zadejte prosím souřadnici Y",
         v => !isNaN(parseFloat(v)) || "Zadejte prosím platnou souřadnici"
       ]
     };
@@ -173,6 +177,7 @@ export default {
       this.error = error;
     },
     onSubmit(evt) {
+      this.$refs.form.validate();
       if (!this.valid) {
         return;
       }

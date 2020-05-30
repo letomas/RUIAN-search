@@ -25,7 +25,11 @@ export default {
     api
       .getDetail(to.params.id)
       .then(result => {
-        next(vm => vm.setData(result.data));
+        if (result.data) {
+          next(vm => vm.setData(result.data));
+        } else {
+          next({ name: "404" });
+        }
       })
       .catch(error => {
         next(vm => vm.setError(error));

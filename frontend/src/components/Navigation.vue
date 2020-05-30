@@ -17,12 +17,18 @@
           :key="item.path"
           :to="{ name: item.path }"
           exact
-          ><v-icon>{{ item.icon }}</v-icon
+          ><v-icon class="mr-1">{{ item.icon }}</v-icon
           >{{ item.title }}</v-btn
         >
-        <a href="https://github.com/letomas/RUIAN-search">
+        <a
+          href="https://github.com/letomas/RUIAN-search"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
           <v-btn>
             <img
+              id="github-logo"
+              class="mr-1"
               alt="github-logo"
               src="../../public/assets/icons/GitHub-Mark-Light-32px.png"
             />
@@ -84,5 +90,8 @@ export default {
 <style scoped>
 a {
   text-decoration: none;
+}
+#github-logo {
+  height: 1.5em;
 }
 </style>

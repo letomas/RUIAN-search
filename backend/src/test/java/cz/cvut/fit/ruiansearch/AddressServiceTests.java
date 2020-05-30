@@ -55,7 +55,7 @@ public class AddressServiceTests {
 
     @Test
     public void findByAdmCodeShouldReturnFromRepositoryTest() {
-        String query = "";
+        Integer query = null;
         when(addressRepository.findByAdmCodeEquals(query)).thenReturn(Optional.empty());
         Optional<Address> result = addressService.findByAdmCode(query);
         assertEquals(result, Optional.empty());

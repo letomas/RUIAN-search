@@ -50,7 +50,7 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public Optional<Address> findByAdmCode(String admCode) {
+    public Optional<Address> findByAdmCode(Integer admCode) {
         return addressRepository.findByAdmCodeEquals(admCode);
     }
 

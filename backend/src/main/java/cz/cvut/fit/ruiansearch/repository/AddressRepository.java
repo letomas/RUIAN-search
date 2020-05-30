@@ -25,5 +25,5 @@ public interface AddressRepository extends SolrCrudRepository<Address, String> {
             String houseNumber,
             Pageable pageable);
     Page<Address> findByAdmCodeStartsWith(String AdmCode, Pageable pageable);
-    Optional<Address> findByAdmCodeEquals(String AdmCode);
+    Optional<Address> findByAdmCodeEquals(Integer AdmCode);
 }

@@ -21,7 +21,7 @@ public interface AddressService {
         String houseNumber,
         Pageable pageable);
     Page<Address> findByAdmCodeStartsWith(String admCode, Pageable pageable);
-    Optional<Address> findByAdmCode(String admCode);
+    Optional<Address> findByAdmCode(Integer admCode);
     GroupResult<Address> getCitySuggestions(String city);
     GroupResult<Address> getDistrictSuggestions(String city, String district);
     GroupResult<Address> getStreetSuggestions(String city, String district, String street);

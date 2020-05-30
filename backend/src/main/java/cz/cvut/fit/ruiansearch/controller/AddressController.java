@@ -65,7 +65,7 @@ public class AddressController {
 
 
     @GetMapping("/{admCode}")
-    public Optional<Address> getAddressDetail(@PathVariable String admCode) {
+    public Optional<Address> getAddressDetail(@PathVariable Integer admCode) {
         return addressService.findByAdmCode(admCode);
     }
 

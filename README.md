@@ -1,5 +1,5 @@
 # Vyhledávání v RÚIAN
-Tato apliakce slouží k usnadnění vyhledávání v registru územní identifikace, adres a nemovitostí.
+Tato aplikace slouží k usnadnění vyhledávání v Registru územní identifikace, adres a nemovitostí (RÚIAN). Aplikace je dostná na adrese [https://hledání.rúian.opendata.cz](https://hledání.rúian.opendata.cz).
 
 ### Navigace
   - [O projektu](#o-projektu)
@@ -11,6 +11,8 @@ Tato apliakce slouží k usnadnění vyhledávání v registru územní identifi
 
 ## O projektu
 Aplikace využívá třívrstvou kontejnerizovanou architekturu. Na datové vrstvě je použit Apache Solr, na aplikační vrstvě spring-boot a na prezentační vrstvě vue a vuetify. Data jsou získávána pomocí skriptu z [této stránky](https://nahlizenidokn.cuzk.cz/StahniAdresniMistaRUIAN.aspx) ve formátu csv. Data na stránce jsou aktualizována každý měsíc (poslední den v měsíci). Pro aktualizaci dat v aplikaci je nutné ručně sputit k tomu určený skript (viz [Spuštění](#spuštění)).
+
+Uživatelská, vývojářská a administrátorská dokumentace je dostupná na [Github Pages](https://letomas.github.io).
 
 ## SW Požadavky
 - Docker

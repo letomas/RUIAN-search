@@ -163,6 +163,7 @@ export default {
         },
         { name: "Název ulice:", value: this.address.streetName },
         { name: "PSČ:", value: this.address.postalCode },
+        { name: "Typ čísla domovního:", value: this.address.buildingType },
         { name: "Číslo domovní:", value: this.address.houseNumber },
         {
           name: "Číslo orientační:",

@@ -1,5 +1,5 @@
 # Vyhledávání v RÚIAN
-Tato aplikace slouží k usnadnění vyhledávání v Registru územní identifikace, adres a nemovitostí (RÚIAN). Aplikace je dostná na adrese [https://hledání.rúian.opendata.cz](https://hledání.rúian.opendata.cz).
+Tato aplikace slouží k usnadnění vyhledávání v Registru územní identifikace, adres a nemovitostí (RÚIAN). Aplikace je dostupná na adrese [https://hledání.rúian.opendata.cz](https://hledání.rúian.opendata.cz).
 
 ### Navigace
   - [O projektu](#o-projektu)
